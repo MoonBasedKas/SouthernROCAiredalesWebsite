@@ -32,7 +32,21 @@ Reviews section if possibler would be nice.
     - We are going to attempt using flask however, this is flexible. I can definitly change if needed.
 - Sql database
 - Domain name
-- Hosting
+- Hosting 
+    - Pythonanywhere
+        - I'll personally expirement with this
+    - Hosting.com
+        - VPS however, there is a good chance it only does php, which honestly could be fine
+        - They do offer a free domain for a year.
+        - SSL certs
+    - Google cloud
+        - I think its cheap, but I honestly don't know how much traffic southern gets.
+        - pay per use
+    - Azure
+        - Could use ASP.
+        - pay as you go.
+    - AWS
+        - If I could figure out what service I'd need
 
 ## Would be nice but not required
 - Log in for admin.
