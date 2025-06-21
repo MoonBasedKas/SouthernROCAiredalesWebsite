@@ -7,9 +7,11 @@ There is a logo its on their facebook page.
 They want the main colors to be black and white.
 
 
-Things of note:
+# Research
 
 Every website nowadays had that stupid nav bar at the top.
+- For mobile websites the nav bar is often collapsed into a menu.
+- I did find one website that just straight up gave the user the desktop verison though. (BAD IDEA)
 
 For breeders that have multiple breeds they do a section for each breed.
 
@@ -18,3 +20,27 @@ Will want the date of birth, the gender, name, picture of the dog, and a way to 
 A blog has appeared on some.
 
 Generally the entire page is not used rather its more like 50-75% of it.
+
+Big 3 pages are home, about, and contact.
+
+Reviews section if possibler would be nice.
+
+
+# Techinical Requirements
+## Must have
+- Some serverlet
+    - We are going to attempt using flask however, this is flexible. I can definitly change if needed.
+- Sql database
+- Domain name
+- Hosting
+
+## Would be nice but not required
+- Log in for admin.
+    - Allow Southern to be able to partially maintain her website.
+    - Obviously allow to add new dogs
+    - Edit dogs already in.
+    - Dog status.
+- Secure file upload.
+
+## Unlikely to add but could be useful.
+- Allow admin to write blog posts.
