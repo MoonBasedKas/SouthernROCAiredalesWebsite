@@ -47,6 +47,8 @@ Reviews section if possibler would be nice.
         - pay as you go.
     - AWS
         - If I could figure out what service I'd need
+    - https://flask.palletsprojects.com/en/stable/deploying/
+        - Recommended by flask
 
 ## Would be nice but not required
 - Log in for admin.

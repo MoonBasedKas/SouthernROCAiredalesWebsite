@@ -1,0 +1,11 @@
+.bar {
+    background-color: black;
+}
+
+.item {
+    border-color: white;
+}
+
+.item:hover {
+    color: aqua;
+}
