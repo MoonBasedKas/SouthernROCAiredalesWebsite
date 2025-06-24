@@ -11,3 +11,10 @@ class dbController:
                                 host='127.0.0.1',
                                 database='dogs')
         self.cursor = self.cnx.cursor()
+
+    def fetchDog(self, id):
+        query = 'select name, gender, available, desc from dogs where id = ?'
+        data = self.cursor(query, (id))
+        print(data)
+        return
+    
