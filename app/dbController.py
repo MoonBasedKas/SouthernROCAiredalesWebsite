@@ -12,9 +12,17 @@ class dbController:
                                 database='dogs')
         self.cursor = self.cnx.cursor()
 
+    """
+    Returns dictionary of the query result.
+    """
     def fetchDog(self, id):
-        query = 'select name, gender, available, desc from dogs where id = ?'
-        data = self.cursor(query, (id))
-        print(data)
-        return
+        query = 'select dogName, gender, available, dogDesc from dogs where id = %s'
+        # query = 'select * from dogs'
+        params = (id,)
+        self.cursor.execute(query, params)
+        
+        # Fetch the data found.
+        fetchedData = self.cursor.fetchall()
+        data = {"dogName":fetchedData[0], "gender":fetchedData[1], "available":fetchedData[2], "dogDesc":fetchedData[3]}
+        return data
     
