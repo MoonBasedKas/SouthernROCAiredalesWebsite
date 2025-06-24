@@ -31,3 +31,7 @@
     background-color: grey;
     color: white;
 }
+
+.headerLink:visited {
+    color: inherit;
+}
