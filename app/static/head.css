@@ -1,13 +1,33 @@
 .bar {
     background-color: black;
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 10vh;
+    border-color: grey;
+    border: solid;
+    border-radius: 1%;
+
+
 }
 
+/* For a single item within the menu bar */
 .item {
+
     color: white;
+    flex-grow: 1;
+    flex-shrink: 1;
+    text-align: center;
+    border-left: 1%;
+    border-right: 1%;
+    border-color: grey;
+    border: solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .item:hover {
-    background-color: antiquewhite;
-    color: aqua;
+    background-color: grey;
+    color: white;
 }
