@@ -1,11 +1,13 @@
 .bar {
     background-color: black;
+    display: flex;
 }
 
 .item {
-    border-color: white;
+    color: white;
 }
 
 .item:hover {
+    background-color: antiquewhite;
     color: aqua;
 }
