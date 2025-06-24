@@ -23,6 +23,24 @@ For viewing all the dogs
 def dogs():
     return render_template('dogs.html')
 
+
+"""
+For viewing a singular dog
+"""
+@app.route('/dog')
+def dog(id=0):
+    photos = ["PlaceHolder.png"]
+    name = "null"
+    desc = "null description"
+    dob = "1970/1/1"
+    gender = False # False == Female because both start with f.
+
+    if gender:
+        gender = "Male"
+    else:
+        gender = "Female"
+    return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
+
 """
 I don't remember what this page was supposed to be./
 """
