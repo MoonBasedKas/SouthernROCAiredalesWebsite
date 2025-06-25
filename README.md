@@ -11,6 +11,10 @@ They want the main colors to be black and white.
 
 Every website nowadays had that stupid nav bar at the top.
 - For mobile websites the nav bar is often collapsed into a menu.
+    - It seems that a common technique is whenever the screen is small have it display vertically and horizontally on larger screens.
+    - Luckily css can handle this for us
+        - @media screen and (max-width: 600px)
+        - https://www.w3schools.com/howto/howto_js_topnav_responsive.asp
 - I did find one website that just straight up gave the user the desktop verison though. (BAD IDEA)
 
 For breeders that have multiple breeds they do a section for each breed.
@@ -24,6 +28,7 @@ Generally the entire page is not used rather its more like 50-75% of it.
 Big 3 pages are home, about, and contact.
 
 Reviews section if possibler would be nice.
+
 
 
 # Techinical Requirements
