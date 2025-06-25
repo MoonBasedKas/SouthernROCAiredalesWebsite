@@ -22,9 +22,16 @@ class dbController:
         
         # Fetch the data found.
         fetchedData = self.cursor.fetchall()
-        data = {"dogName":fetchedData[0], "gender":fetchedData[1], "available":fetchedData[2], "dogDesc":fetchedData[3]}
+        if fetchedData == []:
+            return {}
+        
+        print(fetchedData)
+        data = {"dogName":fetchedData[0][0], "gender":fetchedData[0][1], "available":fetchedData[0][2], "dogDesc":fetchedData[0][3]}
         return data
     
+    """
+    Fetches the images for a given dog.
+    """
     def fetchImage(self, id):
         query = 'select photoName from images where id = %s'
         params = (id,)
@@ -32,5 +39,5 @@ class dbController:
         
         # Fetch the data found.
         fetchedData = self.cursor.fetchall()
-        data = fetchedData()
+        data = fetchedData
         return data
