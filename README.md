@@ -29,6 +29,8 @@ Big 3 pages are home, about, and contact.
 
 Reviews section if possibler would be nice.
 
+Domain Name: AirdalesofSouthernROC.com
+
 
 
 # Techinical Requirements
@@ -54,6 +56,9 @@ Reviews section if possibler would be nice.
         - If I could figure out what service I'd need
     - https://flask.palletsprojects.com/en/stable/deploying/
         - Recommended by flask
+    - GoDaddy
+        - Recommended by client
+
 
 ## Would be nice but not required
 - Log in for admin.
