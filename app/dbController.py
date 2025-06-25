@@ -17,7 +17,6 @@ class dbController:
     """
     def fetchDog(self, id):
         query = 'select dogName, gender, available, dogDesc from dogs where id = %s'
-        # query = 'select * from dogs'
         params = (id,)
         self.cursor.execute(query, params)
         
@@ -26,3 +25,12 @@ class dbController:
         data = {"dogName":fetchedData[0], "gender":fetchedData[1], "available":fetchedData[2], "dogDesc":fetchedData[3]}
         return data
     
+    def fetchImage(self, id):
+        query = 'select photoName from images where id = %s'
+        params = (id,)
+        self.cursor.execute(query, params)
+        
+        # Fetch the data found.
+        fetchedData = self.cursor.fetchall()
+        data = fetchedData()
+        return data
