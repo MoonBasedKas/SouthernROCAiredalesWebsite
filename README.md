@@ -31,6 +31,8 @@ Reviews section if possibler would be nice.
 
 Domain Name: AirdalesofSouthernROC.com
 
+Writing the website with wordpress seems like it's going to be the choice as most the simplest options that include a domain
+do wordpress.
 
 
 # Techinical Requirements
