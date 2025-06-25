@@ -1,2 +1,4 @@
 app/__pycache__/*
 app/DB_CONFIG
+app/main.py
+
