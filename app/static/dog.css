@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    border: 0;
+}
+
+.dogPhotoContainer {
+    background-color: black;
+}
+
+.dogInfoContainer {
+    background-color: white;
+}
+
+.dogTitle {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.dogTitleItem {
+    margin: 0%;
+}
+
+.dogDesc {
+    background-color: black;
+    color: white;
+    border-top: solid;
+    border-color: grey;
+    border-radius: 1px;
+}

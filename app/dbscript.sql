@@ -5,6 +5,7 @@ CREATE TABLE dogs (
     gender boolean,
     available boolean,
     dogDesc text(4096),
+    dob DateTime,
     primary key (id)
 );
 
