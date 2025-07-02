@@ -72,3 +72,6 @@ do wordpress.
 
 ## Unlikely to add but could be useful.
 - Allow admin to write blog posts.
+
+
+## Meeting 2 notes
