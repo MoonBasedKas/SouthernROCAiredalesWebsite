@@ -1,7 +1,13 @@
 from flask import Flask
 from flask import render_template
 from flask import Flask, jsonify, request
+import pandas
 
+try:
+    dogs = pandas.read_csv("dogs.csv")
+except:
+    dogs = None
+    
 app = Flask(__name__)
 
 
