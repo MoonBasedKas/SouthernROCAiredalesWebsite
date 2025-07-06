@@ -12,12 +12,12 @@ photos=None
 try:
     dogDB = pandas.read_csv("dogs.csv")
 except:
-    pass
+    dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
 
 try:
     photos = pandas.read_csv("photos.csv")
 except:
-    pass
+    photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
     
 app = Flask(__name__)
 
