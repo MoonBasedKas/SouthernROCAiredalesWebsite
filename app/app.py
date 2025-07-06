@@ -10,6 +10,7 @@ import dbController
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB=None
 photos=None
+counter = 0
 try:
     dogDB = pandas.read_csv("dogs.csv")
 except:
@@ -31,11 +32,13 @@ app = Flask(__name__)
 @app.route('/home')
 @app.route('/index')
 def Welcome():
+    global counter
+    counter += 1
     available = dogDB[dogDB["available"] == True]
     
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
-    return render_template('home.html', males=males.values.tolist(), females=females.values.tolist())
+    return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter)
 
 
 """
