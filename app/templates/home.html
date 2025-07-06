@@ -4,6 +4,8 @@
 
     <link rel="stylesheet" href="static/head.css">
     <link rel="stylesheet" href="static/content.css">
+    <link rel="stylesheet" href="static/mainpage.css">
+
 </head>
 
 <body>
@@ -12,7 +14,7 @@
     <!-- End Top of page -->
 
     <!-- I'm thinking we put the main picture here. -->
-    <img src="static/MainPic.jpg">
+    <img src="static/MainPic.jpg" loading="lazy">
     <!-- Content -->
     <div id="home">
         <!-- Intro -->
@@ -25,7 +27,7 @@
 
 
         <!-- History and book -->
-        <h3>History of the kennel</h3>
+        <h3>Vistors {{count}}</h3>
 
         <h4>The story of the blacks</h4>
         <p>
@@ -56,25 +58,46 @@
 
         <div>
             <!-- I'm guessing a frame buster is causing this to not work. :C -->
-            <iframe
+            <!-- <iframe
                 src="https://rv.royalcaningha.com/Reports/MDUwMTIwMjFcNDMwMTYzNlw0MzAxNjM2LXdv.pdf?fbclid=IwY2xjawLVHitleHRuA2FlbQIxMABicmlkETFVWTV2enNqSHVqU01XVkliAR7nfGNLx63uTh001NJhtOQzArdy7YnlfgyckrThDrwE1RuC1DfN6fVI8OaYwQ_aem_EOHKVyXXqWMgE4-TJhtC_g"
-                title="DNA Report"></iframe>
+                title="DNA Report"></iframe> -->
         </div>
-        <!-- Dogs -->
-        <h3 id="dogs">The Dogs</h3>
-        <p>
-            Each dog comes with a health garuantee and health chart.
-        </p>
-        <h3>Females</h3>
         <div>
-
+            <!-- Dogs -->
+            <h3 id="dogs">The Dogs</h3>
+            <p>
+                Each dog comes with a health garuantee and health chart.
+            </p>
+            <h3>Females</h3>
+            <!-- Females -->
+            <div>
+                {% for dog in females %}
+                <div>
+                    <h4>{{dog[1]}}</h4><br>
+                    Gender: Female<br>
+                    {{dog[3]}}<br>
+                    Registration: {{dog[4]}}<br>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Males -->
+            <h3>Males</h3>
+            <div>
+                {% for dog in males %}
+                <div>
+                    <h4>{{dog[0]}}</h4><br>
+                    Gender: Male<br>
+                    {{dog[2]}}<br>
+                    Registration: {{dog[3]}}<br>
+                </div>
+                {% endfor %}
+            </div>
+            <div>
+                <h3>DNA Report</h3>
+                <iframe src="./static/blackjustice.pdf" width="100%" height="100%" title="Black Justice DNA report"
+                    loading="lazy"></iframe>
+            </div>
         </div>
-
-        <h3>Males</h3>
-        <div>
-
-        </div>
-
         <!-- Health Gaurantee -->
         <h3 id="health_gaurantee">Health Gaurantee</h3>
         <ul>
