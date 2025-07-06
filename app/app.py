@@ -7,6 +7,7 @@ import dbController
 
 # db = dbController.dbController()
 
+#Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB=None
 photos=None
 try:
@@ -40,9 +41,16 @@ def Welcome():
 """
 For viewing all the dogs
 """
-@app.route('/dogs/<gender>')
-def dogs():
-    return render_template('dogs.html')
+@app.route('/dogs/<string:gender>')
+def dogs(gender):
+    
+    # Female is only false because they both start with f.
+    if gender.lower() == "female":
+        dog = dogDB[dogDB["gender"] == False]
+    else:
+        dog = dogDB[dogDB["gender"] == True]
+
+    return render_template('dogs.html', dogInfo=dogs.values.tolist())
 
 
 """
@@ -51,6 +59,12 @@ For viewing a singular dog
 @app.route('/dogs/dog/<int:id>')
 def dog(id):
     dog = dogDB[dogDB["id"] == id]
+    photos = ["PlaceHolder.png"]
+    name = "null"
+    desc = "null"
+    dob = "1970/01/01"
+    gender = False
+    return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc) 
 
 # def dog():
 #     photos = ["PlaceHolder.png"]
