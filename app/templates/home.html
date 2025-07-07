@@ -75,9 +75,9 @@
                 </p>
                 <h3 class="subtitle">Females</h3>
                 <!-- Females -->
-                <div>
+                <div class="dogContainer">
                     {% for dog in females %}
-                    <div>
+                    <div class="dogItem">
                         <h4>{{dog[1]}}</h4><br>
                         Gender: Female<br>
                         {{dog[3]}}<br>
@@ -87,10 +87,10 @@
                 </div>
                 <!-- Males -->
                 <h3 class="subtitle">Males</h3>
-                <div>
+                <div class="dogContainer">
                     {% for dog in males %}
-                    <div>
-                        <h4>{{dog[0]}}</h4><br>
+                    <div class="dogItem">
+                        <h4>{{dog[1]}}</h4><br>
                         Gender: Male<br>
                         {{dog[2]}}<br>
                         Registration: {{dog[3]}}<br>
@@ -101,9 +101,9 @@
                 <div>
                     <h2 id="health_gaurantee" class="subtitle">Health Gaurantee</h2>
                     <ul>
-                        <li>Heart, Liver, Lung, Kidney, and Bowl for life against any birth defect</li>
-                        <li>Hips-Full 2 year garuantee against dysplasia</li>
-                        <li>Eyes we garuantee eyes on any pup and young adult, we are not responsible as dog gets
+                        <li>Heart, Liver, Lung, Kidney, and Bowl for life against any birth defect.</li>
+                        <li>Hips-Full 2 year garuantee against dysplasia.</li>
+                        <li>We garuantee eyes on any pup and young adult, we are not responsible as dog gets
                             older.
                         </li>
                     </ul>
@@ -119,19 +119,21 @@
 
             <div id="contact">
                 <h2 class="subtitle">Contact Us</h2>
-                Willing to answer any and all questions.<br>
-                We can be reached out at the following numbers: <br>
-                Southern Sollars: (505) 384-4453 <br>
-                John Kunz: (208) 244-2512 <br>
-                Sherry Kunz: (208) 520-4263 <br><br>
+                <p class="paragraph">
+                    Willing to answer any and all questions.<br>
+                    We can be reached out at the following numbers: <br>
+                    Southern Sollars: (505) 384-4453 <br>
+                    John Kunz: (208) 244-2512 <br>
+                    Sherry Kunz: (208) 520-4263 <br><br>
 
-                <!-- TODO: Make this an actual email link. -->
-                We can be emailed at <a>airedalesblack@aol.com</a><br>
-                Check out our Facebook page <a
-                    href="https://www.facebook.com/southernrocairedales">SouthernROCAiredales</a><br><br>
+                    <!-- TODO: Make this an actual email link. -->
+                    We can be emailed at <a>airedalesblack@aol.com</a><br>
+                    Check out our Facebook page <a
+                        href="https://www.facebook.com/southernrocairedales">SouthernROCAiredales</a><br><br>
 
-                PO box 189 McIntosh NM 87032 <br>
-                Hours 9am-9pm<br>
+                    PO box 189 McIntosh NM 87032 <br>
+                    Hours 9am-9pm<br>
+                </p>
             </div>
 
         </div>

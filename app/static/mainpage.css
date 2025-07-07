@@ -59,3 +59,16 @@
 .paragraph {
     margin: 2vw;
 }
+
+.dogContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dogItem {
+    background-color: white;
+    border-style: solid;
+    border-color: black;
+
+    margin: 2%;
+}
