@@ -1,0 +1,61 @@
+.bodycolor {
+    background-color: black;
+}
+
+.content {
+    background-color: black;
+
+}
+
+.subtitle {
+    text-align: center;
+}
+
+.info {
+    background-color: white;
+    margin: 5vw;
+    margin-bottom: 0vw;
+    margin-top: 0vw;
+
+    border-style: solid;
+    border-width: 3px;
+    border-color: rgb(193, 193, 193);
+    border-radius: 5px;
+
+
+}
+
+.pdfHolder {
+    height: 90vh;
+    border: none;
+}
+
+.mainPhoto {
+    /* height: 100vh; */
+    width: 25vw;
+    align-self: center;
+    justify-content: center;
+
+    display: block;
+    margin: auto;
+}
+
+
+
+.bookPhoto {
+    /* height: 100vh; */
+    /* width: 10vw; */
+    align-self: center;
+    justify-content: center;
+
+    display: block;
+    margin: auto;
+}
+
+.title {
+    text-align: center;
+}
+
+.paragraph {
+    margin: 2vw;
+}
