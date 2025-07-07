@@ -85,6 +85,7 @@
                 <!-- Females -->
                 <div class="dogContainer">
                     {% for dog in females %}
+                    <a href="/dogs/dog/{{dog[0]}}" class="dogAnchor">
                     <div class="dogItem">
                         <h4 class="subtitle">{{dog[1]}}</h4><br>
                         <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
@@ -92,19 +93,22 @@
                         {{dog[3]}}<br>
                         Registration: {{dog[4]}}<br>
                     </div>
+                    </a>
                     {% endfor %}
                 </div>
                 <!-- Males -->
                 <h3 class="subtitle">Our Males</h3>
                 <div class="dogContainer">
                     {% for dog in males %}
+                    <a href="/dogs/dog/{{dog[0]}}" class="dogAnchor">
                     <div class="dogItem">
                         <h4 class="subtitle">{{dog[1]}}</h4><br>
                         <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
-                        Gender: Male<br>
-                        {{dog[2]}}<br>
-                        Registration: {{dog[3]}}<br>
+                        Gender: Female<br>
+                        {{dog[3]}}<br>
+                        Registration: {{dog[4]}}<br>
                     </div>
+                    </a>
                     {% endfor %}
                 </div>
                 <!-- Health Gaurantee -->

@@ -71,8 +71,8 @@
     background-color: white;
     border-style: solid;
     border-color: black;
-    height: 25%;
-    width: 25%;
+    /* height: 25%; */
+    /* width: 25%; */
     margin: 10px;
     /* display: block; */
     /* margin: auto; */
@@ -84,4 +84,13 @@
     height: 75%;
     margin: auto;
     display: block;
+}
+
+.dogAnchor{
+  text-decoration: none;
+  display: block;
+  width: 25%;
+  height: 25%;
+  color: black;
+  margin: 10px;
 }
