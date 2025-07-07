@@ -60,6 +60,7 @@ do wordpress.
         - Recommended by flask
     - GoDaddy
         - Recommended by client
+    - Local website host service
 
 
 ## Would be nice but not required
