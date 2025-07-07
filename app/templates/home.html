@@ -69,16 +69,17 @@
 
             <div>
                 <!-- Dogs -->
-                <h2 class="subtitle" id="dogs">The Dogs</h2>
+                <h2 class="subtitle" id="dogs">Our Dogs</h2>
                 <p class="paragraph">
-                    Each dog comes with a health garuantee and health chart.
+                    Below you can see our available dogs, each dog comes with a health garuantee and health chart.
                 </p>
-                <h3 class="subtitle">Females</h3>
+                <h3 class="subtitle">Our Females</h3>
                 <!-- Females -->
                 <div class="dogContainer">
                     {% for dog in females %}
                     <div class="dogItem">
-                        <h4>{{dog[1]}}</h4><br>
+                        <h4 class="subtitle">{{dog[1]}}</h4><br>
+                        <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
                         Gender: Female<br>
                         {{dog[3]}}<br>
                         Registration: {{dog[4]}}<br>
@@ -86,11 +87,12 @@
                     {% endfor %}
                 </div>
                 <!-- Males -->
-                <h3 class="subtitle">Males</h3>
+                <h3 class="subtitle">Our Males</h3>
                 <div class="dogContainer">
                     {% for dog in males %}
                     <div class="dogItem">
-                        <h4>{{dog[1]}}</h4><br>
+                        <h4 class="subtitle">{{dog[1]}}</h4><br>
+                        <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
                         Gender: Male<br>
                         {{dog[2]}}<br>
                         Registration: {{dog[3]}}<br>
