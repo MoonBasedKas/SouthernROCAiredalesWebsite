@@ -8,124 +8,147 @@
 
 </head>
 
-<body>
+<body class="bodycolor">
     <!-- Top of page -->
-    {% include 'header.html' %}
+
     <!-- End Top of page -->
+    <div class="content">
+        <!-- I'm thinking we put the main picture here. -->
 
-    <!-- I'm thinking we put the main picture here. -->
-    <img src="static/MainPic.jpg" loading="lazy">
-    <!-- Content -->
-    <div id="home">
-        <!-- Intro -->
-        <h1>The Kennel of Southern Roc Airedales</h1>
-        <p>
-            In 1984 Frank Drach first opened Southern Roc in Pheonix Airzona. We took our time finding just the right
-            just the right stock to go with and on the following pages you will see all that we have done in the last 40
-            something years.
-        </p>
-
-
-        <!-- History and book -->
-        <h3>Vistors {{count}}</h3>
-
-        <h4>The story of the blacks</h4>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
-        </p>
-
-        <h4>Our Book</h4>
-        <img src="static/dogfightcover.jpg">
-        <p>
-            Southern realizes when she is a little girl that she will dedicate her life to breeding dogs. After all, it
-            is in her blood; she grew up with dogs in her father's kennel in the swamps of Alabama. A business woman who
-            with her husband has devoted over 30 years of her life to breeding Airedale Terriers, specializing over time
-            on a unique breed --- a Black Airedale. The growing acclaim of their Black Airedales is interrupted as they
-            faces an intimidating fight against intimidation and slander from competing breeders and the greed and
-            corruption of lawyers and large socio-educational clubs. They are forced to defend their reputation and her
-            career and their beloved dogs in the competitive world of dog breeding.
-            <br><br>
-
-            <a
-                href="https://www.amazon.com/DOG-FIGHT-STORY-BLACK-AIREDALE-ebook/dp/B06W2FWLZG#:~:text=Book%20overview&text=The%20growing%20acclaim%20of%20their,and%20large%20socio%2Deducational%20clubs.">
-                Read Here.
-            </a>
-        </p>
-
-        <div>
-            <!-- I'm guessing a frame buster is causing this to not work. :C -->
-            <!-- <iframe
-                src="https://rv.royalcaningha.com/Reports/MDUwMTIwMjFcNDMwMTYzNlw0MzAxNjM2LXdv.pdf?fbclid=IwY2xjawLVHitleHRuA2FlbQIxMABicmlkETFVWTV2enNqSHVqU01XVkliAR7nfGNLx63uTh001NJhtOQzArdy7YnlfgyckrThDrwE1RuC1DfN6fVI8OaYwQ_aem_EOHKVyXXqWMgE4-TJhtC_g"
-                title="DNA Report"></iframe> -->
-        </div>
-        <div>
-            <!-- Dogs -->
-            <h3 id="dogs">The Dogs</h3>
-            <p>
-                Each dog comes with a health garuantee and health chart.
+        <!-- Content -->
+        <div id="home" class="info">
+            {% include 'header.html' %}
+            <!-- Intro -->
+            <h1 class="title">The Kennel of Southern Roc Airedales</h1>
+            <img src="static/MainPic.jpg" loading="lazy" class="mainPhoto">
+            <p class="paragraph">
+                In 1984, Frank Drach first opened Southern Roc in Pheonix Airzona. We took our time finding
+                just the right stock to go with and on the following pages you will see all that we have done in the
+                last 40
+                something years.
             </p>
-            <h3>Females</h3>
-            <!-- Females -->
+
+            <!-- History and book -->
+            <h3 class="subtitle">Visitors: {{count}}</h3>
+
+            <h2 class="subtitle">The Story of the Blacks</h2>
+            <p class="paragraph">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip
+                ex
+                ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                eu
+                fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit
+                anim id est laborum.
+            </p>
+
+            <h2 class="subtitle">Our Book</h2>
+            <img src="static/dogfightcover.jpg" class="bookPhoto">
+            <p class="paragraph">
+                Southern realizes when she is a little girl that she will dedicate her life to breeding dogs. After
+                all,
+                it
+                is in her blood; she grew up with dogs in her father's kennel in the swamps of Alabama. A business
+                woman
+                who
+                with her husband has devoted over 30 years of her life to breeding Airedale Terriers, specializing
+                over
+                time
+                on a unique breed --- a Black Airedale. The growing acclaim of their Black Airedales is interrupted
+                as
+                they
+                faces an intimidating fight against intimidation and slander from competing breeders and the greed
+                and
+                corruption of lawyers and large socio-educational clubs. They are forced to defend their reputation
+                and
+                her
+                career and their beloved dogs in the competitive world of dog breeding.
+                <br><br>
+
+                <a
+                    href="https://www.amazon.com/DOG-FIGHT-STORY-BLACK-AIREDALE-ebook/dp/B06W2FWLZG#:~:text=Book%20overview&text=The%20growing%20acclaim%20of%20their,and%20large%20socio%2Deducational%20clubs.">
+                    Available for Purchase on Amazon.
+                </a>
+            </p>
+
             <div>
-                {% for dog in females %}
-                <div>
-                    <h4>{{dog[1]}}</h4><br>
-                    Gender: Female<br>
-                    {{dog[3]}}<br>
-                    Registration: {{dog[4]}}<br>
+                <!-- Dogs -->
+                <h2 class="subtitle" id="dogs">Our Dogs</h2>
+                <p class="paragraph">
+                    Below you can see our available dogs, each dog comes with a health garuantee and health chart.
+                </p>
+                <h3 class="subtitle">Our Females</h3>
+                <!-- Females -->
+                <div class="dogContainer">
+                    {% for dog in females %}
+                    <div class="dogItem">
+                        <h4 class="subtitle">{{dog[1]}}</h4><br>
+                        <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
+                        Gender: Female<br>
+                        {{dog[3]}}<br>
+                        Registration: {{dog[4]}}<br>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
-            <!-- Males -->
-            <h3>Males</h3>
-            <div>
-                {% for dog in males %}
-                <div>
-                    <h4>{{dog[0]}}</h4><br>
-                    Gender: Male<br>
-                    {{dog[2]}}<br>
-                    Registration: {{dog[3]}}<br>
+                <!-- Males -->
+                <h3 class="subtitle">Our Males</h3>
+                <div class="dogContainer">
+                    {% for dog in males %}
+                    <div class="dogItem">
+                        <h4 class="subtitle">{{dog[1]}}</h4><br>
+                        <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
+                        Gender: Male<br>
+                        {{dog[2]}}<br>
+                        Registration: {{dog[3]}}<br>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                <!-- Health Gaurantee -->
+                <div>
+                    <h2 id="health_gaurantee" class="subtitle">Health Gaurantee</h2>
+                    <ul>
+                        <li>Heart, Liver, Lung, Kidney, and Bowl for life against any birth defect.</li>
+                        <li>Hips-Full 2 year garuantee against dysplasia.</li>
+                        <li>We garuantee eyes on any pup and young adult, we are not responsible as dog gets
+                            older.
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h2 class="subtitle">DNA Test Report</h2>
+                    <iframe src="./static/blackjustice.pdf" width="100%" height="200%" title="Black Justice DNA report"
+                        class="pdfHolder" loading="lazy"></iframe>
+                </div>
             </div>
-            <div>
-                <h3>DNA Report</h3>
-                <iframe src="./static/blackjustice.pdf" width="100%" height="100%" title="Black Justice DNA report"
-                    loading="lazy"></iframe>
+
+
+
+            <div id="contact">
+                <h2 class="subtitle">Contact Us</h2>
+                <p class="paragraph">
+                    Willing to answer any and all questions.<br>
+                    We can be reached out at the following numbers: <br>
+                    Southern Sollars: <a href="tel:5053844453">(505) 384-4453</a> <br>
+                    John Kunz: <a href="tel:2082442512">(208) 244-2512</a> <br>
+                    Sherry Kunz: <a href="tel:2085204263">(208) 520-4263</a> <br><br>
+
+                    <!-- TODO: Make this an actual email link. -->
+                    We can be emailed at <a href="mailto:airedalesblack@aol.com">airedalesblack@aol.com</a><br>
+                    Check out our Facebook page <a
+                        href="https://www.facebook.com/southernrocairedales">SouthernROCAiredales</a><br><br>
+
+                    PO box 189 McIntosh NM 87032 <br>
+                    Hours 9am-9pm<br>
+                </p>
             </div>
+
         </div>
-        <!-- Health Gaurantee -->
-        <h3 id="health_gaurantee">Health Gaurantee</h3>
-        <ul>
-            <li>Heart, Liver, Lung, Kidney, and Bowl for life against any birth defect</li>
-            <li>Hips-Full 2 year garuantee against dysplasia</li>
-            <li>Eyes we garuantee eyes on any pup and young adult, we are not responsible as dog gets older.</li>
-        </ul>
-
-        <div id="contact">
-            <h3>Contact Us</h3>
-            Willing to answer any and all questions.<br>
-            We can be reached out at the following numbers: <br>
-            Southern Sollars: (505) 384-4453 <br>
-            John Kunz: (208) 244-2512 <br>
-            Sherry Kunz: (208) 520-4263 <br><br>
-
-            <!-- TODO: Make this an actual email link. -->
-            We can be emailed at <a>airedalesblack@aol.com</a><br>
-            Check out our Facebook page <a
-                href="https://www.facebook.com/southernrocairedales">SouthernROCAiredales</a><br><br>
-
-            PO box 189 McIntosh NM 87032 <br>
-            Hours 9am-9pm<br>
-        </div>
-
+        <!-- End Content -->
     </div>
-    <!-- End Content -->
-
 
 
 </body>
