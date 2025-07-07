@@ -8,8 +8,8 @@ import pandas
 # db = dbController.dbController()
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
-dogDB=None
-photos=None
+dogDB = None
+photos = None
 counter = 0
 try:
     dogDB = pandas.read_csv("dogs.csv")
@@ -66,8 +66,21 @@ def dog(id):
     name = "null"
     desc = "null"
     dob = "1970/01/01"
-    gender = False
-    return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc) 
+    gender = "Female"
+    query = dog.values.tolist()
+    if query == []:
+        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc) 
+    query = query[0]
+    name = query[1]
+    gender = query[2]
+    dob = query[3]
+    desc = query[4]
+    if gender:
+        gender = "Male"
+    else:
+        gender = "Female"
+
+    return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
 
 # def dog():
 #     photos = ["PlaceHolder.png"]

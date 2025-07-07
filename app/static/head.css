@@ -6,7 +6,7 @@
     height: 10vh;
     border-color: grey;
     border: solid;
-    border-radius: 1%;
+    border-radius: 5px;
 
 
 }
@@ -34,4 +34,14 @@
 
 .headerLink:visited {
     color: inherit;
+}
+
+
+.headerAnchor {
+    text-decoration: none;
+    display: block;
+    width: 25%;
+    height: 25%;
+    color: black;
+    margin: 10px;
 }
