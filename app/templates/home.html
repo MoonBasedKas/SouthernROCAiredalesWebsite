@@ -61,7 +61,7 @@
                 on a unique breed --- a Black Airedale. The growing acclaim of their Black Airedales is interrupted
                 as
                 they
-                faces an intimidating fight against intimidation and slander from competing breeders and the greed
+                face an intimidating fight against intimidation and slander from competing breeders and the greed
                 and
                 corruption of lawyers and large socio-educational clubs. They are forced to defend their reputation
                 and
@@ -86,13 +86,15 @@
                 <div class="dogContainer">
                     {% for dog in females %}
                     <a href="/dogs/dog/{{dog[0]}}" class="dogAnchor">
-                    <div class="dogItem">
-                        <h4 class="subtitle">{{dog[1]}}</h4><br>
-                        <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
-                        Gender: Female<br>
-                        {{dog[3]}}<br>
-                        Registration: {{dog[4]}}<br>
-                    </div>
+                        <div class="dogItem">
+                            <h4 class="subtitle">{{dog[1]}}</h4><br>
+                            <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage"><br>
+                            <p class="subtitle">
+                                Gender: Female<br>
+                                Date of Birth {{dog[5]}}<br>
+                                Registration: {{dog[4]}}<br>
+                            </p>
+                        </div>
                     </a>
                     {% endfor %}
                 </div>
@@ -101,13 +103,15 @@
                 <div class="dogContainer">
                     {% for dog in males %}
                     <a href="/dogs/dog/{{dog[0]}}" class="dogAnchor">
-                    <div class="dogItem">
-                        <h4 class="subtitle">{{dog[1]}}</h4><br>
-                        <img src="./static/dogPhotos/placeholder.jpg" class="dogImage"><br>
-                        Gender: Female<br>
-                        {{dog[3]}}<br>
-                        Registration: {{dog[4]}}<br>
-                    </div>
+                        <div class="dogItem">
+                            <h4 class="subtitle">{{dog[1]}}</h4><br>
+                            <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage"><br>
+                            <p class="subtitle">
+                                Gender: Female<br>
+                                Date of Birth {{dog[5]}}<br>
+                                Registration: {{dog[4]}}<br>
+                            </p>
+                        </div>
                     </a>
                     {% endfor %}
                 </div>
@@ -140,7 +144,6 @@
                     John Kunz: <a href="tel:2082442512">(208) 244-2512</a> <br>
                     Sherry Kunz: <a href="tel:2085204263">(208) 520-4263</a> <br><br>
 
-                    <!-- TODO: Make this an actual email link. -->
                     We can be emailed at <a href="mailto:airedalesblack@aol.com">airedalesblack@aol.com</a><br>
                     Check out our Facebook page <a
                         href="https://www.facebook.com/southernrocairedales">SouthernROCAiredales</a><br><br>
