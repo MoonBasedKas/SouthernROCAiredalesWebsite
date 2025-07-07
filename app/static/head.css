@@ -39,9 +39,11 @@
 
 .headerAnchor {
     text-decoration: none;
-    display: block;
-    width: 25%;
-    height: 25%;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    /* width: 25%; */
+    /* height: 25%; */
     color: black;
     margin: 10px;
 }
