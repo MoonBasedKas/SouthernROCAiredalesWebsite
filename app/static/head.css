@@ -1,35 +1,34 @@
 .bar {
-    background-color: black;
+    background-color: rgb(240 240 235);
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     height: 10vh;
-    border-color: grey;
-    border: solid;
-    border-radius: 5px;
-
-
+    /* border-color: grey; */
+    /* border: solid; */
+    /* border-radius: 5px; */
 }
 
 /* For a single item within the menu bar */
 .item {
-
-    color: white;
+    color: black;
     flex-grow: 1;
     flex-shrink: 1;
     text-align: center;
     border-left: 1%;
     border-right: 1%;
-    border-color: grey;
-    border: solid;
+    /* border-color: rgb(87, 87, 87); */
+
+    /* border: solid; */
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 5px;
 }
 
 .item:hover {
-    background-color: grey;
-    color: white;
+    background-color: rgb(255, 255, 255);
+    color: black;
 }
 
 .headerLink:visited {
@@ -45,5 +44,5 @@
     /* width: 25%; */
     /* height: 25%; */
     color: black;
-    margin: 10px;
+    /* margin: 10px; */
 }
