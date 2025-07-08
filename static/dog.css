@@ -1,0 +1,15 @@
+.content {
+    background-color: black;
+}
+
+.info {
+    background-color: rgb(240 240 235);
+    margin: 5vw;
+    margin-bottom: 0vw;
+    margin-top: 0vw;
+
+    border-style: solid;
+    border-width: 0px;
+    border-color: rgb(193, 193, 193);
+    border-radius: 5px;
+}

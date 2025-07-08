@@ -3,26 +3,28 @@
 <head>
     <link rel="stylesheet" href="/static/dog.css">
     <link rel="stylesheet" href="/static/head.css">
-    
+
 </head>
 
-<body>
-    <!-- Top of page -->
-    {% include 'header.html' %}
+<body class="content">
+    <div class="info">
+        <!-- Top of page -->
+        {% include 'header.html' %}
 
-    <!-- Photo container -->
-    <div class="dogPhotoContainer">
+        <!-- Photo container -->
+        <div class="dogPhotoContainer">
 
-    </div>
-    <!-- Dog info container -->
-    <div class="dogInfoContainer">
-        <div class="dogTitle">
-            <h1 class="dogTitleItem">{{name}}</h1>
-            <h3 class="dogTitleItem">{{gender}}</h3>
-            <h3 class="dogTitleItem">Born: {{dob}}</h3>
         </div>
-        <div class="dogDesc">
-            {{desc}}
+        <!-- Dog info container -->
+        <div class="dogInfoContainer">
+            <div class="dogTitle">
+                <h1 class="dogTitleItem">{{name}}</h1>
+                <h3 class="dogTitleItem">{{gender}}</h3>
+                <h3 class="dogTitleItem">Born: {{dob}}</h3>
+            </div>
+            <div class="dogDesc">
+                {{desc}}
+            </div>
         </div>
     </div>
 
