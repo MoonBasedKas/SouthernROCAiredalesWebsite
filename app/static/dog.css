@@ -34,11 +34,11 @@
 }
 
 .dogInfoContainer {
-    background-color: white;
+    background-color: rgb(240 240 235);
 }
 
 .dogTitle {
-    background-color: white;
+    background-color: rgb(240 240 235);
     display: flex;
     flex-direction: column;
     justify-content: center;
