@@ -19,6 +19,16 @@
     border-radius: 5px;
 }
 
+.desc {
+    margin: 2%;
+}
+
+
+.mainDogPhoto {
+    display: block;
+    margin: auto;
+}
+
 .dogPhotoContainer {
     background-color: black;
 }
