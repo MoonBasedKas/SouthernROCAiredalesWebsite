@@ -27,6 +27,7 @@
 .mainDogPhoto {
     display: block;
     margin: auto;
+    border-radius: 5px;
 }
 
 .dogPhotoContainer {
@@ -61,4 +62,9 @@
 .gallery {
     display: flex;
     flex-wrap: wrap;
+}
+
+
+.galleryPhoto {
+    border-radius: 5px;
 }
