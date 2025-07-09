@@ -23,6 +23,7 @@
     border-width: 0px;
     border-color: rgb(193, 193, 193);
     border-radius: 5px;
+    padding-bottom: 1cm;
 
 
 }
@@ -34,6 +35,7 @@
     border: none;
 }
 
+/* Photos */
 .mainPhoto {
     /* height: 100vh; */
     width: 25vw;
@@ -62,11 +64,16 @@
 /* For any blocks of text */
 .paragraph {
     padding-left: 2%;
-    margin: 0%;
+    /* margin: 2%; */
 }
 
 .subParagraph {
     padding-left: 4%;
+}
+
+.paragraphUnderPhoto {
+    margin: 2%;
+
 }
 
 .itemList {
@@ -89,6 +96,7 @@
     /* height: 25%; */
     /* width: 25%; */
     margin: 10px;
+    padding-bottom: 2%;
     /* box-shadow: 4px 10px; */
     /* display: block; */
     /* margin: auto; */
