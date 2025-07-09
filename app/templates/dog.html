@@ -6,35 +6,39 @@
 
 </head>
 
-<body class="content">
-    <div class="info">
-        <!-- Top of page -->
+<body>
+
+    <div class="content">
         {% include 'header.html' %}
+        <div class="info">
+            <!-- Top of page -->
 
-        <!-- Dog info container -->
-        <div class="dogInfoContainer">
-            <div class="dogTitle">
-                <h1 class="dogTitleItem">{{name}} - {{org}}</h1>
 
-                <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto">
-                <h3 class="dogTitleItem">Gender: {{gender}}</h3>
+            <!-- Dog info container -->
+            <div class="dogInfoContainer">
+                <div class="dogTitle">
+                    <h1 class="dogTitleItem">{{name}} - {{org}}</h1>
 
-                <h3 class="dogTitleItem">Birth Day: {{dob}}</h3>
+                    <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto">
+                    <h3 class="dogTitleItem">Gender: {{gender}}</h3>
+
+                    <h3 class="dogTitleItem">Birth Day: {{dob}}</h3>
+                </div>
+                {% if desc != "nan" %}
+                <p class="desc">
+                    {{desc}}
+                </p>
+                {% endif %}
+                {% if photos != [] %}
+                <h2>Gallery</h2>
+                <div class="gallery">
+                    {% for photo in photos %}
+                    <img src="/static/dogPhotos/{{photo}}" loading="lazy" class="galleryPhoto">
+                    {% endfor %}
+
+                </div>
+                {% endif %}
             </div>
-            {% if desc != "nan" %}
-            <p class="desc">
-                {{desc}}
-            </p>
-            {% endif %}
-            {% if photos != [] %}
-            <h2>Gallery</h2>
-            <div class="gallery">
-                {% for photo in photos %}
-                <img src="/static/dogPhotos/{{photo}}" loading="lazy" class="galleryPhoto">
-                {% endfor %}
-
-            </div>
-            {% endif %}
         </div>
     </div>
 

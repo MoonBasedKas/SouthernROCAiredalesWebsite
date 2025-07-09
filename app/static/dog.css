@@ -1,14 +1,17 @@
-/* body {
+body {
     margin: 0;
     border: 0;
-} */
+    background-color: black;
+}
 
 .content {
     background-color: black;
+
 }
 
 .info {
     background-color: rgb(240 240 235);
+    padding-bottom: 1cm;
     margin: 5vw;
     margin-bottom: 0vw;
     margin-top: 0vw;
