@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 
 <head>
+    <link rel="stylesheet" href="/static/mainpage.css">
     <link rel="stylesheet" href="/static/dog.css">
     <link rel="stylesheet" href="/static/head.css">
-    
+
 </head>
 
 <body>
-    <!-- Top of page -->
-    {% include 'header.html' %}
 
-    <!-- Photo container -->
-    <div class="dogPhotoContainer">
+    <div class="content">
+        {% include 'header.html' %}
+        <br>
+        <div class="info">
+            <!-- Top of page -->
 
-    </div>
-    <!-- Dog info container -->
-    <div class="dogInfoContainer">
-        <div class="dogTitle">
-            <h1 class="dogTitleItem">{{name}}</h1>
-            <h3 class="dogTitleItem">{{gender}}</h3>
-            <h3 class="dogTitleItem">Born: {{dob}}</h3>
-        </div>
-        <div class="dogDesc">
-            {{desc}}
+
+            <!-- Dog info container -->
+            <div class="dogInfoContainer">
+                <div class="dogTitle">
+                    <h1 class="dogTitleItem">{{name}} - {{org}}</h1>
+
+                    <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto">
+                    <h3 class="dogTitleItem">Gender: {{gender}}</h3>
+
+                    <h3 class="dogTitleItem">Birth Day: {{dob}}</h3>
+                </div>
+                {% if desc != "nan" %}
+                <p class="desc">
+                    {{desc}}
+                </p>
+                {% endif %}
+                {% if photos != [] %}
+                <h2>Gallery</h2>
+                <div class="gallery">
+                    {% for photo in photos %}
+                    <img src="/static/dogPhotos/{{photo}}" loading="lazy" class="galleryPhoto">
+                    {% endfor %}
+
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 

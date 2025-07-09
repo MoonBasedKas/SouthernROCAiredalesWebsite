@@ -14,14 +14,16 @@
     <!-- End Top of page -->
     <div class="content">
         <!-- I'm thinking we put the main picture here. -->
+        {% include 'header.html' %}
 
         <!-- Content -->
         <div id="home" class="info">
-            {% include 'header.html' %}
+
             <!-- Intro -->
             <h1 class="title">The Kennel of Southern Roc Airedales</h1>
-            <img src="static/MainPic.jpg" loading="lazy" class="mainPhoto">
-            <p class="paragraph">
+            <img src="/static/MainPic.jpg" loading="lazy" class="mainPhoto">
+            <div class="spacing"></div>
+            <p class="paragraphUnderPhoto">
                 In 1984, Frank Drach first opened Southern Roc in Pheonix Airzona. We took our time finding
                 just the right stock to go with and on the following pages you will see all that we have done in the
                 last 40
@@ -48,7 +50,7 @@
 
             <h2 class="subtitle">Our Book</h2> -->
             <img src="static/dogfightcover.jpg" class="bookPhoto">
-            <p class="paragraph">
+            <p class="paragraphUnderPhoto">
                 Southern realizes when she is a little girl that she will dedicate her life to breeding dogs. After
                 all,
                 it
@@ -88,7 +90,7 @@
                     <a href="/dogs/dog/{{dog[0]}}" class="dogAnchor">
                         <div class="dogItem">
                             <h4 class="subtitle">{{dog[1]}}</h4><br>
-                            <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage"><br>
+                            <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage" loading="lazy"><br>
                             <p class="subtitle">
                                 Gender: Female<br>
                                 Date of Birth {{dog[5]}}<br>
@@ -105,7 +107,7 @@
                     <a href="/dogs/dog/{{dog[0]}}" class="dogAnchor">
                         <div class="dogItem">
                             <h4 class="subtitle">{{dog[1]}}</h4><br>
-                            <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage"><br>
+                            <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage" loading="lazy"><br>
                             <p class="subtitle">
                                 Gender: Female<br>
                                 Date of Birth {{dog[5]}}<br>
@@ -118,10 +120,18 @@
                 <!-- Health Gaurantee -->
                 <div>
                     <h2 id="health_gaurantee" class="subtitle">Health Gaurantee</h2>
-                    <ul>
-                        <li>Heart, Liver, Lung, Kidney, and Bowl for life against any birth defect.</li>
-                        <li>Hips-Full 2 year garuantee against dysplasia.</li>
-                        <li>We garuantee eyes on any pup and young adult, we are not responsible as dog gets
+                    <p class="paragraph">
+                        For all dogs you purchase from us we provide the following garuantees.
+                    </p>
+                    <ul class="itemList">
+                        <li>
+                            Heart, Liver, Lung, Kidney, and Bowl for life against any birth defect.
+                        </li>
+                        <li>
+                            Hips-Full 2 year garuantee against dysplasia.
+                        </li>
+                        <li>
+                            We garuantee eyes on any pup and young adult, we are not responsible as dog gets
                             older.
                         </li>
                     </ul>
@@ -140,16 +150,17 @@
                 <p class="paragraph">
                     Willing to answer any and all questions.<br>
                     We can be reached out at the following numbers: <br>
-                    Southern Sollars: <a href="tel:5053844453">(505) 384-4453</a> <br>
-                    John Kunz: <a href="tel:2082442512">(208) 244-2512</a> <br>
-                    Sherry Kunz: <a href="tel:2085204263">(208) 520-4263</a> <br><br>
+
+                    &ensp; Southern Sollars: <a href="tel:5053844453">(505) 384-4453</a> <br>
+                    &ensp; John Kunz: <a href="tel:2082442512">(208) 244-2512</a> <br>
+                    &ensp; Sherry Kunz: <a href="tel:2085204263">(208) 520-4263</a> <br><br>
 
                     We can be emailed at <a href="mailto:airedalesblack@aol.com">airedalesblack@aol.com</a><br>
                     Check out our Facebook page <a
                         href="https://www.facebook.com/southernrocairedales">SouthernROCAiredales</a><br><br>
 
                     PO box 189 McIntosh NM 87032 <br>
-                    Hours 9am-9pm<br>
+                    We are available from 9am-9pm.<br>
                 </p>
             </div>
 

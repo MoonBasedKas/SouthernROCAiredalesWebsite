@@ -1,3 +1,5 @@
+/* Basic page set up */
+
 .bodycolor {
     background-color: black;
 }
@@ -21,16 +23,19 @@
     border-width: 0px;
     border-color: rgb(193, 193, 193);
     border-radius: 5px;
+    padding-bottom: 1cm;
 
 
 }
 
+/* For the DNA report */
 .pdfHolder {
     height: 90vh;
     width: 100%;
     border: none;
 }
 
+/* Photos */
 .mainPhoto {
     /* height: 100vh; */
     width: 25vw;
@@ -41,8 +46,6 @@
     display: block;
     margin: auto;
 }
-
-
 
 .bookPhoto {
     /* height: 100vh; */
@@ -58,10 +61,27 @@
     text-align: center;
 }
 
+/* For any blocks of text */
 .paragraph {
-    margin: 2vw;
+    padding-left: 2%;
+    /* margin: 2%; */
 }
 
+.subParagraph {
+    padding-left: 4%;
+}
+
+.paragraphUnderPhoto {
+    margin: 2%;
+
+}
+
+.itemList {
+    padding-left: 4%;
+}
+
+
+/* For displaying the dogs */
 .dogContainer {
     display: flex;
     flex-wrap: wrap;
@@ -76,6 +96,8 @@
     /* height: 25%; */
     /* width: 25%; */
     margin: 10px;
+    padding-bottom: 1%;
+    padding-top: 1%;
     /* box-shadow: 4px 10px; */
     /* display: block; */
     /* margin: auto; */

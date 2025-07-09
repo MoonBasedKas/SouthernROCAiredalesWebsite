@@ -1,6 +1,36 @@
 body {
     margin: 0;
     border: 0;
+    background-color: black;
+}
+
+.content {
+    background-color: black;
+
+}
+
+.info {
+    background-color: rgb(240 240 235);
+    padding-bottom: 1cm;
+    margin: 5vw;
+    margin-bottom: 0vw;
+    margin-top: 0vw;
+
+    border-style: solid;
+    border-width: 0px;
+    border-color: rgb(193, 193, 193);
+    border-radius: 5px;
+}
+
+.desc {
+    margin: 2%;
+}
+
+
+.mainDogPhoto {
+    display: block;
+    margin: auto;
+    border-radius: 5px;
 }
 
 .dogPhotoContainer {
@@ -8,11 +38,11 @@ body {
 }
 
 .dogInfoContainer {
-    background-color: white;
+    background-color: rgb(240 240 235);
 }
 
 .dogTitle {
-    background-color: white;
+    background-color: rgb(240 240 235);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,4 +59,15 @@ body {
     border-top: solid;
     border-color: grey;
     border-radius: 1px;
+}
+
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.galleryPhoto {
+    border-radius: 5px;
 }
