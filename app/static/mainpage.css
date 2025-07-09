@@ -57,7 +57,12 @@
 }
 
 .paragraph {
-    margin: 2vw;
+    padding-left: 2%;
+    margin: 0%;
+}
+
+.subParagraph {
+    padding-left: 4%;
 }
 
 .dogContainer {
