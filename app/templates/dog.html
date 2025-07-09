@@ -14,21 +14,23 @@
         <!-- Dog info container -->
         <div class="dogInfoContainer">
             <div class="dogTitle">
-                <h1 class="dogTitleItem">{{name}} - {{reg}}</h1>
+                <h1 class="dogTitleItem">{{name}} - {{org}}</h1>
 
                 <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto">
                 <h3 class="dogTitleItem">{{gender}}</h3>
 
                 <h3 class="dogTitleItem">Born: {{dob}}</h3>
             </div>
+            {% if desc != "nan" %}
             <p class="desc">
                 {{desc}}
             </p>
-            {% if photos != []%}
+            {% endif %}
+            {% if photos != [] %}
             <h2>Gallery</h2>
-            <div>
+            <div class="gallery">
                 {% for photo in photos %}
-                <img src="/static/dogPhotos/{{photo}}" loading="lazy">
+                <img src="/static/dogPhotos/{{photo}}" loading="lazy" class="galleryPhoto">
                 {% endfor %}
 
             </div>

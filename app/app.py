@@ -3,6 +3,7 @@ from flask import render_template
 from flask import Flask, jsonify, request
 
 import pandas
+import numpy as np
 # import dbController
 
 # db = dbController.dbController()
@@ -67,20 +68,29 @@ def dog(id):
     desc = "null"
     dob = "1970/01/01"
     gender = "Female"
+    mainPhoto=""
+    org=""
+    photos=[]
     query = dog.values.tolist()
     if query == []:
-        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc) 
+        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
+    print(query)
     query = query[0]
     name = query[1]
     gender = query[2]
-    dob = query[3]
-    desc = query[4]
+    org = query[4]
+    dob = query[5]
+    mainPhoto= query[6]
+    desc = query[7]
+    if type(desc) == float:
+        desc = ""
+
     if gender:
         gender = "Male"
     else:
         gender = "Female"
 
-    return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
+    return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
 
 # def dog():
 #     photos = ["PlaceHolder.png"]

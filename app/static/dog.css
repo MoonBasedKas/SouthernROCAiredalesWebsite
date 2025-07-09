@@ -56,3 +56,9 @@
     border-color: grey;
     border-radius: 1px;
 }
+
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+}
