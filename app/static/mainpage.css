@@ -1,3 +1,5 @@
+/* Basic page set up */
+
 .bodycolor {
     background-color: black;
 }
@@ -25,6 +27,7 @@
 
 }
 
+/* For the DNA report */
 .pdfHolder {
     height: 90vh;
     width: 100%;
@@ -56,6 +59,7 @@
     text-align: center;
 }
 
+/* For any blocks of text */
 .paragraph {
     padding-left: 2%;
     margin: 0%;
@@ -65,6 +69,12 @@
     padding-left: 4%;
 }
 
+.itemList {
+    padding-left: 4%;
+}
+
+
+/* For displaying the dogs */
 .dogContainer {
     display: flex;
     flex-wrap: wrap;
