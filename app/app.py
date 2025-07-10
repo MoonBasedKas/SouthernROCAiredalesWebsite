@@ -169,19 +169,27 @@ def admin():
 def newDog():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    
+    pics=""
     name = request.form['Name']
     gender = request.form['gender']
     avail = request.form['avail']
     reg = request.form['reg']
     dob = request.form['dob']
     desc = request.form['desc']
-    # photos = request.files[request.form['Photos[]']]
+    
 
-    if 'file' not in request.files:
-        print("hi")
+    if 'files[]' not in request.files:
+        pass
+        print("no photo sent")
+    else:
+        pics = request.files['files[]']
+        sent = request.files.getlist('files[]')
+        for file in sent:
+            file.save(file.filename)
 
-    print(photos)
+    print(pics)
+    print(sent)
+
 
     return redirect(url_for('admin'))
 
