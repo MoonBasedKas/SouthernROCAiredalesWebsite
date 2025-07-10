@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request, redirect, session, u
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
+import threading
 
 import pandas
 import numpy as np
@@ -164,31 +165,66 @@ def admin():
         return redirect(url_for("Welcome"))
     return render_template("admin.html")
 
-
+"""
+This is for when a request is made by an admin to save a new dog
+"""
 @app.route("/admin/newDog", methods=["POST"])
 def newDog():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    pics=""
+    
+    fname = ""
+    threads = []
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+    dogID = dogDB["id"].max() + 1
     name = request.form['Name']
+
     gender = request.form['gender']
+    if gender == "Female":
+        gender = False
+    else:
+        gender = True
+
     avail = request.form['avail']
+    if avail == "true":
+        avail = True
+    else:
+        avail = False
+
     reg = request.form['reg']
     dob = request.form['dob']
     desc = request.form['desc']
     
 
     if 'files[]' not in request.files:
-        pass
         print("no photo sent")
     else:
-        pics = request.files['files[]']
+        photoID = photos['id'].max()
         sent = request.files.getlist('files[]')
         for file in sent:
-            file.save(UPLOAD_FOLDER + file.filename)
+            fname = secure_filename(file.filename)
+            # TODO: Check file types
+            file.save(UPLOAD_FOLDER + fname)
+            photoID += 1
+            # This could honestly slow everything down a lot.
+            addPhoto(photoID, dogID, fname)
 
-    print(pics)
-    print(sent)
+
+    if fname == "":
+        fname = "placeholder.jpg"
+
+    addDog(dogID, name, gender, avail, reg, dob, fname, desc)
+    while threads != []:
+        print("hi")
+        print(threads[0].is_alive())
+        if not threads[0].is_alive():
+            threads.pop(0)
+    print(dogDB)
+    print(photos)
+    
+    # threading.Thread(target=saveUpdates, args=(threads))    
 
 
     return redirect(url_for('admin'))
@@ -250,6 +286,37 @@ def logout():
     return redirect(url_for('Welcome'))
 
 
+
+# Util functions
+"""
+Adds a photo to the database
+"""
+def addPhoto(id, dogID, photo):
+    new = {"id":id,"dogID":dogID,"photoName":photo}
+    photos.loc[len(photos)] = new
+    return
+
+"""
+Adds a new dog to the database
+"""
+def addDog(id, name, gender, available, registration, dob, mainPhoto, desc):
+    new = {"id":id, "name":name, "gender":gender, "available":available, "registration":registration, "dob":dob, "mainPhoto":mainPhoto, "desc":desc}
+    dogDB.loc[len(dogDB)] = new
+    return
+
+"""
+Saves updates to a database
+
+threads - the current disbatched threads. Waits until all threads are done before writing.
+"""
+def saveUpdates(threads):
+    while threads != []:
+        if not threads[0].is_alive():
+            threads.pop(0)
+
+    dogDB.to_csv("newDogs.csv")
+    photos.to_csv("newPhotos.csv")
+    return
 
 if __name__ == '__main__':
     with app.app_context():
