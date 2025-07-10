@@ -6,7 +6,6 @@ import pandas
 import numpy as np
 # import dbController
 
-restrictedPages = {}
 
 # db = dbController.dbController()
 
@@ -17,6 +16,7 @@ counter = 0
 try:
     dogDB = pandas.read_csv("dogs.csv")
 except:
+    print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
 
 try:
@@ -61,10 +61,9 @@ def Welcome():
 
         
     available = dogDB[dogDB["available"] == True]
-    
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
-
+    print(available)
     # Set Cookies
     visit = request.cookies.get("visited")
     if visit != "true":
@@ -198,13 +197,53 @@ def contact():
 #     return secrets[funcName]
 
 # Protected pages
-@app.route("/secret")
-def secret():
+@app.route("/admin")
+def admin():
     if "username" not in session:
         return redirect(url_for("Welcome"))
     return "Secret Key"
 
 
+
+# Login Route
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "GET":
+        return render_template('login.html')
+    username = request.form['username']
+    password = request.form['password']
+    
+
+    user = User.query.filter_by(username=username).first()
+    if user and user.check_password(password):
+        session['username'] = username
+        return redirect(url_for('admin'))
+    else:
+        return redirect(url_for('login'))
+
+
+# Register Route
+@app.route("/register", methods=["POST"])
+def register():
+    username = request.form['username']
+    password = request.form['password']
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return render_template("index.html", error="Username already exists")
+    
+    new_user = User(username=username)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+    session['username'] = username
+    return redirect(url_for('admin'))
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+
+    return redirect(url_for('Welcome'))
 
 
 
