@@ -15,7 +15,7 @@ logins = True
 dogDB = None
 photos = None
 counter = 0
-UPLOAD_FOLDER="./static/dogPhotos"
+UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
     dogDB = pandas.read_csv("dogs.csv",  sep=',')
@@ -185,7 +185,7 @@ def newDog():
         pics = request.files['files[]']
         sent = request.files.getlist('files[]')
         for file in sent:
-            file.save(file.filename)
+            file.save(UPLOAD_FOLDER + file.filename)
 
     print(pics)
     print(sent)
