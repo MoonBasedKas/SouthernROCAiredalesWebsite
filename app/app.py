@@ -180,7 +180,7 @@ def newDog():
     
     dogID = dogDB["id"].max() + 1
     name = request.form['Name']
-    
+
     gender = request.form['gender']
     if gender == "Female":
         gender = False
@@ -209,15 +209,22 @@ def newDog():
             file.save(UPLOAD_FOLDER + fname)
             photoID += 1
             # This could honestly slow everything down a lot.
-            # threads.append(threading.Thread(target=addPhoto, args=(photoID, dogID, fname)))
+            addPhoto(photoID, dogID, fname)
 
 
     if fname == "":
         fname = "placeholder.jpg"
 
-    # threads.append(threading.Thread(target=addDog, args=(dogID, name, gender, avail, reg, dob, fname, desc)))    
-
-    threading.Thread(target=saveUpdates, args=(threads))    
+    addDog(dogID, name, gender, avail, reg, dob, fname, desc)
+    while threads != []:
+        print("hi")
+        print(threads[0].is_alive())
+        if not threads[0].is_alive():
+            threads.pop(0)
+    print(dogDB)
+    print(photos)
+    
+    # threading.Thread(target=saveUpdates, args=(threads))    
 
 
     return redirect(url_for('admin'))
@@ -286,14 +293,15 @@ Adds a photo to the database
 """
 def addPhoto(id, dogID, photo):
     new = {"id":id,"dogID":dogID,"photoName":photo}
-    photos.append(new)
+    photos.loc[len(photos)] = new
+    return
 
 """
 Adds a new dog to the database
 """
 def addDog(id, name, gender, available, registration, dob, mainPhoto, desc):
     new = {"id":id, "name":name, "gender":gender, "available":available, "registration":registration, "dob":dob, "mainPhoto":mainPhoto, "desc":desc}
-    dogDB.append(new)
+    dogDB.loc[len(dogDB)] = new
     return
 
 """
@@ -303,11 +311,12 @@ threads - the current disbatched threads. Waits until all threads are done befor
 """
 def saveUpdates(threads):
     while threads != []:
-        if threads[0].is_alive():
+        if not threads[0].is_alive():
             threads.pop(0)
 
     dogDB.to_csv("newDogs.csv")
     photos.to_csv("newPhotos.csv")
+    return
 
 if __name__ == '__main__':
     with app.app_context():
