@@ -40,16 +40,18 @@
                     <h3>Organization of Registration</h3>
                     <input type="radio" name="reg" value="AKC" id="AKC" required> <label for="AKC">AKC</label><br>
                     <input type="radio" name="reg" value="AATR" id="AATR" required> <label for="AATR">AATR</label><br>
+                    <input type="radio" name="reg" value="None" id="None" required> <label for="None">None</label><br>
 
                     <h3>Date of Birth</h3>
                     <input type="date" name="dob" required><br>
 
                     <h3>Photo of dog</h3>
-                    <input type="file" name="mainPhoto" required>
+                    <input type="file" name="Photos[]" required multiple>
 
                     <h3>Descripton of dog</h3>
-                    <textarea name="desc" id="desc" required></textarea>
-                    <!-- Description -->
+                    <textarea name="desc" id="desc" required></textarea><br>
+
+                    <input type="submit" value="submit">
                 </form>
             </div>
 
