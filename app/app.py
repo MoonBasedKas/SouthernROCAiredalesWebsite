@@ -1,20 +1,27 @@
-from flask import Flask
-from flask import render_template
-from flask import Flask, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, session, url_for, make_response
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
 
 import pandas
 import numpy as np
 # import dbController
 
+# Disable this
+logins = True
 # db = dbController.dbController()
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB = None
 photos = None
 counter = 0
+UPLOAD_FOLDER="./static/dogPhotos/"
+ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
-    dogDB = pandas.read_csv("dogs.csv")
+    dogDB = pandas.read_csv("dogs.csv",  sep=',')
+
 except:
+    print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
 
 try:
@@ -22,8 +29,30 @@ try:
 except:
     photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
     
+# App Config    
 app = Flask(__name__)
+app.secret_key = "A Super Secret Key"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
+
+# Config of SQL alchemy
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(32), unique=True, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
+    
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 # @app.route('/home')
 # def Welcome(name = None):
@@ -34,11 +63,20 @@ app = Flask(__name__)
 @app.route('/index')
 def Welcome():
     global counter
-    counter += 1
+
+        
     available = dogDB[dogDB["available"] == True]
-    
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
+    # Set Cookies
+    visit = request.cookies.get("visited")
+    if visit != "true":
+        counter += 1
+    else:
+        resp = make_response(render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter))
+        resp.set_cookie(key="visited", value="true", max_age=90*60*60*24)
+        return resp
+
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter)
 
 
@@ -74,7 +112,6 @@ def dog(id):
     query = dog.values.tolist()
     if query == []:
         return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
-    print(query)
     query = query[0]
     name = query[1]
     gender = query[2]
@@ -91,41 +128,6 @@ def dog(id):
         gender = "Female"
 
     return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
-
-# def dog():
-#     photos = ["PlaceHolder.png"]
-#     name = "null"
-#     desc = "null description"
-#     dob = "1970/1/1"
-#     gender = False # False == Female because both start with f.
-
-#     # Parameter fetching
-#     id = request.args.get("id")
-#     # if id == None:
-#     if id == None:
-#         return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
-#     id = int(id)
-#     result = db.fetchDog(id)
-#     images = db.fetchImage(id)
-
-#     # If any images assign
-#     if images != []:
-#         photos = images
-    
-#     # If dog doesn't exist write error page.
-#     if result.get("dogName", None) == None:
-#         return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
-
-#     name = result["dogName"]
-#     gender = result["gender"]
-#     # dob = result["dob"]
-#     desc = result["dogDesc"]
-
-#     if gender:
-#         gender = "Male"
-#     else:
-#         gender = "Female"
-#     return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
 
 """
 I don't remember what this page was supposed to be./
@@ -148,7 +150,108 @@ For rendering the contact us
 """
 @app.route('/contact')
 def contact():
+    if "username" in session:
+        return "yes"
     return render_template('contact.html')
 
+
+
+
+# Protected pages
+@app.route("/admin")
+def admin():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    return render_template("admin.html")
+
+
+@app.route("/admin/newDog", methods=["POST"])
+def newDog():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    pics=""
+    name = request.form['Name']
+    gender = request.form['gender']
+    avail = request.form['avail']
+    reg = request.form['reg']
+    dob = request.form['dob']
+    desc = request.form['desc']
+    
+
+    if 'files[]' not in request.files:
+        pass
+        print("no photo sent")
+    else:
+        pics = request.files['files[]']
+        sent = request.files.getlist('files[]')
+        for file in sent:
+            file.save(UPLOAD_FOLDER + file.filename)
+
+    print(pics)
+    print(sent)
+
+
+    return redirect(url_for('admin'))
+
+@app.route("/admin/modify")
+def modify():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+
+
+    return render_template('modify.html')
+
+
+
+# Login Route
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "GET":
+        return render_template('login.html')
+    username = request.form['username']
+    password = request.form['password']
+    
+
+    user = User.query.filter_by(username=username).first()
+    if user and user.check_password(password):
+        session['username'] = username
+        return redirect(url_for('admin'))
+    else:
+        return redirect(url_for('login'))
+
+
+# Register Route
+@app.route("/register", methods=["POST"])
+def register():
+    if not logins:
+        return redirect(url_for('Welcome'))
+
+    username = request.form['username']
+    password = request.form['password']
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return render_template("index.html", error="Username already exists")
+    
+    new_user = User(username=username)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+    session['username'] = username
+    return redirect(url_for('admin'))
+
+
+@app.route('/logout')
+def logout():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    session.pop('username', None)
+
+    return redirect(url_for('Welcome'))
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True, Threading=True)
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
