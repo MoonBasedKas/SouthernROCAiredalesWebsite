@@ -6,7 +6,8 @@ import pandas
 import numpy as np
 # import dbController
 
-
+# Disable this
+logins = True
 # db = dbController.dbController()
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
@@ -63,7 +64,6 @@ def Welcome():
     available = dogDB[dogDB["available"] == True]
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
-    print(available)
     # Set Cookies
     visit = request.cookies.get("visited")
     if visit != "true":
@@ -108,7 +108,6 @@ def dog(id):
     query = dog.values.tolist()
     if query == []:
         return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
-    print(query)
     query = query[0]
     name = query[1]
     gender = query[2]
@@ -201,8 +200,16 @@ def contact():
 def admin():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    return "Secret Key"
+    return render_template("admin.html")
 
+
+@app.route("/admin/newDog")
+def newDog():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+
+    return redirect(url_for('admin'))
 
 
 # Login Route
@@ -225,6 +232,9 @@ def login():
 # Register Route
 @app.route("/register", methods=["POST"])
 def register():
+    if not logins:
+        return redirect(url_for('Welcome'))
+
     username = request.form['username']
     password = request.form['password']
     user = User.query.filter_by(username=username).first()

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<head>
+
+    <link rel="stylesheet" href="/static/head.css">
+    <link rel="stylesheet" href="/static/content.css">
+    <link rel="stylesheet" href="/static/mainpage.css">
+
+</head>
+
+<body class="bodycolor">
+    <!-- Top of page -->
+
+    <!-- End Top of page -->
+    <div class="content">
+        <!-- I'm thinking we put the main picture here. -->
+        {% include 'header.html' %}
+
+        <!-- Content -->
+        <div id="home" class="info">
+            <h1>Welcome to your dashboard</h1>
+
+            <!-- Enter a new dog -->
+            <div>
+                <h1>Enter a new dog</h1>
+                <form>
+                    <input type="text" placeholder="Name" name="Name" required><br>
+                    <!-- Gender -->
+                    <h3>Gender</h3>
+                    <input type="radio" name="gender" value="Female" id="Female" required> <label
+                        for="Female">Female</label><br>
+                    <input type="radio" name="gender" value="Male" id="Male" required> <label
+                        for="Male">Male</label><br>
+
+                    <!-- Available -->
+                    <h3>Are they available</h3>
+                    <input type="checkbox" id="avail" name="avail" value="true"> Available<br>
+
+                    <!-- Reg -->
+                    <h3>Organization of Registration</h3>
+                    <input type="radio" name="reg" value="AKC" id="AKC" required> <label for="AKC">AKC</label><br>
+                    <input type="radio" name="reg" value="AATR" id="AATR" required> <label for="AATR">AATR</label><br>
+
+                    <h3>Date of Birth</h3>
+                    <input type="date" name="dob" required><br>
+
+                    <h3>Photo of dog</h3>
+                    <input type="file" name="mainPhoto" required>
+
+                    <h3>Descripton of dog</h3>
+                    <textarea name="desc" id="desc" required></textarea>
+                    <!-- Description -->
+                </form>
+            </div>
+
+            <!-- Modify a current dog -->
+            <!-- Other actions -->
+            <a href="/logout">logout</a>
+
+        </div>
+        <!-- End Content -->
+    </div>
+
+
+</body>
