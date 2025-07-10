@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect, session, url_for, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 
 import pandas
@@ -14,8 +15,11 @@ logins = True
 dogDB = None
 photos = None
 counter = 0
+UPLOAD_FOLDER="./static/dogPhotos"
+ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
-    dogDB = pandas.read_csv("dogs.csv")
+    dogDB = pandas.read_csv("dogs.csv",  sep=',')
+
 except:
     print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
@@ -28,7 +32,7 @@ except:
 # App Config    
 app = Flask(__name__)
 app.secret_key = "A Super Secret Key"
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 
@@ -125,41 +129,6 @@ def dog(id):
 
     return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
 
-# def dog():
-#     photos = ["PlaceHolder.png"]
-#     name = "null"
-#     desc = "null description"
-#     dob = "1970/1/1"
-#     gender = False # False == Female because both start with f.
-
-#     # Parameter fetching
-#     id = request.args.get("id")
-#     # if id == None:
-#     if id == None:
-#         return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
-#     id = int(id)
-#     result = db.fetchDog(id)
-#     images = db.fetchImage(id)
-
-#     # If any images assign
-#     if images != []:
-#         photos = images
-    
-#     # If dog doesn't exist write error page.
-#     if result.get("dogName", None) == None:
-#         return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
-
-#     name = result["dogName"]
-#     gender = result["gender"]
-#     # dob = result["dob"]
-#     desc = result["dogDesc"]
-
-#     if gender:
-#         gender = "Male"
-#     else:
-#         gender = "Female"
-#     return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc)
-
 """
 I don't remember what this page was supposed to be./
 """
@@ -188,13 +157,6 @@ def contact():
 
 
 
-# Login Magic
-# Remember to use do @login_required
-# def login_required(secrets, funcName):
-#     if "username" not in session:
-#         return redirect(url_for("home"))
-#     return secrets[funcName]
-
 # Protected pages
 @app.route("/admin")
 def admin():
@@ -203,13 +165,35 @@ def admin():
     return render_template("admin.html")
 
 
-@app.route("/admin/newDog")
+@app.route("/admin/newDog", methods=["POST"])
 def newDog():
     if "username" not in session:
         return redirect(url_for("Welcome"))
     
+    name = request.form['Name']
+    gender = request.form['gender']
+    avail = request.form['avail']
+    reg = request.form['reg']
+    dob = request.form['dob']
+    desc = request.form['desc']
+    # photos = request.files[request.form['Photos[]']]
+
+    if 'file' not in request.files:
+        print("hi")
+
+    print(photos)
 
     return redirect(url_for('admin'))
+
+@app.route("/admin/modify")
+def modify():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+
+
+    return render_template('modify.html')
+
 
 
 # Login Route
@@ -251,6 +235,8 @@ def register():
 
 @app.route('/logout')
 def logout():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
     session.pop('username', None)
 
     return redirect(url_for('Welcome'))

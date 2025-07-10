@@ -128,4 +128,10 @@
 /* Input form */
 .inputForm {
     margin: 2%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.innerForm {
+    margin: 2%;
 }
