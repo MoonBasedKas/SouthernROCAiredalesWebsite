@@ -299,22 +299,26 @@ def dogDetails(id):
     
 @app.route("/admin/deletePhoto", methods=["POST"])
 def deletePhoto():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
     photoID = request.form["photoID"]
     dogID = request.form["dogID"]
     ids = photos[["id"]]
-    loc = np.where(photoID)
+    loc = np.where(ids)
     photos.at[loc, "id"] = -1
     print(photos)
     return redirect(f"/admin/details/{dogID}")
 
 @app.route("/admin/setMainPhoto", methods=["POST"])
 def setMainPhoto():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
     photoName = request.form["photoName"]
     dogID = request.form["dogID"]
-    ids = dogDB[["id"]]
-    loc = np.where(ids)
-    dogDB.at[loc, "mainPhoto"] = photoName
-    print(dogDB)
+    dog = dogDB.index[dogDB["id"]].tolist()
+    
+    print(dog)
+    print(type(dogID))
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -327,7 +331,6 @@ def login():
         return render_template('login.html')
     username = request.form['username']
     password = request.form['password']
-    
 
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
