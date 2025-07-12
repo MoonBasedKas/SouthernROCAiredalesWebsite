@@ -166,7 +166,7 @@ def admin():
     return render_template("admin.html")
 
 """
-This is for when a request is made by an admin to save a new dog
+Does the request for when an admin sends a new dog to add.
 """
 @app.route("/admin/newDog", methods=["POST"])
 def newDog():
@@ -174,7 +174,6 @@ def newDog():
         return redirect(url_for("Welcome"))
     
     fname = ""
-    threads = []
     if "username" not in session:
         return redirect(url_for("Welcome"))
     
@@ -216,33 +215,91 @@ def newDog():
         fname = "placeholder.jpg"
 
     addDog(dogID, name, gender, avail, reg, dob, fname, desc)
-    while threads != []:
-        print("hi")
-        print(threads[0].is_alive())
-        if not threads[0].is_alive():
-            threads.pop(0)
-    print(dogDB)
-    print(photos)
     
-    # threading.Thread(target=saveUpdates, args=(threads))    
+    
+    threading.Thread(target=saveUpdates, args=([]))    
 
 
     return redirect(url_for('admin'))
 
+"""
+Shows all of the dogs for what to modify
+"""
 @app.route("/admin/modify")
 def modify():
     if "username" not in session:
         return redirect(url_for("Welcome"))
     
+    result = dogDB
+    
+    page = request.args.get('page', default=0, type=int) * 20
+    query = request.args.get('search', default="", type=str)
+    
+    if query != "":
+        result = result["name"].str.contains(query)
+
+    result = result.loc[page:page + 20]
 
 
-    return render_template('modify.html')
+    return render_template('modify.html', results=result.values.tolist())
 
 
+"""
+Shows all of the dogs for what to modify
+"""
+@app.route("/admin/update/<int:id>", methods=["POST"])
+def updateDog(id):
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+
+    return redirect(url_for("modify"))
+
+
+"""
+Shows us the details of the dogs, let's us see each dog so we can modify it.
+"""
+@app.route("/admin/details/<int:id>")
+def dogDetails(id):
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    dog = dogDB[dogDB["id"] == id]
+    photos = ["PlaceHolder.png"]
+    name = "null"
+    desc = "null"
+    dob = "1970/01/01"
+    gender = "Female"
+    mainPhoto=""
+    org=""
+    photos=[]
+    query = dog.values.tolist()
+    if query == []:
+        # TODO upodate to no dog found.
+        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
+    query = query[0] # Set to first value because it'll return [[]] if it exists.
+    name = query[1]
+    gender = query[2]
+    avail = query[3]
+    org = query[4]
+    dob = query[5]
+    mainPhoto= query[6]
+    desc = query[7]
+    if type(desc) == float:
+        desc = ""
+
+    if gender:
+        gender = "Male"
+    else:
+        gender = "Female"
+
+    return render_template('details.html', id=id, photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
+    
 
 # Login Route
 @app.route("/login", methods=["POST", "GET"])
 def login():
+    if "username" in session:
+        return redirect(url_for("admin"))
     if request.method == "GET":
         return render_template('login.html')
     username = request.form['username']
@@ -317,6 +374,8 @@ def saveUpdates(threads):
     dogDB.to_csv("newDogs.csv")
     photos.to_csv("newPhotos.csv")
     return
+
+
 
 if __name__ == '__main__':
     with app.app_context():
