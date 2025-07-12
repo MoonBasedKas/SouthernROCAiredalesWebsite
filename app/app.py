@@ -3,7 +3,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 import threading
-
 import pandas
 import numpy as np
 # import dbController
@@ -264,14 +263,14 @@ def dogDetails(id):
     if "username" not in session:
         return redirect(url_for("Welcome"))
     dog = dogDB[dogDB["id"] == id]
-    photos = ["PlaceHolder.png"]
+    pics = ["PlaceHolder.png"]
     name = "null"
     desc = "null"
     dob = "1970/01/01"
     gender = "Female"
     mainPhoto=""
     org=""
-    photos=[]
+    pics=[]
     query = dog.values.tolist()
     if query == []:
         # TODO upodate to no dog found.
@@ -292,8 +291,32 @@ def dogDetails(id):
     else:
         gender = "Female"
 
-    return render_template('details.html', id=id, photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
+    print(photos)
+    pics = photos[photos["dogID"] == id]
+    pics = pics.values.tolist()
+
+    return render_template('details.html', id=id, pics=pics, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
     
+@app.route("/admin/deletePhoto", methods=["POST"])
+def deletePhoto():
+    photoID = request.form["photoID"]
+    dogID = request.form["dogID"]
+    ids = photos[["id"]]
+    loc = np.where(photoID)
+    photos.at[loc, "id"] = -1
+    print(photos)
+    return redirect(f"/admin/details/{dogID}")
+
+@app.route("/admin/setMainPhoto", methods=["POST"])
+def setMainPhoto():
+    photoName = request.form["photoName"]
+    dogID = request.form["dogID"]
+    ids = dogDB[["id"]]
+    loc = np.where(ids)
+    dogDB.at[loc, "mainPhoto"] = photoName
+    print(dogDB)
+    return redirect(f"/admin/details/{dogID}")
+
 
 # Login Route
 @app.route("/login", methods=["POST", "GET"])
@@ -341,7 +364,6 @@ def logout():
     session.pop('username', None)
 
     return redirect(url_for('Welcome'))
-
 
 
 # Util functions

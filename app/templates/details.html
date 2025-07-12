@@ -6,6 +6,22 @@
     <link rel="stylesheet" href="/static/content.css">
     <link rel="stylesheet" href="/static/mainpage.css">
 
+    <script>
+        function setPhotoForm(action, id) {
+            let form = document.getElementById("photo-form-" + id)
+            console.log(action)
+            console.log("photo-form-" + id)
+            if (action === 'delete') {
+                form.action = "{{url_for('deletePhoto')}}"
+                form.method = 'post'
+                form.submit()
+            } else if (action === 'setMainPhoto') {
+                form.action = "{{url_for('setMainPhoto')}}"
+                form.method = 'post'
+                form.submit()
+            }
+        }
+    </script>
 </head>
 
 <body class="bodycolor">
@@ -18,7 +34,9 @@
 
         <!-- Content -->
         <div id="home" class="info">
-            <h1 class="title">Update {{name}}'s information</h1>
+            <h1 class="title">Update {{ name }}'s information</h1>
+
+            <img src="/static/dogPhotos/{{mainPhoto}}">
 
             <!-- Enter a new dog -->
             <div class="inputForm">
@@ -45,17 +63,17 @@
 
                         <!-- Reg -->
                         <h3>Organization of registration</h3>
-                        <input type="radio" name="reg" value="AKC" id="AKC" required {%if org=="AKC" %} checked
-                            {%endif%}> <label for="AKC">AKC</label><br>
-                        <input type="radio" name="reg" value="AATR" id="AATR" required {%if org=="AATR" %} checked
-                            {%endif%}> <label for="AATR">AATR</label><br>
-                        <input type="radio" name="reg" value="None" id="None" required {%if org=="None" %} checked
-                            {%endif%}> <label for="None">None</label><br>
+                        <input type="radio" name="reg" value="AKC" id="AKC" required {%if org=="AKC" %} checked {% endif
+                            %}> <label for="AKC">AKC</label><br>
+                        <input type="radio" name="reg" value="AATR" id="AATR" required {%if org=="AATR" %} checked {%
+                            endif %}> <label for="AATR">AATR</label><br>
+                        <input type="radio" name="reg" value="None" id="None" required {%if org=="None" %} checked {%
+                            endif %}> <label for="None">None</label><br>
 
                         <h3>Date of Birth</h3>
-                        <input type="date" name="dob" value={{dob}} required><br>
+                        <input type="date" name="dob" value={{ dob }} required><br>
 
-                        <h3>Add new photos of {{name}}</h3>
+                        <h3>Add new photos of {{ name }}</h3>
                         <input type="file" name="files[]" multiple>
 
                         <h3>Descripton of dog</h3>
@@ -65,13 +83,27 @@
                     </div>
                 </form>
 
-                <h3>Modify {{name}}'s photos</h3>
-            </div>
+                <h3>Modify {{ name }}'s photos</h3>
 
+            </div>
+            {% for pic in pics %}
+            <div>
+                <img src="/static/dogPhotos/{{pic[2]}}">
+                <form id="photo-form-{{pic[0]}}" action="POST">
+                    <input type="hidden" value="{{pic[2]}}" name="photoName">
+                    <input type="hidden" value="{{pic[0]}}" name="photoID">
+                    <input type="hidden" value="{{id}}" name="dogID">
+                    <input type="button" value="Delete Photo" onclick="setPhotoForm('delete', {{pic[0]}})">
+                    <input type="button" value="Set as Primary Photo"
+                        onclick="setPhotoForm('setMainPhoto', {{pic[0]}})">
+                </form>
+            </div>
+            {% endfor %}
 
         </div>
         <!-- End Content -->
     </div>
+
 
 
 </body>
