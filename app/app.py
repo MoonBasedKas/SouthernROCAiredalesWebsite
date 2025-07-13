@@ -19,15 +19,18 @@ UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
     dogDB = pandas.read_csv("dogs.csv",  sep=',')
-
+    # dogDB.set_index("id")
 except:
     print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
+    # dogDB.set_index("id")
 
 try:
     photos = pandas.read_csv("photos.csv")
+    # photos.set_index("id")
 except:
     photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
+    # photos.set_index("id")
     
 # App Config    
 app = Flask(__name__)
@@ -315,10 +318,9 @@ def setMainPhoto():
         return redirect(url_for("Welcome"))
     photoName = request.form["photoName"]
     dogID = request.form["dogID"]
-    dog = dogDB.index[dogDB["id"]].tolist()
-    
-    print(dog)
-    print(type(dogID))
+    dogID = int(dogID)
+    # Query to update the dogs primary photo
+    dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = photoName
     return redirect(f"/admin/details/{dogID}")
 
 
