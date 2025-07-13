@@ -305,10 +305,10 @@ def deletePhoto():
     if "username" not in session:
         return redirect(url_for("Welcome"))
     photoID = request.form["photoID"]
+    photoID = int(photoID)
     dogID = request.form["dogID"]
-    ids = photos[["id"]]
-    loc = np.where(ids)
-    photos.at[loc, "id"] = -1
+    
+    photos.loc[photos["id"] == photoID, "dogID"] = -1
     print(photos)
     return redirect(f"/admin/details/{dogID}")
 
