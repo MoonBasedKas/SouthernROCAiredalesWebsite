@@ -288,7 +288,8 @@ def updateDog(id):
     else:
         photoID = photos['id'].max()
         sent = request.files.getlist('files[]')
-        
+        check = True
+        size = photos[photos["dogID"] == dogID].size
         for file in sent:
             fname = secure_filename(file.filename)
             if fname == "":
@@ -297,8 +298,16 @@ def updateDog(id):
             # TODO: Check file types
             file.save(UPLOAD_FOLDER + fname)
             photoID += 1
-            # This could honestly slow everything down a lot.
+            # Avoid checking the count each time after its been set
+            print(photos[photos["dogID"] == dogID].size)
+            if size == 0:
+                dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
+                size += 1
+
             addPhoto(photoID, dogID, fname)
+
+        
+
 
 
     if fname == "":
