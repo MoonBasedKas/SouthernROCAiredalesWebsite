@@ -407,4 +407,17 @@ def saveUpdates(threads):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        try:
+            fp = open(".env")
+            fp = fp.readlines()
+            username = fp[0].split("=")[1].strip()
+            user = User.query.filter_by(username=username).first()
+            if not user:
+                new_user = User(username=username)
+                new_user.set_password(fp[1].split("=")[1].strip())
+                db.session.add(new_user)
+                db.session.commit()
+                
+        except FileNotFoundError:
+            print("Warning | Login may not be possible.")
     app.run(debug=True)
