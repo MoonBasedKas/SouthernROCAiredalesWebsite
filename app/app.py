@@ -6,6 +6,8 @@ import threading
 import pandas
 import numpy as np
 import math as mt
+import secrets
+from datetime import date
 # import dbController
 
 # Disable this
@@ -35,8 +37,11 @@ except:
     
 # App Config    
 app = Flask(__name__)
-app.secret_key = "A Super Secret Key"
+app.secret_key = secrets.token_hex(256)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+autoKeyReset = False
+lastReset = date.today()
 
 
 
@@ -451,7 +456,7 @@ def register():
     session['username'] = username
     return redirect(url_for('admin'))
 
-
+# Log out the user
 @app.route('/logout')
 def logout():
     if "username" not in session:
