@@ -233,7 +233,7 @@ Shows all of the dogs for what to modify
 def dogQuery():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    querySize = 3
+    querySize = 18
 
     result = dogDB
     pageNo = request.args.get('page', default=0, type=int)
@@ -260,6 +260,7 @@ def dogQuery():
     pageMax = result.shape[0]
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
+
     # Adjusts indeces
     result = result.loc[page:page + querySize - 1]
     print(pageMax)
