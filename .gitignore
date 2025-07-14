@@ -2,3 +2,5 @@ app/__pycache__/*
 app/DB_CONFIG
 app/main.py
 app/static/dogPhotos/*
+app/.env
+app/instance/users.db

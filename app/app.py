@@ -3,7 +3,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 import threading
-
 import pandas
 import numpy as np
 # import dbController
@@ -20,15 +19,18 @@ UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
     dogDB = pandas.read_csv("dogs.csv",  sep=',')
-
+    # dogDB.set_index("id")
 except:
     print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
+    # dogDB.set_index("id")
 
 try:
     photos = pandas.read_csv("photos.csv")
+    # photos.set_index("id")
 except:
     photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
+    # photos.set_index("id")
     
 # App Config    
 app = Flask(__name__)
@@ -59,9 +61,10 @@ class User(db.Model):
 # def Welcome(name = None):
 #     return render_template('index.html', person=name)
 
-@app.route('/')
+
 @app.route('/home')
 @app.route('/index')
+@app.route('/')
 def Welcome():
     global counter
 
@@ -166,7 +169,7 @@ def admin():
     return render_template("admin.html")
 
 """
-This is for when a request is made by an admin to save a new dog
+Does the request for when an admin sends a new dog to add.
 """
 @app.route("/admin/newDog", methods=["POST"])
 def newDog():
@@ -174,7 +177,6 @@ def newDog():
         return redirect(url_for("Welcome"))
     
     fname = ""
-    threads = []
     if "username" not in session:
         return redirect(url_for("Welcome"))
     
@@ -216,38 +218,190 @@ def newDog():
         fname = "placeholder.jpg"
 
     addDog(dogID, name, gender, avail, reg, dob, fname, desc)
-    while threads != []:
-        print("hi")
-        print(threads[0].is_alive())
-        if not threads[0].is_alive():
-            threads.pop(0)
-    print(dogDB)
-    print(photos)
     
-    # threading.Thread(target=saveUpdates, args=(threads))    
+    
+    threading.Thread(target=saveUpdates, args=([]))    
 
 
     return redirect(url_for('admin'))
 
+"""
+Shows all of the dogs for what to modify
+"""
 @app.route("/admin/modify")
 def modify():
     if "username" not in session:
         return redirect(url_for("Welcome"))
     
+    result = dogDB
+    
+    page = request.args.get('page', default=0, type=int) * 20
+    query = request.args.get('search', default="", type=str)
+    
+    if query != "":
+        result = result["name"].str.contains(query)
+
+    result = result.loc[page:page + 20]
 
 
-    return render_template('modify.html')
+    return render_template('modify.html', results=result.values.tolist())
 
+
+"""
+Shows all of the dogs for what to modify
+"""
+@app.route("/admin/update/<int:id>", methods=["POST"])
+def updateDog(id):
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+
+    
+    fname = ""
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    print(request.form.keys())
+    dogID = int(request.form['dogID'])
+    
+    name = request.form['Name']
+    print(dogID)
+
+    gender = request.form['gender']
+    if gender == "Female":
+        gender = False
+    else:
+        gender = True
+
+    avail = request.form['avail']
+    if avail == "true":
+        avail = True
+    else:
+        avail = False
+
+    reg = request.form['reg']
+    dob = request.form['dob']
+    desc = request.form['desc']
+    print("desc", desc)
+    
+
+    if 'files[]' not in request.files:
+        print("Warning | No photo sent.")
+    else:
+        photoID = photos['id'].max()
+        sent = request.files.getlist('files[]')
+        check = True
+        size = photos[photos["dogID"] == dogID].size
+        for file in sent:
+            fname = secure_filename(file.filename)
+            if fname == "":
+                break
+            print(sent)
+            # TODO: Check file types
+            file.save(UPLOAD_FOLDER + fname)
+            photoID += 1
+            # Avoid checking the count each time after its been set
+            print(photos[photos["dogID"] == dogID].size)
+            if size == 0:
+                dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
+                size += 1
+
+            addPhoto(photoID, dogID, fname)
+
+        
+
+
+
+    if fname == "":
+        fname = "placeholder.jpg"
+
+    updateDog(dogID, name, desc, dob, gender, avail, reg)
+    print(dogDB)
+    return redirect(f"/admin/details/{dogID}")
+
+
+"""
+Shows us the details of the dogs, let's us see each dog so we can modify it.
+"""
+@app.route("/admin/details/<int:id>")
+def dogDetails(id):
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    dog = dogDB[dogDB["id"] == id]
+    pics = ["PlaceHolder.png"]
+    name = "null"
+    desc = "null"
+    dob = "1970/01/01"
+    gender = "Female"
+    mainPhoto=""
+    org=""
+    pics=[]
+    query = dog.values.tolist()
+    if query == []:
+        # TODO upodate to no dog found.
+        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
+    query = query[0] # Set to first value because it'll return [[]] if it exists.
+    name = query[1]
+    gender = query[2]
+    avail = query[3]
+    org = query[4]
+    dob = query[5]
+    mainPhoto= query[6]
+    desc = query[7]
+    if type(desc) == float:
+        desc = ""
+
+    pics = photos[photos["dogID"] == id]
+    pics = pics.values.tolist()
+
+    return render_template('details.html', id=id, pics=pics, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
+    
+@app.route("/admin/deletePhoto", methods=["POST"])
+def deletePhoto():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+    photoID = request.form["photoID"]
+    photoID = int(photoID)
+    dogID = int(request.form["dogID"])
+    photoName = photos.loc[photos["id"] == photoID, "photoName"].item()
+
+    photos.loc[photos["id"] == photoID, "dogID"] = -1 # invalidate photo
+    value = dogDB.loc[dogDB["id"] == dogID, "mainPhoto"].item()
+
+    # Attempt to find a replacement
+    if photoName == value:
+        try:
+            canidates = photos[photos["dogID"] == dogID][["photoName"]]
+            if canidates == []:
+                raise ValueError
+            
+            dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] =  canidates[0][0]
+        except:
+            dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
+
+    # print(photos)
+    return redirect(f"/admin/details/{dogID}")
+
+@app.route("/admin/setMainPhoto", methods=["POST"])
+def setMainPhoto():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    photoName = request.form["photoName"]
+    dogID = request.form["dogID"]
+    dogID = int(dogID)
+    # Query to update the dogs primary photo
+    dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = photoName
+    return redirect(f"/admin/details/{dogID}")
 
 
 # Login Route
 @app.route("/login", methods=["POST", "GET"])
 def login():
+    if "username" in session:
+        return redirect(url_for("admin"))
     if request.method == "GET":
         return render_template('login.html')
     username = request.form['username']
     password = request.form['password']
-    
 
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
@@ -286,7 +440,6 @@ def logout():
     return redirect(url_for('Welcome'))
 
 
-
 # Util functions
 """
 Adds a photo to the database
@@ -318,7 +471,34 @@ def saveUpdates(threads):
     photos.to_csv("newPhotos.csv")
     return
 
+"""
+Updates every parameter of a dog except for the mainPhoto
+"""
+def updateDog(id, name, desc, dob, gender, avail, reg):
+    dogDB.loc[dogDB["id"] == id, "name"] = name
+    dogDB.loc[dogDB["id"] == id, "desc"] = desc
+    dogDB.loc[dogDB["id"] == id, "dob"] = dob
+    dogDB.loc[dogDB["id"] == id, "gender"] = gender
+    dogDB.loc[dogDB["id"] == id, "available"] = avail
+    dogDB.loc[dogDB["id"] == id, "registration"] = reg
+
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        try:
+            fp = open(".env")
+            fp = fp.readlines()
+            username = fp[0].split("=")[1].strip()
+            user = User.query.filter_by(username=username).first()
+            if not user:
+                new_user = User(username=username)
+                new_user.set_password(fp[1].split("=")[1].strip())
+                db.session.add(new_user)
+                db.session.commit()
+
+        except FileNotFoundError:
+            print("Warning | Login may not be possible.")
+
     app.run(debug=True)
