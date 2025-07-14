@@ -306,7 +306,7 @@ def updateDog(id):
 
     updateDog(dogID, name, desc, dob, gender, avail, reg)
     print(dogDB)
-    return redirect(f"/admin/details/{1}")
+    return redirect(f"/admin/details/{dogID}")
 
 
 """

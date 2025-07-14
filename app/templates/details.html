@@ -57,9 +57,9 @@
 
                         <!-- Available REQUIRED -->
                         <h3>Are they available</h3>
-                        <input type="radio" id="avail" name="avail" value="true" {% if avail %} checked {% endif %}>
+                        <input type="radio" id="true" name="avail" value="true" {% if avail %} checked {% endif %}>
                         <label for="true">Yes</label><br>
-                        <input type="radio" id="avail" name="avail" value="false" {% if avail==false %} checked {% endif
+                        <input type="radio" id="false" name="avail" value="false" {% if not avail %} checked {% endif
                             %}>
                         <label for="false">No</label><br>
 
