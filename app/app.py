@@ -251,17 +251,17 @@ def dogQuery():
 
     if query != "":
         result = result[result["name"].str.contains(query, case=False)]
-        print(result)
         isQuery = True
 
 
-    print(result)
-    # Adjusts indeces
-    result = result.loc[page:page + querySize - 1]
+
+    
     
     pageMax = result.shape[0]
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
+    # Adjusts indeces
+    result = result.loc[page:page + querySize - 1]
     print(pageMax)
 
     return render_template('adminDogs.html', results=result.values.tolist(), query=query, isQuery=isQuery, pageNo=pageNo, pageMax=pageMax)
