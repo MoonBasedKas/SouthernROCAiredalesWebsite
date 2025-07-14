@@ -44,24 +44,26 @@
                 <form action="/admin/update/{{id}}" method="post" enctype="multipart/form-data">
                     <div class="innerForm">
                         <h1 class="title">Update information</h1>
+
                         <h3>Name</h3>
+                        <!-- REQUIRED -->
                         <input type="text" value="{{name}}" name="Name" required><br>
-                        <!-- Gender -->
+                        <!-- Gender REQUIRED-->
                         <h3>Gender</h3>
-                        <input type="radio" name="gender" value="Female" id="Female" required {% if gender is false%}
+                        <input type="radio" name="gender" value="Female" id="Female" required {% if not gender %}
                             checked {% endif %}> <label for="Female">Female</label><br>
-                        <input type="radio" name="gender" value="Male" id="Male" required {% if gender%} checked {%
+                        <input type="radio" name="gender" value="Male" id="Male" required {% if gender %} checked {%
                             endif %}> <label for="Male">Male</label><br>
 
-                        <!-- Available -->
+                        <!-- Available REQUIRED -->
                         <h3>Are they available</h3>
-                        <input type="radio" id="avail" name="avail" value="true" {% if avail%} checked {% endif %}>
+                        <input type="radio" id="avail" name="avail" value="true" {% if avail %} checked {% endif %}>
                         <label for="true">Yes</label><br>
-                        <input type="radio" id="avail" name="avail" value="false" {% if avail is false%} checked {%
-                            endif %}>
+                        <input type="radio" id="avail" name="avail" value="false" {% if avail==false %} checked {% endif
+                            %}>
                         <label for="false">No</label><br>
 
-                        <!-- Reg -->
+                        <!-- Reg REQUIRED -->
                         <h3>Organization of registration</h3>
                         <input type="radio" name="reg" value="AKC" id="AKC" required {%if org=="AKC" %} checked {% endif
                             %}> <label for="AKC">AKC</label><br>
@@ -70,6 +72,7 @@
                         <input type="radio" name="reg" value="None" id="None" required {%if org=="None" %} checked {%
                             endif %}> <label for="None">None</label><br>
 
+                        <!-- REQUIRED -->
                         <h3>Date of Birth</h3>
                         <input type="date" name="dob" value={{ dob }} required><br>
 
@@ -78,6 +81,8 @@
 
                         <h3>Descripton of dog</h3>
                         <textarea name="desc" id="desc" value="{{desc}}"></textarea><br>
+
+                        <input type="hidden" value="{{id}}" name="dogID">
 
                         <input type="submit" value="Update">
                     </div>

@@ -61,9 +61,10 @@ class User(db.Model):
 # def Welcome(name = None):
 #     return render_template('index.html', person=name)
 
-@app.route('/')
+
 @app.route('/home')
 @app.route('/index')
+@app.route('/')
 def Welcome():
     global counter
 
@@ -253,9 +254,59 @@ Shows all of the dogs for what to modify
 def updateDog(id):
     if "username" not in session:
         return redirect(url_for("Welcome"))
+
+    
+    fname = ""
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    print(request.form.keys())
+    dogID = int(request.form['dogID'])
+    
+    name = request.form['Name']
+    print(dogID)
+
+    gender = request.form['gender']
+    if gender == "Female":
+        gender = False
+    else:
+        gender = True
+
+    avail = request.form['avail']
+    if avail == "true":
+        avail = True
+    else:
+        avail = False
+
+    reg = request.form['reg']
+    dob = request.form['dob']
+    desc = request.form['desc']
+    print("desc", desc)
     
 
-    return redirect(url_for("modify"))
+    if 'files[]' not in request.files:
+        print("Warning | No photo sent.")
+    else:
+        photoID = photos['id'].max()
+        sent = request.files.getlist('files[]')
+        
+        for file in sent:
+            fname = secure_filename(file.filename)
+            if fname == "":
+                break
+            print(sent)
+            # TODO: Check file types
+            file.save(UPLOAD_FOLDER + fname)
+            photoID += 1
+            # This could honestly slow everything down a lot.
+            addPhoto(photoID, dogID, fname)
+
+
+    if fname == "":
+        fname = "placeholder.jpg"
+
+    updateDog(dogID, name, desc, dob, gender, avail, reg)
+    print(dogDB)
+    return redirect(f"/admin/details/{1}")
 
 
 """
@@ -289,12 +340,6 @@ def dogDetails(id):
     if type(desc) == float:
         desc = ""
 
-    if gender:
-        gender = "Male"
-    else:
-        gender = "Female"
-
-    print(photos)
     pics = photos[photos["dogID"] == id]
     pics = pics.values.tolist()
 
@@ -304,12 +349,27 @@ def dogDetails(id):
 def deletePhoto():
     if "username" not in session:
         return redirect(url_for("Welcome"))
+    
     photoID = request.form["photoID"]
     photoID = int(photoID)
-    dogID = request.form["dogID"]
-    
-    photos.loc[photos["id"] == photoID, "dogID"] = -1
-    print(photos)
+    dogID = int(request.form["dogID"])
+    photoName = photos.loc[photos["id"] == photoID, "photoName"].item()
+
+    photos.loc[photos["id"] == photoID, "dogID"] = -1 # invalidate photo
+    value = dogDB.loc[dogDB["id"] == dogID, "mainPhoto"].item()
+
+    # Attempt to find a replacement
+    if photoName == value:
+        try:
+            canidates = photos[photos["dogID"] == dogID][["photoName"]]
+            if canidates == []:
+                raise ValueError
+            
+            dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] =  canidates[0][0]
+        except:
+            dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
+
+    # print(photos)
     return redirect(f"/admin/details/{dogID}")
 
 @app.route("/admin/setMainPhoto", methods=["POST"])
@@ -402,6 +462,17 @@ def saveUpdates(threads):
     photos.to_csv("newPhotos.csv")
     return
 
+"""
+Updates every parameter of a dog except for the mainPhoto
+"""
+def updateDog(id, name, desc, dob, gender, avail, reg):
+    dogDB.loc[dogDB["id"] == id, "name"] = name
+    dogDB.loc[dogDB["id"] == id, "desc"] = desc
+    dogDB.loc[dogDB["id"] == id, "dob"] = dob
+    dogDB.loc[dogDB["id"] == id, "gender"] = gender
+    dogDB.loc[dogDB["id"] == id, "available"] = avail
+    dogDB.loc[dogDB["id"] == id, "registration"] = reg
+
 
 
 if __name__ == '__main__':
@@ -417,7 +488,8 @@ if __name__ == '__main__':
                 new_user.set_password(fp[1].split("=")[1].strip())
                 db.session.add(new_user)
                 db.session.commit()
-                
+
         except FileNotFoundError:
             print("Warning | Login may not be possible.")
+
     app.run(debug=True)
