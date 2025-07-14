@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import threading
 import pandas
 import numpy as np
+import math as mt
 # import dbController
 
 # Disable this
@@ -228,23 +229,43 @@ def newDog():
 """
 Shows all of the dogs for what to modify
 """
-@app.route("/admin/modify")
-def modify():
+@app.route("/admin/dogs", methods=["GET"])
+def dogQuery():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    
+    querySize = 18
+
     result = dogDB
-    
-    page = request.args.get('page', default=0, type=int) * 20
+    pageNo = request.args.get('page', default=0, type=int)
     query = request.args.get('search', default="", type=str)
-    
+    window = request.args.get('window', default="none", type=str)
+
+    if window == 'inc':
+        pageNo += 1
+    elif window == 'dec':
+        pageNo -= 1
+
+
+    page = pageNo * querySize
+    isQuery = False
+
     if query != "":
-        result = result["name"].str.contains(query)
+        result = result[result["name"].str.contains(query, case=False)]
+        isQuery = True
 
-    result = result.loc[page:page + 20]
 
 
-    return render_template('modify.html', results=result.values.tolist())
+    
+    
+    pageMax = result.shape[0]
+    pageMax = pageMax / querySize
+    pageMax = mt.ceil(pageMax)
+
+    # Adjusts indeces
+    result = result.loc[page:page + querySize - 1]
+    print(pageMax)
+
+    return render_template('adminDogs.html', results=result.values.tolist(), query=query, isQuery=isQuery, pageNo=pageNo, pageMax=pageMax)
 
 
 """
