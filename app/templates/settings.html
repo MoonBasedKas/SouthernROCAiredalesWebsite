@@ -18,10 +18,24 @@
 
         <!-- Content -->
         <div id="home" class="info">
+
+            {{error}}
+
             <h1 class="title">User Settings</h1>
 
-            <form>
-                <input type="submit" value="Reset Web Key">
+            <h3 class="subtitle">Reset your password</h3>
+            <form action="{{url_for('passwordReset')}}" method="POST">
+                <input type="password" name="password">
+                <input type="password" name="second">
+                <input type="submit">
+            </form>
+
+            <h3>Create a new account</h3>
+            <form action="{{url_for('register')}}" method="POST">
+                <input type="text" name="username">
+                <input type="password" name="password">
+                <input type="password" name="second">
+                <input type="submit">
             </form>
         </div>
         <!-- End Content -->

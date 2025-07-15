@@ -10,8 +10,6 @@ import secrets
 from datetime import date
 # import dbController
 
-# Disable this
-logins = True
 # db = dbController.dbController()
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
@@ -422,7 +420,7 @@ def passwordReset():
         return redirect(url_for("Welcome"))
     
     password = request.form['password']
-    second = request.form['seccond']
+    second = request.form['second']
 
     if second != password:
         return redirect(url_for('settings'))
@@ -430,7 +428,6 @@ def passwordReset():
     user = User.query.filter_by(username=session["username"]).first()
     
     user.set_password(password)
-    db.session.add(new_user)
     db.session.commit()
 
     return redirect(url_for('settings'))
@@ -446,32 +443,39 @@ def login():
         return render_template('login.html')
     username = request.form['username']
     password = request.form['password']
-
+    
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         session['username'] = username
         return redirect(url_for('admin'))
     else:
+        
         return redirect(url_for('login'))
 
 
 # Register Route
 @app.route("/register", methods=["POST"])
 def register():
-    if not logins:
+    if "username" not in session:
         return redirect(url_for('Welcome'))
 
     username = request.form['username']
     password = request.form['password']
+    second = request.form['second']
+
+    if second != password:
+        return redirect(url_for('settings'))
+
     user = User.query.filter_by(username=username).first()
     if user:
+        print("ERROR")
         return render_template("index.html", error="Username already exists")
     
     new_user = User(username=username)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
-    session['username'] = username
+
     return redirect(url_for('admin'))
 
 # Log out the user

@@ -14,26 +14,11 @@
             <input type="text" name="username" placeholder="username">
             <input type="password" name="password" placeholder="password">
             <!-- <input type="text" name="verify" placeholder="password"> -->
-            <input type="submit" value="login" onclick="setLoginForm('login')">
-            <input type="button" value="register" onclick="setLoginForm('register')">
+            <input type="submit" value="login">
         </form>
     </div>
 
 
-    <script>
-        function setLoginForm(action) {
-            let form = document.getElementById("auth-form")
-            if (action === 'login') {
-                form.action = "{{url_for('login')}}"
-                form.method = 'post'
-                form.submit()
-            } else if (action === 'register') {
-                form.action = "{{url_for('register')}}"
-                form.method = 'post'
-                form.submit()
-            }
-        }
-    </script>
 </body>
 
 </html>
