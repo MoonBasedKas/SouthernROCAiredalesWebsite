@@ -35,7 +35,9 @@ except:
     
 # App Config    
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(32)
+
+app.secret_key = "dog"
+# app.secret_key = secrets.token_hex(32)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 autoKeyReset = False
@@ -61,10 +63,6 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# @app.route('/home')
-# def Welcome(name = None):
-#     return render_template('index.html', person=name)
-
 
 @app.route('/home')
 @app.route('/index')
@@ -86,21 +84,6 @@ def Welcome():
         return resp
 
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter)
-
-
-# """
-# For viewing all the dogs
-# """
-# @app.route('/dogs/<string:gender>')
-# def dogs(gender):
-    
-#     # Female is only false because they both start with f.
-#     if gender.lower() == "female":
-#         dog = dogDB[dogDB["gender"] == False]
-#     else:
-#         dog = dogDB[dogDB["gender"] == True]
-
-#     return render_template('dogs.html', dogInfo=dogs.values.tolist())
 
 
 """
