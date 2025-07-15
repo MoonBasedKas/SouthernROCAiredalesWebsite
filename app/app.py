@@ -22,18 +22,18 @@ UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
     dogDB = pandas.read_csv("dogs.csv",  sep=',')
-    # dogDB.set_index("id")
+
 except:
     print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
-    # dogDB.set_index("id")
+
 
 try:
     photos = pandas.read_csv("photos.csv")
-    # photos.set_index("id")
+
 except:
     photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
-    # photos.set_index("id")
+
     
 # App Config    
 app = Flask(__name__)
@@ -90,19 +90,19 @@ def Welcome():
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter)
 
 
-"""
-For viewing all the dogs
-"""
-@app.route('/dogs/<string:gender>')
-def dogs(gender):
+# """
+# For viewing all the dogs
+# """
+# @app.route('/dogs/<string:gender>')
+# def dogs(gender):
     
-    # Female is only false because they both start with f.
-    if gender.lower() == "female":
-        dog = dogDB[dogDB["gender"] == False]
-    else:
-        dog = dogDB[dogDB["gender"] == True]
+#     # Female is only false because they both start with f.
+#     if gender.lower() == "female":
+#         dog = dogDB[dogDB["gender"] == False]
+#     else:
+#         dog = dogDB[dogDB["gender"] == True]
 
-    return render_template('dogs.html', dogInfo=dogs.values.tolist())
+#     return render_template('dogs.html', dogInfo=dogs.values.tolist())
 
 
 """
@@ -138,31 +138,6 @@ def dog(id):
         gender = "Female"
 
     return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
-
-"""
-I don't remember what this page was supposed to be./
-"""
-@app.route('/health_gaurantee')
-def health():
-    return render_template('health.html')
-
-
-"""
-For rendering the about us
-"""
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-
-"""
-For rendering the contact us
-"""
-@app.route('/contact')
-def contact():
-    if "username" in session:
-        return "yes"
-    return render_template('contact.html')
 
 
 
@@ -340,7 +315,7 @@ def updateDog(id):
         fname = "placeholder.jpg"
 
     updateDog(dogID, name, desc, dob, gender, avail, reg)
-    print(dogDB)
+    threading.Thread(target=saveUpdates, args=([]))  
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -404,7 +379,7 @@ def deletePhoto():
         except:
             dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
 
-    # print(photos)
+    threading.Thread(target=saveUpdates, args=([]))  
     return redirect(f"/admin/details/{dogID}")
 
 @app.route("/admin/setMainPhoto", methods=["POST"])
@@ -416,6 +391,7 @@ def setMainPhoto():
     dogID = int(dogID)
     # Query to update the dogs primary photo
     dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = photoName
+    threading.Thread(target=saveUpdates, args=([]))  
     return redirect(f"/admin/details/{dogID}")
 
 
