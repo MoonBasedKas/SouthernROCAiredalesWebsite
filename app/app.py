@@ -395,6 +395,48 @@ def setMainPhoto():
     return redirect(f"/admin/details/{dogID}")
 
 
+@app.route("/admin/settings", methods=["GET"])
+def settings():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+
+    return render_template('settings.html')
+
+
+"""
+Generates a new Secret Key
+"""
+@app.route("/admin/keyReset", methods=["POST"])
+def keyReset():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    app.secret_key = secrets.token_hex(32)
+    return render_template('settings.html')
+
+"""
+Resets the logged in users password.
+"""
+@app.route("/admin/passwordReset", methods=["POST"])
+def passwordReset():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+    password = request.form['password']
+    second = request.form['seccond']
+
+    if second != password:
+        return redirect(url_for('settings'))
+    
+    user = User.query.filter_by(username=session["username"]).first()
+    
+    user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return redirect(url_for('settings'))
+
+
+
 # Login Route
 @app.route("/login", methods=["POST", "GET"])
 def login():
