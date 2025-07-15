@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<head>
+
+    <link rel="stylesheet" href="/static/head.css">
+    <link rel="stylesheet" href="/static/content.css">
+    <link rel="stylesheet" href="/static/mainpage.css">
+
+</head>
+
+<body class="bodycolor">
+    <!-- Top of page -->
+
+    <!-- End Top of page -->
+    <div class="content">
+        <!-- I'm thinking we put the main picture here. -->
+        {% include 'header.html' %}
+
+        <!-- Content -->
+        <div id="home" class="info">
+
+            {{error}}
+
+            <h1 class="title">User Settings</h1>
+
+            <h3 class="subtitle">Reset your password</h3>
+            <form action="{{url_for('passwordReset')}}" method="POST">
+                <input type="password" name="password">
+                <input type="password" name="second">
+                <input type="submit">
+            </form>
+
+            <h3>Create a new account</h3>
+            <form action="{{url_for('register')}}" method="POST">
+                <input type="text" name="username">
+                <input type="password" name="password">
+                <input type="password" name="second">
+                <input type="submit">
+            </form>
+        </div>
+        <!-- End Content -->
+    </div>
+
+
+</body>

@@ -6,10 +6,10 @@ import threading
 import pandas
 import numpy as np
 import math as mt
+import secrets
+from datetime import date
 # import dbController
 
-# Disable this
-logins = True
 # db = dbController.dbController()
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
@@ -20,23 +20,26 @@ UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
     dogDB = pandas.read_csv("dogs.csv",  sep=',')
-    # dogDB.set_index("id")
+
 except:
     print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
-    # dogDB.set_index("id")
+
 
 try:
     photos = pandas.read_csv("photos.csv")
-    # photos.set_index("id")
+
 except:
     photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
-    # photos.set_index("id")
+
     
 # App Config    
 app = Flask(__name__)
-app.secret_key = "A Super Secret Key"
+app.secret_key = secrets.token_hex(32)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+autoKeyReset = False
+lastReset = date.today()
 
 
 
@@ -85,19 +88,19 @@ def Welcome():
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter)
 
 
-"""
-For viewing all the dogs
-"""
-@app.route('/dogs/<string:gender>')
-def dogs(gender):
+# """
+# For viewing all the dogs
+# """
+# @app.route('/dogs/<string:gender>')
+# def dogs(gender):
     
-    # Female is only false because they both start with f.
-    if gender.lower() == "female":
-        dog = dogDB[dogDB["gender"] == False]
-    else:
-        dog = dogDB[dogDB["gender"] == True]
+#     # Female is only false because they both start with f.
+#     if gender.lower() == "female":
+#         dog = dogDB[dogDB["gender"] == False]
+#     else:
+#         dog = dogDB[dogDB["gender"] == True]
 
-    return render_template('dogs.html', dogInfo=dogs.values.tolist())
+#     return render_template('dogs.html', dogInfo=dogs.values.tolist())
 
 
 """
@@ -133,31 +136,6 @@ def dog(id):
         gender = "Female"
 
     return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
-
-"""
-I don't remember what this page was supposed to be./
-"""
-@app.route('/health_gaurantee')
-def health():
-    return render_template('health.html')
-
-
-"""
-For rendering the about us
-"""
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-
-"""
-For rendering the contact us
-"""
-@app.route('/contact')
-def contact():
-    if "username" in session:
-        return "yes"
-    return render_template('contact.html')
 
 
 
@@ -335,7 +313,7 @@ def updateDog(id):
         fname = "placeholder.jpg"
 
     updateDog(dogID, name, desc, dob, gender, avail, reg)
-    print(dogDB)
+    threading.Thread(target=saveUpdates, args=([]))  
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -399,7 +377,7 @@ def deletePhoto():
         except:
             dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
 
-    # print(photos)
+    threading.Thread(target=saveUpdates, args=([]))  
     return redirect(f"/admin/details/{dogID}")
 
 @app.route("/admin/setMainPhoto", methods=["POST"])
@@ -411,7 +389,49 @@ def setMainPhoto():
     dogID = int(dogID)
     # Query to update the dogs primary photo
     dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = photoName
+    threading.Thread(target=saveUpdates, args=([]))  
     return redirect(f"/admin/details/{dogID}")
+
+
+@app.route("/admin/settings", methods=["GET"])
+def settings():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+
+    return render_template('settings.html')
+
+
+"""
+Generates a new Secret Key
+"""
+@app.route("/admin/keyReset", methods=["POST"])
+def keyReset():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    app.secret_key = secrets.token_hex(32)
+    return render_template('settings.html')
+
+"""
+Resets the logged in users password.
+"""
+@app.route("/admin/passwordReset", methods=["POST"])
+def passwordReset():
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+    
+    password = request.form['password']
+    second = request.form['second']
+
+    if second != password:
+        return redirect(url_for('settings'))
+    
+    user = User.query.filter_by(username=session["username"]).first()
+    
+    user.set_password(password)
+    db.session.commit()
+
+    return redirect(url_for('settings'))
+
 
 
 # Login Route
@@ -423,35 +443,42 @@ def login():
         return render_template('login.html')
     username = request.form['username']
     password = request.form['password']
-
+    
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         session['username'] = username
         return redirect(url_for('admin'))
     else:
+        
         return redirect(url_for('login'))
 
 
 # Register Route
 @app.route("/register", methods=["POST"])
 def register():
-    if not logins:
+    if "username" not in session:
         return redirect(url_for('Welcome'))
 
     username = request.form['username']
     password = request.form['password']
+    second = request.form['second']
+
+    if second != password:
+        return redirect(url_for('settings'))
+
     user = User.query.filter_by(username=username).first()
     if user:
+        print("ERROR")
         return render_template("index.html", error="Username already exists")
     
     new_user = User(username=username)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
-    session['username'] = username
+
     return redirect(url_for('admin'))
 
-
+# Log out the user
 @app.route('/logout')
 def logout():
     if "username" not in session:
