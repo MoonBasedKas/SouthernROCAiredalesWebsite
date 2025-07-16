@@ -1,0 +1,27 @@
+.loginContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+
+.loginItem {
+    display: block;
+    margin: auto;
+    width: 25%;
+    height: 30px;
+    border-radius: 5px;
+    border: 0px;
+}
+
+
+.loginSubmit {
+    display: block;
+    margin: auto;
+    width: 25%;
+    height: 30px;
+    border-radius: 5px;
+}

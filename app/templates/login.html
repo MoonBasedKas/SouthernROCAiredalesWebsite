@@ -2,20 +2,28 @@
 <html>
 
 <head>
-
+    <link rel="stylesheet" href="/static/head.css">
+    <link rel="stylesheet" href="/static/content.css">
+    <link rel="stylesheet" href="/static/mainpage.css">
+    <link rel="stylesheet" href="/static/login.css">
 </head>
 
-<body>
+<body class="bodycolor">
 
 
-    <div>
-        <h1>Plese enter your login information</h1>
-        <form id="auth-form" action="{{url_for('login')}}" method="post">
-            <input type="text" name="username" placeholder="username">
-            <input type="password" name="password" placeholder="password">
-            <!-- <input type="text" name="verify" placeholder="password"> -->
-            <input type="submit" value="login">
-        </form>
+    <div class="content">
+
+
+        {% include 'header.html' %}
+
+        <div class="info">
+            <h1 class="title">Plese enter your login information</h1>
+            <form id="auth-form" action="{{url_for('login')}}" method="post" class="loginContainer">
+                <input type="text" name="username" placeholder="Username" class="loginItem"><br>
+                <input type="password" name="password" placeholder="Password" class="loginItem"><br>
+                <input type="submit" value="Login" class="loginSubmit">
+            </form>
+        </div>
     </div>
 
 
