@@ -69,7 +69,6 @@ class User(db.Model):
 @app.route('/')
 def Welcome():
     global counter
-
         
     available = dogDB[dogDB["available"] == True]
     males = available[available["gender"] ==  True]
@@ -102,7 +101,7 @@ def dog(id):
     photos=[]
     query = dog.values.tolist()
     if query == []:
-        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
+        return render_template('noDog.html')
     query = query[0]
     name = query[1]
     gender = query[2]

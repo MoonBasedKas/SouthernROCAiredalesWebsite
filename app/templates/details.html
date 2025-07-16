@@ -34,7 +34,7 @@
         <div id="home" class="info">
             <h1 class="title">Update {{ name }}'s information</h1>
 
-            <img src="/static/dogPhotos/{{mainPhoto}}">
+            <img src="/static/dogPhotos/{{mainPhoto}}" class="mainPhoto">
 
             <!-- Enter a new dog -->
             <div class="inputForm">
@@ -86,22 +86,26 @@
                     </div>
                 </form>
 
-                <h3>Modify {{ name }}'s photos</h3>
+
 
             </div>
-            {% for pic in pics %}
+            <h2 class="subtitle">Modify {{ name }}'s photos</h2>
             <div>
-                <img src="/static/dogPhotos/{{pic[2]}}">
-                <form id="photo-form-{{pic[0]}}" action="POST">
-                    <input type="hidden" value="{{pic[2]}}" name="photoName">
-                    <input type="hidden" value="{{pic[0]}}" name="photoID">
-                    <input type="hidden" value="{{id}}" name="dogID">
-                    <input type="button" value="Delete Photo" onclick="setPhotoForm('delete', {{pic[0]}})">
-                    <input type="button" value="Set as Primary Photo"
-                        onclick="setPhotoForm('setMainPhoto', {{pic[0]}})">
-                </form>
+                {% for pic in pics %}
+                <div>
+                    <img src="/static/dogPhotos/{{pic[2]}}">
+                    <form id="photo-form-{{pic[0]}}" action="POST">
+                        <input type="hidden" value="{{pic[2]}}" name="photoName">
+                        <input type="hidden" value="{{pic[0]}}" name="photoID">
+                        <input type="hidden" value="{{id}}" name="dogID">
+                        <!-- Inputs -->
+                        <input type="button" value="Delete Photo" onclick="setPhotoForm('delete', {{pic[0]}})"><br>
+                        <input type="button" value="Set as Primary Photo"
+                            onclick="setPhotoForm('setMainPhoto', {{pic[0]}})">
+                    </form>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
 
         </div>
         <!-- End Content -->

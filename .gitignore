@@ -4,3 +4,4 @@ app/main.py
 app/static/dogPhotos/*
 app/.env
 app/instance/users.db
+app/instance/users.db
