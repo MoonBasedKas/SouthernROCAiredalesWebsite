@@ -2,10 +2,9 @@
 
 <head>
 
-    <link rel="stylesheet" href="/static/head.css">
-    <link rel="stylesheet" href="/static/content.css">
-    <link rel="stylesheet" href="/static/mainpage.css">
+    {% include 'headValues.html' %}
 
+    <link rel="stylesheet" href="/static/form.css">
 </head>
 
 <body class="bodycolor">
@@ -22,21 +21,26 @@
             {{error}}
 
             <h1 class="title">User Settings</h1>
+            <div>
+                <div>
+                    <h2 class="subtitle">Reset your password</h2>
+                    <form action="{{url_for('passwordReset')}}" method="POST" class="loginContainer">
+                        <input type="password" name="password" class="loginItem" placeholder="Verify Password"><br>
+                        <input type="password" name="second" class="loginItem" placeholder="Verify"><br>
+                        <input type="submit" class="loginSubmit">
+                    </form>
+                </div>
 
-            <h3 class="subtitle">Reset your password</h3>
-            <form action="{{url_for('passwordReset')}}" method="POST">
-                <input type="password" name="password">
-                <input type="password" name="second">
-                <input type="submit">
-            </form>
-
-            <h3>Create a new account</h3>
-            <form action="{{url_for('register')}}" method="POST">
-                <input type="text" name="username">
-                <input type="password" name="password">
-                <input type="password" name="second">
-                <input type="submit">
-            </form>
+                <div>
+                    <h2 class="subtitle">Create a new account</h2>
+                    <form action="{{url_for('register')}}" method="POST" class="loginContainer">
+                        <input type="text" name="username" class="loginItem" placeholder="Username"><br>
+                        <input type="password" name="password" class="loginItem" placeholder="Password"><br>
+                        <input type="password" name="second" class="loginItem" placeholder="Verify Password"><br>
+                        <input type="submit" class="loginSubmit">
+                    </form>
+                </div>
+            </div>
         </div>
         <!-- End Content -->
     </div>
