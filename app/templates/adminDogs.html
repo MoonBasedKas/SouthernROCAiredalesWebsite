@@ -41,7 +41,7 @@
                             <h4 class="subtitle">{{dog[1]}}</h4><br>
                             <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage" loading="lazy"><br>
                             <p class="subtitle">
-                                {% if not gender%}
+                                {% if not dog[2]%}
                                 Gender: Female<br>
                                 {% else %}
                                 Gender: Male<br>

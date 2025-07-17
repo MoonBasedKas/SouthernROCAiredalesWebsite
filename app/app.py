@@ -220,7 +220,6 @@ def dogQuery():
     page = pageNo * querySize
     # Adjusts indeces
     result = result.loc[page:page + querySize - 1]
-
     return render_template('adminDogs.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
 
 
