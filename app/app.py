@@ -204,6 +204,8 @@ def dogQuery():
         pageNo += 1
     elif window == 'dec':
         pageNo -= 1
+        if pageNo < 0:
+            pageNo = 0
 
 
     
