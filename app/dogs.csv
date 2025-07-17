@@ -1,5 +1,5 @@
 id,name,gender,available,registration,dob,mainPhoto,desc
-1,Gloria,False,True,AKC,1970-01-01,placeholder.jpg,None
+1,Gloria,False,True,AKC,1970-01-01,placeholder.jpg,a dog
 2,Iris,False,True,AKC,1970-01-01,placeholder.jpg,None
 3,Joanne,False,True,AKC,1970-01-01,placeholder.jpg,None
 4,Black Babbee,False,True,AATR,1970-01-01,placeholder.jpg,None

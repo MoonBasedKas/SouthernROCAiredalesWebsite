@@ -2,7 +2,7 @@
 
 <head>
     {% include 'headValues.html' %}
-
+    <link rel="stylesheet" href="/static/dog.css">
 </head>
 
 <body>
@@ -19,7 +19,8 @@
                 <div class="dogTitle">
                     <h1 class="dogTitleItem">{{name}} - {{org}}</h1>
 
-                    <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto">
+                    <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto" loading="lazy"
+                        alt="Main Photo of Dog">
                     <h3 class="dogTitleItem">Gender: {{gender}}</h3>
 
                     <h3 class="dogTitleItem">Birth Day: {{dob}}</h3>

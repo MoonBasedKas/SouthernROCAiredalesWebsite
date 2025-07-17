@@ -181,7 +181,7 @@ def newDog():
     addDog(dogID, name, gender, avail, reg, dob, fname, desc)
     
     
-    threading.Thread(target=saveUpdates, args=([]))    
+    threading.Thread(target=saveUpdates, args=([])).start()
 
 
     return redirect(url_for('admin'))
@@ -290,7 +290,8 @@ def updateDog(id):
         fname = "placeholder.jpg"
 
     updateDog(dogID, name, desc, dob, gender, avail, reg)
-    threading.Thread(target=saveUpdates, args=([]))  
+    # saveUpdates()
+    threading.Thread(target=saveUpdates, args=()).start()
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -354,7 +355,7 @@ def deletePhoto():
         except:
             dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
 
-    threading.Thread(target=saveUpdates, args=([]))  
+    threading.Thread(target=saveUpdates).start()
     return redirect(f"/admin/details/{dogID}")
 
 @app.route("/admin/setMainPhoto", methods=["POST"])
@@ -366,7 +367,7 @@ def setMainPhoto():
     dogID = int(dogID)
     # Query to update the dogs primary photo
     dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = photoName
-    threading.Thread(target=saveUpdates, args=([]))  
+    threading.Thread(target=saveUpdates).start()
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -487,11 +488,8 @@ Saves updates to a database
 
 threads - the current disbatched threads. Waits until all threads are done before writing.
 """
-def saveUpdates(threads):
-    while threads != []:
-        if not threads[0].is_alive():
-            threads.pop(0)
-
+def saveUpdates():
+    print("hi")
     dogDB.to_csv("newDogs.csv")
     photos.to_csv("newPhotos.csv")
     return
