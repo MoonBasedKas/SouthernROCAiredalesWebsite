@@ -207,17 +207,9 @@ def dogQuery():
         if pageNo < 0:
             pageNo = 0
 
-
-    
-    isQuery = False
-
     if query != "":
         result = result[result["name"].str.contains(query, case=False)]
-        isQuery = True
 
-
-
-    
     
     pageMax = result.shape[0]
     pageMax = pageMax / querySize
@@ -228,9 +220,8 @@ def dogQuery():
     page = pageNo * querySize
     # Adjusts indeces
     result = result.loc[page:page + querySize - 1]
-    print(pageMax)
 
-    return render_template('adminDogs.html', results=result.values.tolist(), query=query, isQuery=isQuery, pageNo=pageNo, pageMax=pageMax)
+    return render_template('adminDogs.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
 
 
 """
@@ -323,7 +314,7 @@ def dogDetails(id):
     query = dog.values.tolist()
     if query == []:
         # TODO upodate to no dog found.
-        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
+        return render_template('noDog.html')
     query = query[0] # Set to first value because it'll return [[]] if it exists.
     name = query[1]
     gender = query[2]
