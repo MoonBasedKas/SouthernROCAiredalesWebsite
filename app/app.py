@@ -206,7 +206,7 @@ def dogQuery():
         pageNo -= 1
 
 
-    page = pageNo * querySize
+    
     isQuery = False
 
     if query != "":
@@ -221,6 +221,9 @@ def dogQuery():
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
+    if pageMax == pageNo:
+        pageNo = pageMax - 1
+    page = pageNo * querySize
     # Adjusts indeces
     result = result.loc[page:page + querySize - 1]
     print(pageMax)

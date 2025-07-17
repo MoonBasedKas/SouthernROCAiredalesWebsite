@@ -29,3 +29,43 @@
 .multiFormContainer {
     margin-bottom: 10%;
 }
+
+.searchContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.searchItem {
+    /* display: block; */
+    margin: auto;
+    width: 40%;
+    height: 30px;
+    border-radius: 5px;
+    border: 0px;
+}
+
+
+.searchSubmit {
+    /* display: block; */
+    margin: auto;
+    /* width: 25%; */
+    height: 30px;
+    border-radius: 5px;
+}
+
+.searchWindowSubmit {
+    /* display: block; */
+    margin: auto;
+    /* width: 25%; */
+    height: 25px;
+    border-radius: 5px;
+}
+
+.searchContainer {
+    display: block;
+    margin-left: auto;
+    text-align: center;
+}
