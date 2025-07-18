@@ -3,6 +3,7 @@
 <head>
 
     {% include 'headValues.html' %}
+    <link rel="stylesheet" href="/static/form.css">
 
     <script>
         function setPhotoForm(action, id) {
@@ -90,18 +91,19 @@
 
             </div>
             <h2 class="subtitle">Modify {{ name }}'s photos</h2>
-            <div>
+            <div class="galleryContainer">
                 {% for pic in pics %}
-                <div>
-                    <img src="/static/dogPhotos/{{pic[2]}}">
+                <div class="galleryItem">
+                    <img src="/static/dogPhotos/{{pic[2]}}" class="galleryPhoto">
                     <form id="photo-form-{{pic[0]}}" action="POST">
                         <input type="hidden" value="{{pic[2]}}" name="photoName">
                         <input type="hidden" value="{{pic[0]}}" name="photoID">
                         <input type="hidden" value="{{id}}" name="dogID">
                         <!-- Inputs -->
-                        <input type="button" value="Delete Photo" onclick="setPhotoForm('delete', {{pic[0]}})"><br>
+                        <input type="button" value="Delete Photo" onclick="setPhotoForm('delete', {{pic[0]}})"
+                            class="galleryButton"><br>
                         <input type="button" value="Set as Primary Photo"
-                            onclick="setPhotoForm('setMainPhoto', {{pic[0]}})">
+                            onclick="setPhotoForm('setMainPhoto', {{pic[0]}})" class="galleryButton">
                     </form>
                 </div>
                 {% endfor %}

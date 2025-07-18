@@ -31,10 +31,10 @@
                 </p>
                 {% endif %}
                 {% if photos != [] %}
-                <h2>Gallery</h2>
+                <h2 class="subtitle">Gallery</h2>
                 <div class="gallery">
                     {% for photo in photos %}
-                    <img src="/static/dogPhotos/{{photo}}" loading="lazy" class="galleryPhoto">
+                    <img src="/static/dogPhotos/{{photo[0]}}" loading="lazy" class="galleryPhoto">
                     {% endfor %}
 
                 </div>

@@ -101,7 +101,9 @@ def dog(id):
     query = dog.values.tolist()
     if query == []:
         return render_template('noDog.html')
-    photos = photoDB[photoDB["dogID"] == id].values.tolist()
+    photos = photoDB[photoDB["dogID"] == id]
+    photos = photos[["photoName"]].values.tolist()
+    
     query = query[0]
     name = query[1]
     gender = query[2]
