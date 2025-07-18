@@ -14,7 +14,7 @@ from datetime import date
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB = None
-photos = None
+photoDB = None
 counter = 0
 UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
@@ -27,10 +27,10 @@ except:
 
 
 try:
-    photos = pandas.read_csv("photos.csv")
+    photoDB = pandas.read_csv("photos.csv")
 
 except:
-    photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
+    photoDB=pandas.DataFrame(columns=["id", "dogID", "photoName"])
 
     
 # App Config    
@@ -98,10 +98,10 @@ def dog(id):
     gender = "Female"
     mainPhoto=""
     org=""
-    photos=[]
     query = dog.values.tolist()
     if query == []:
         return render_template('noDog.html')
+    photos = photoDB[photoDB["dogID"] == id].values.tolist()
     query = query[0]
     name = query[1]
     gender = query[2]
@@ -164,7 +164,7 @@ def newDog():
     if 'files[]' not in request.files:
         print("no photo sent")
     else:
-        photoID = photos['id'].max()
+        photoID = photoDB['id'].max()
         sent = request.files.getlist('files[]')
         for file in sent:
             fname = secure_filename(file.filename)
@@ -262,10 +262,10 @@ def updateDog(id):
     if 'files[]' not in request.files:
         print("Warning | No photo sent.")
     else:
-        photoID = photos['id'].max()
+        photoID = photoDB['id'].max()
         sent = request.files.getlist('files[]')
         check = True
-        size = photos[photos["dogID"] == dogID].size
+        size = photoDB[photoDB["dogID"] == dogID].size
         for file in sent:
             fname = secure_filename(file.filename)
             if fname == "":
@@ -275,7 +275,7 @@ def updateDog(id):
             file.save(UPLOAD_FOLDER + fname)
             photoID += 1
             # Avoid checking the count each time after its been set
-            print(photos[photos["dogID"] == dogID].size)
+            print(photoDB[photoDB["dogID"] == dogID].size)
             if size == 0:
                 dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
                 size += 1
@@ -326,7 +326,7 @@ def dogDetails(id):
     if type(desc) == float:
         desc = ""
 
-    pics = photos[photos["dogID"] == id]
+    pics = photoDB[photoDB["dogID"] == id]
     pics = pics.values.tolist()
 
     return render_template('details.html', id=id, pics=pics, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
@@ -339,15 +339,15 @@ def deletePhoto():
     photoID = request.form["photoID"]
     photoID = int(photoID)
     dogID = int(request.form["dogID"])
-    photoName = photos.loc[photos["id"] == photoID, "photoName"].item()
+    photoName = photoDB.loc[photoDB["id"] == photoID, "photoName"].item()
 
-    photos.loc[photos["id"] == photoID, "dogID"] = -1 # invalidate photo
+    photoDB.loc[photoDB["id"] == photoID, "dogID"] = -1 # invalidate photo
     value = dogDB.loc[dogDB["id"] == dogID, "mainPhoto"].item()
 
     # Attempt to find a replacement
     if photoName == value:
         try:
-            canidates = photos[photos["dogID"] == dogID][["photoName"]]
+            canidates = photoDB[photoDB["dogID"] == dogID][["photoName"]]
             if canidates == []:
                 raise ValueError
             
@@ -472,7 +472,7 @@ Adds a photo to the database
 """
 def addPhoto(id, dogID, photo):
     new = {"id":id,"dogID":dogID,"photoName":photo}
-    photos.loc[len(photos)] = new
+    photoDB.loc[len(photoDB)] = new
     return
 
 """
@@ -491,7 +491,7 @@ threads - the current disbatched threads. Waits until all threads are done befor
 def saveUpdates():
     print("hi")
     dogDB.to_csv("newDogs.csv")
-    photos.to_csv("newPhotos.csv")
+    photoDB.to_csv("newPhotos.csv")
     return
 
 """
