@@ -5,3 +5,5 @@ app/static/dogPhotos/*
 app/.env
 app/instance/users.db
 app/instance/users.db
+app/newDogs.csv
+app/newPhotos.csv
