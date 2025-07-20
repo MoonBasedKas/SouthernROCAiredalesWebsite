@@ -16,7 +16,7 @@ counter = 0
 UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
-    dogDB = pandas.read_csv("dogs.csv",  sep=',')
+    dogDB = pandas.read_csv("dogs.tsv",  sep='\t')
 
 except:
     print("failed read")
@@ -24,7 +24,7 @@ except:
 
 
 try:
-    photoDB = pandas.read_csv("photos.csv")
+    photoDB = pandas.read_csv("photos.tsv", sep="\t")
 
 except:
     photoDB=pandas.DataFrame(columns=["id", "dogID", "photoName"])
@@ -59,6 +59,8 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+
 
 
 @app.route('/home')
@@ -158,6 +160,7 @@ def newDog():
     reg = request.form['reg']
     dob = request.form['dob']
     desc = request.form['desc']
+    desc = desc.replace("\t", "&emsp;")
     
 
     if 'files[]' not in request.files:
@@ -255,7 +258,8 @@ def updateDog(id):
     reg = request.form['reg']
     dob = request.form['dob']
     desc = request.form['desc']
-    print("desc", desc)
+    desc = desc.replace("\t", "&emsp;")
+
     
 
     if 'files[]' not in request.files:
@@ -488,9 +492,8 @@ Saves updates to a database
 threads - the current disbatched threads. Waits until all threads are done before writing.
 """
 def saveUpdates():
-    print("hi")
-    dogDB.to_csv("newDogs.csv")
-    photoDB.to_csv("newPhotos.csv")
+    dogDB.to_csv("Dogs.tsv", sep="\t", index=False)
+    photoDB.to_csv("Photos.tsv", sep="\t", index=False)
     return
 
 """
@@ -504,7 +507,7 @@ def updateDog(id, name, desc, dob, gender, avail, reg):
     dogDB.loc[dogDB["id"] == id, "available"] = avail
     dogDB.loc[dogDB["id"] == id, "registration"] = reg
 
-
+saveUpdates()
 
 if __name__ == '__main__':
     with app.app_context():
