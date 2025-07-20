@@ -1,0 +1,136 @@
+.loginContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+
+.loginItem {
+    display: block;
+    margin: auto;
+    width: 25%;
+    height: 30px;
+    border-radius: 5px;
+    border: 0px;
+}
+
+
+.loginSubmit {
+    display: block;
+    margin: auto;
+    width: 25%;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.multiFormContainer {
+    margin-bottom: 10%;
+}
+
+.searchContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.searchItem {
+    /* display: block; */
+    margin: auto;
+    width: 40%;
+    height: 30px;
+    border-radius: 5px;
+    border: 0px;
+}
+
+
+.searchSubmit {
+    /* display: block; */
+    margin: auto;
+    /* width: 25%; */
+    height: 30px;
+    border-radius: 5px;
+}
+
+.searchWindowSubmit {
+    /* display: block; */
+    margin: auto;
+    /* width: 25%; */
+    height: 25px;
+    border-radius: 5px;
+}
+
+.searchContainer {
+    display: block;
+    margin-left: auto;
+    text-align: center;
+}
+
+
+.galleryContainer {
+    margin: 3%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+
+.galleryItem {
+    width: 30%;
+    background-color: white;
+    border-radius: 5px;
+    margin-top: 2%;
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.galleryPhoto {
+    border-radius: 5px;
+    width: 90%;
+    margin-top: 2%;
+    /* display: block; */
+    /* margin: auto; */
+}
+
+.galleryButton {
+    /* display: block; */
+    margin: auto;
+    width: 100%;
+    height: 30px;
+    border-radius: 5px;
+}
+
+
+.formSubmit {
+    /* display: block; */
+    /* margin-bottom: 2%; */
+    /* width: 25%; */
+    height: 25px;
+    border-radius: 5px;
+    margin-left: 2%;
+}
+
+.formContainerItem {
+    margin-left: 2%;
+}
+
+.formContainer {
+    padding: 1%;
+}
+
+.formDesc {
+    display: block;
+    /* margin-left: 2%; */
+    width: 75%;
+    height: 100px;
+    resize: none;
+}

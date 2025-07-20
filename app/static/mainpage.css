@@ -133,5 +133,11 @@
 }
 
 .innerForm {
-    margin: 2%;
+    margin-left: 4%;
+}
+
+.links {
+    text-align: center;
+    display: block;
+    margin: auto;
 }

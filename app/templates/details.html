@@ -2,9 +2,8 @@
 
 <head>
 
-    <link rel="stylesheet" href="/static/head.css">
-    <link rel="stylesheet" href="/static/content.css">
-    <link rel="stylesheet" href="/static/mainpage.css">
+    {% include 'headValues.html' %}
+    <link rel="stylesheet" href="/static/form.css">
 
     <script>
         function setPhotoForm(action, id) {
@@ -22,6 +21,8 @@
             }
         }
     </script>
+
+    <title>Modify {{name}}</title>
 </head>
 
 <body class="bodycolor">
@@ -36,27 +37,27 @@
         <div id="home" class="info">
             <h1 class="title">Update {{ name }}'s information</h1>
 
-            <img src="/static/dogPhotos/{{mainPhoto}}">
+            <img src="/static/dogPhotos/{{mainPhoto}}" class="mainPhoto">
 
             <!-- Enter a new dog -->
             <div class="inputForm">
                 <h1 class="subtitle"></h1>
-                <form action="/admin/update/{{id}}" method="post" enctype="multipart/form-data">
+                <form action="/admin/update/{{id}}" method="post" enctype="multipart/form-data" class="formContainer">
                     <div class="innerForm">
                         <h1 class="title">Update information</h1>
 
-                        <h3>Name</h3>
+                        <h1>Name</h1>
                         <!-- REQUIRED -->
                         <input type="text" value="{{name}}" name="Name" required><br>
                         <!-- Gender REQUIRED-->
-                        <h3>Gender</h3>
+                        <h1>Gender</h1>
                         <input type="radio" name="gender" value="Female" id="Female" required {% if not gender %}
                             checked {% endif %}> <label for="Female">Female</label><br>
                         <input type="radio" name="gender" value="Male" id="Male" required {% if gender %} checked {%
                             endif %}> <label for="Male">Male</label><br>
 
                         <!-- Available REQUIRED -->
-                        <h3>Are they available</h3>
+                        <h1>Are they available</h1>
                         <input type="radio" id="true" name="avail" value="true" {% if avail %} checked {% endif %}>
                         <label for="true">Yes</label><br>
                         <input type="radio" id="false" name="avail" value="false" {% if not avail %} checked {% endif
@@ -64,7 +65,7 @@
                         <label for="false">No</label><br>
 
                         <!-- Reg REQUIRED -->
-                        <h3>Organization of registration</h3>
+                        <h1>Organization of registration</h1>
                         <input type="radio" name="reg" value="AKC" id="AKC" required {%if org=="AKC" %} checked {% endif
                             %}> <label for="AKC">AKC</label><br>
                         <input type="radio" name="reg" value="AATR" id="AATR" required {%if org=="AATR" %} checked {%
@@ -73,37 +74,42 @@
                             endif %}> <label for="None">None</label><br>
 
                         <!-- REQUIRED -->
-                        <h3>Date of Birth</h3>
+                        <h1>Date of Birth</h1>
                         <input type="date" name="dob" value={{ dob }} required><br>
 
-                        <h3>Add new photos of {{ name }}</h3>
+                        <h1>Add new photos of {{ name }}</h1>
                         <input type="file" name="files[]" multiple>
 
-                        <h3>Descripton of dog</h3>
-                        <textarea name="desc" id="desc">{{desc}}</textarea><br>
+                        <h1>Descripton of dog</h1>
+                        <textarea name="desc" id="desc" class="formDesc">{{desc}}</textarea><br>
 
                         <input type="hidden" value="{{id}}" name="dogID">
 
-                        <input type="submit" value="Update">
+                        <input type="submit" value="Update" class="searchSubmit">
                     </div>
                 </form>
 
-                <h3>Modify {{ name }}'s photos</h3>
+
 
             </div>
-            {% for pic in pics %}
-            <div>
-                <img src="/static/dogPhotos/{{pic[2]}}">
-                <form id="photo-form-{{pic[0]}}" action="POST">
-                    <input type="hidden" value="{{pic[2]}}" name="photoName">
-                    <input type="hidden" value="{{pic[0]}}" name="photoID">
-                    <input type="hidden" value="{{id}}" name="dogID">
-                    <input type="button" value="Delete Photo" onclick="setPhotoForm('delete', {{pic[0]}})">
-                    <input type="button" value="Set as Primary Photo"
-                        onclick="setPhotoForm('setMainPhoto', {{pic[0]}})">
-                </form>
+            <h2 class="subtitle">Modify {{ name }}'s photos</h2>
+            <div class="galleryContainer">
+                {% for pic in pics %}
+                <div class="galleryItem">
+                    <img src="/static/dogPhotos/{{pic[2]}}" class="galleryPhoto">
+                    <form id="photo-form-{{pic[0]}}" action="POST">
+                        <input type="hidden" value="{{pic[2]}}" name="photoName">
+                        <input type="hidden" value="{{pic[0]}}" name="photoID">
+                        <input type="hidden" value="{{id}}" name="dogID">
+                        <!-- Inputs -->
+                        <input type="button" value="Delete Photo" onclick="setPhotoForm('delete', {{pic[0]}})"
+                            class="galleryButton"><br>
+                        <input type="button" value="Set Primary" onclick="setPhotoForm('setMainPhoto', {{pic[0]}})"
+                            class="galleryButton">
+                    </form>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
 
         </div>
         <!-- End Content -->

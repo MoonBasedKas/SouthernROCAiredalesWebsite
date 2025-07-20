@@ -2,20 +2,29 @@
 <html>
 
 <head>
+    {% include 'headValues.html' %}
 
+
+    <link rel="stylesheet" href="/static/form.css">
+    <title>Login</title>
 </head>
 
-<body>
+<body class="bodycolor">
 
 
-    <div>
-        <h1>Plese enter your login information</h1>
-        <form id="auth-form" action="{{url_for('login')}}" method="post">
-            <input type="text" name="username" placeholder="username">
-            <input type="password" name="password" placeholder="password">
-            <!-- <input type="text" name="verify" placeholder="password"> -->
-            <input type="submit" value="login">
-        </form>
+    <div class="content">
+
+
+        {% include 'header.html' %}
+
+        <div class="info">
+            <h1 class="title">Plese enter your login information</h1>
+            <form id="auth-form" action="{{url_for('login')}}" method="post" class="loginContainer">
+                <input type="text" name="username" placeholder="Username" class="loginItem"><br>
+                <input type="password" name="password" placeholder="Password" class="loginItem"><br>
+                <input type="submit" value="Login" class="loginSubmit">
+            </form>
+        </div>
     </div>
 
 

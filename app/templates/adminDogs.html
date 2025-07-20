@@ -2,10 +2,12 @@
 
 <head>
 
-    <link rel="stylesheet" href="/static/head.css">
-    <link rel="stylesheet" href="/static/content.css">
-    <link rel="stylesheet" href="/static/mainpage.css">
+    {% include 'headValues.html' %}
+    <link rel="stylesheet" href="/static/form.css">
     <script src="/static/pageWindow.js"></script>
+
+
+    <title>View Dogs</title>
 </head>
 
 <body class="bodycolor">
@@ -23,13 +25,15 @@
 
             <h1 class="title">Dog Records</h1>
 
-            <form action="{{url_for('dogQuery')}}" method="GET">
-                <input type="textbox" name="search" required>
-                <input type="submit">
-                <!-- <img src="/static/search.css" onclick="sendQuery()"> -->
+            <form action="{{url_for('dogQuery')}}" method="GET" class="searchContainer">
+                <div>
+                    <input type="textbox" name="search" required class="searchItem" placeholder="Enter your query.">
+                    <input type="submit" value="Search" class="searchSubmit">
+                    <!-- <img src="/static/search.css" onclick="sendQuery()"> -->
+                </div>
             </form>
             <div>
-                {% if isQuery %}
+                {% if Query == "" %}
                 <h3> Showing Results for {{Query}}.</h3>
                 {% endif %}
                 <!-- Females -->
@@ -40,7 +44,7 @@
                             <h4 class="subtitle">{{dog[1]}}</h4><br>
                             <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage" loading="lazy"><br>
                             <p class="subtitle">
-                                {% if gender == "Female" %}
+                                {% if not dog[2]%}
                                 Gender: Female<br>
                                 {% else %}
                                 Gender: Male<br>
@@ -55,7 +59,7 @@
 
 
 
-                <form action="{{url_for('dogQuery')}}" method="GET" id="windowControl">
+                <form action="{{url_for('dogQuery')}}" method="GET" id="windowControl" class="searchContainer">
 
                     <input type="hidden" id="window" name="window">
                     <input type="hidden" id="search" name="search" value="{{query}}">
@@ -63,20 +67,25 @@
                     Page {{pageNo + 1}}/{{pageMax}}<br>
                     {% if pageNo == 0 %}
 
-                    {{pageNo + 1}} <input type="button" value="Next Page" onclick="setLoginForm('inc')">
+                    {{pageNo + 1}} <input type="button" value="Next Page" onclick="setLoginForm('inc')"
+                        class="searchWindowSubmit">
 
                     {% elif pageNo == (pageMax - 1) %}
-                    <input type="button" onclick="setLoginForm('dec')" value="Last Page"> {{pageNo + 1}}
+                    <input type="button" onclick="setLoginForm('dec')" value="Last Page" class="searchWindowSubmit">
+                    {{pageNo
+                    + 1}}
 
                     {% else %}
-                    <input type="button" onclick="setLoginForm('dec')" value="Last Page"> {{pageNo + 1}} <input
-                        type="button" value="Next Page" onclick="setLoginForm('inc')">
+                    <input type="button" onclick="setLoginForm('dec')" value="Last Page" class="searchWindowSubmit">
+                    {{pageNo
+                    + 1}} <input type="button" value="Next Page" onclick="setLoginForm('inc')"
+                        class="searchWindowSubmit">
 
                     {% endif %}
 
                 </form>
-                <form action="{{url_for('dogQuery')}}" method="GET">
-                    <input type="submit" value="clear search">
+                <form action="{{url_for('dogQuery')}}" method="GET" class="searchContainer">
+                    <input type="submit" value="Clear search" class="searchWindowSubmit">
                 </form>
 
 

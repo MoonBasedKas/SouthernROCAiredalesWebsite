@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 
 <head>
-    <link rel="stylesheet" href="/static/mainpage.css">
+    {% include 'headValues.html' %}
     <link rel="stylesheet" href="/static/dog.css">
-    <link rel="stylesheet" href="/static/head.css">
-
+    <title> {{name}} </title>
 </head>
 
 <body>
@@ -21,7 +20,8 @@
                 <div class="dogTitle">
                     <h1 class="dogTitleItem">{{name}} - {{org}}</h1>
 
-                    <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto">
+                    <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto" loading="lazy"
+                        alt="Main Photo of Dog">
                     <h3 class="dogTitleItem">Gender: {{gender}}</h3>
 
                     <h3 class="dogTitleItem">Birth Day: {{dob}}</h3>
@@ -32,10 +32,12 @@
                 </p>
                 {% endif %}
                 {% if photos != [] %}
-                <h2>Gallery</h2>
+                <h2 class="subtitle">Gallery</h2>
                 <div class="gallery">
                     {% for photo in photos %}
-                    <img src="/static/dogPhotos/{{photo}}" loading="lazy" class="galleryPhoto">
+                    <div class="galleryItem">
+                        <img src="/static/dogPhotos/{{photo[0]}}" loading="lazy" class="galleryPhoto">
+                    </div>
                     {% endfor %}
 
                 </div>

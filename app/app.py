@@ -8,18 +8,15 @@ import numpy as np
 import math as mt
 import secrets
 from datetime import date
-# import dbController
-
-# db = dbController.dbController()
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB = None
-photos = None
+photoDB = None
 counter = 0
 UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
-    dogDB = pandas.read_csv("dogs.csv",  sep=',')
+    dogDB = pandas.read_csv("dogs.tsv",  sep='\t')
 
 except:
     print("failed read")
@@ -27,14 +24,15 @@ except:
 
 
 try:
-    photos = pandas.read_csv("photos.csv")
+    photoDB = pandas.read_csv("photos.tsv", sep="\t")
 
 except:
-    photos=pandas.DataFrame(columns=["id", "dogID", "photoName"])
+    photoDB=pandas.DataFrame(columns=["id", "dogID", "photoName"])
 
     
 # App Config    
 app = Flask(__name__)
+
 app.secret_key = secrets.token_hex(32)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -60,18 +58,12 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-# @app.route('/home')
-# def Welcome(name = None):
-#     return render_template('index.html', person=name)
+    
 
 
-@app.route('/home')
-@app.route('/index')
 @app.route('/')
 def Welcome():
     global counter
-
         
     available = dogDB[dogDB["available"] == True]
     males = available[available["gender"] ==  True]
@@ -88,21 +80,6 @@ def Welcome():
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter)
 
 
-# """
-# For viewing all the dogs
-# """
-# @app.route('/dogs/<string:gender>')
-# def dogs(gender):
-    
-#     # Female is only false because they both start with f.
-#     if gender.lower() == "female":
-#         dog = dogDB[dogDB["gender"] == False]
-#     else:
-#         dog = dogDB[dogDB["gender"] == True]
-
-#     return render_template('dogs.html', dogInfo=dogs.values.tolist())
-
-
 """
 For viewing a singular dog
 """
@@ -116,10 +93,12 @@ def dog(id):
     gender = "Female"
     mainPhoto=""
     org=""
-    photos=[]
     query = dog.values.tolist()
     if query == []:
-        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
+        return render_template('noDog.html')
+    photos = photoDB[photoDB["dogID"] == id]
+    photos = photos[["photoName"]].values.tolist()
+    
     query = query[0]
     name = query[1]
     gender = query[2]
@@ -177,12 +156,13 @@ def newDog():
     reg = request.form['reg']
     dob = request.form['dob']
     desc = request.form['desc']
+    desc = desc.replace("\t", "&emsp;")
     
 
     if 'files[]' not in request.files:
         print("no photo sent")
     else:
-        photoID = photos['id'].max()
+        photoID = photoDB['id'].max()
         sent = request.files.getlist('files[]')
         for file in sent:
             fname = secure_filename(file.filename)
@@ -199,7 +179,7 @@ def newDog():
     addDog(dogID, name, gender, avail, reg, dob, fname, desc)
     
     
-    threading.Thread(target=saveUpdates, args=([]))    
+    threading.Thread(target=saveUpdates, args=([])).start()
 
 
     return redirect(url_for('admin'))
@@ -222,28 +202,23 @@ def dogQuery():
         pageNo += 1
     elif window == 'dec':
         pageNo -= 1
-
-
-    page = pageNo * querySize
-    isQuery = False
+        if pageNo < 0:
+            pageNo = 0
 
     if query != "":
         result = result[result["name"].str.contains(query, case=False)]
-        isQuery = True
 
-
-
-    
     
     pageMax = result.shape[0]
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
+    if pageMax == pageNo:
+        pageNo = pageMax - 1
+    page = pageNo * querySize
     # Adjusts indeces
     result = result.loc[page:page + querySize - 1]
-    print(pageMax)
-
-    return render_template('adminDogs.html', results=result.values.tolist(), query=query, isQuery=isQuery, pageNo=pageNo, pageMax=pageMax)
+    return render_template('adminDogs.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
 
 
 """
@@ -279,16 +254,17 @@ def updateDog(id):
     reg = request.form['reg']
     dob = request.form['dob']
     desc = request.form['desc']
-    print("desc", desc)
+    desc = desc.replace("\t", "&emsp;")
+
     
 
     if 'files[]' not in request.files:
         print("Warning | No photo sent.")
     else:
-        photoID = photos['id'].max()
+        photoID = photoDB['id'].max()
         sent = request.files.getlist('files[]')
         check = True
-        size = photos[photos["dogID"] == dogID].size
+        size = photoDB[photoDB["dogID"] == dogID].size
         for file in sent:
             fname = secure_filename(file.filename)
             if fname == "":
@@ -298,7 +274,7 @@ def updateDog(id):
             file.save(UPLOAD_FOLDER + fname)
             photoID += 1
             # Avoid checking the count each time after its been set
-            print(photos[photos["dogID"] == dogID].size)
+            print(photoDB[photoDB["dogID"] == dogID].size)
             if size == 0:
                 dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
                 size += 1
@@ -313,7 +289,8 @@ def updateDog(id):
         fname = "placeholder.jpg"
 
     updateDog(dogID, name, desc, dob, gender, avail, reg)
-    threading.Thread(target=saveUpdates, args=([]))  
+    # saveUpdates()
+    threading.Thread(target=saveUpdates, args=()).start()
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -336,7 +313,7 @@ def dogDetails(id):
     query = dog.values.tolist()
     if query == []:
         # TODO upodate to no dog found.
-        return render_template('dog.html', photos=photos, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org)
+        return render_template('noDog.html')
     query = query[0] # Set to first value because it'll return [[]] if it exists.
     name = query[1]
     gender = query[2]
@@ -348,7 +325,7 @@ def dogDetails(id):
     if type(desc) == float:
         desc = ""
 
-    pics = photos[photos["dogID"] == id]
+    pics = photoDB[photoDB["dogID"] == id]
     pics = pics.values.tolist()
 
     return render_template('details.html', id=id, pics=pics, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
@@ -361,15 +338,15 @@ def deletePhoto():
     photoID = request.form["photoID"]
     photoID = int(photoID)
     dogID = int(request.form["dogID"])
-    photoName = photos.loc[photos["id"] == photoID, "photoName"].item()
+    photoName = photoDB.loc[photoDB["id"] == photoID, "photoName"].item()
 
-    photos.loc[photos["id"] == photoID, "dogID"] = -1 # invalidate photo
+    photoDB.loc[photoDB["id"] == photoID, "dogID"] = -1 # invalidate photo
     value = dogDB.loc[dogDB["id"] == dogID, "mainPhoto"].item()
 
     # Attempt to find a replacement
     if photoName == value:
         try:
-            canidates = photos[photos["dogID"] == dogID][["photoName"]]
+            canidates = photoDB[photoDB["dogID"] == dogID][["photoName"]]
             if canidates == []:
                 raise ValueError
             
@@ -377,7 +354,7 @@ def deletePhoto():
         except:
             dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
 
-    threading.Thread(target=saveUpdates, args=([]))  
+    threading.Thread(target=saveUpdates).start()
     return redirect(f"/admin/details/{dogID}")
 
 @app.route("/admin/setMainPhoto", methods=["POST"])
@@ -389,7 +366,7 @@ def setMainPhoto():
     dogID = int(dogID)
     # Query to update the dogs primary photo
     dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = photoName
-    threading.Thread(target=saveUpdates, args=([]))  
+    threading.Thread(target=saveUpdates).start()
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -494,7 +471,7 @@ Adds a photo to the database
 """
 def addPhoto(id, dogID, photo):
     new = {"id":id,"dogID":dogID,"photoName":photo}
-    photos.loc[len(photos)] = new
+    photoDB.loc[len(photoDB)] = new
     return
 
 """
@@ -510,13 +487,9 @@ Saves updates to a database
 
 threads - the current disbatched threads. Waits until all threads are done before writing.
 """
-def saveUpdates(threads):
-    while threads != []:
-        if not threads[0].is_alive():
-            threads.pop(0)
-
-    dogDB.to_csv("newDogs.csv")
-    photos.to_csv("newPhotos.csv")
+def saveUpdates():
+    dogDB.to_csv("Dogs.tsv", sep="\t", index=False)
+    photoDB.to_csv("Photos.tsv", sep="\t", index=False)
     return
 
 """
@@ -529,8 +502,6 @@ def updateDog(id, name, desc, dob, gender, avail, reg):
     dogDB.loc[dogDB["id"] == id, "gender"] = gender
     dogDB.loc[dogDB["id"] == id, "available"] = avail
     dogDB.loc[dogDB["id"] == id, "registration"] = reg
-
-
 
 if __name__ == '__main__':
     with app.app_context():
