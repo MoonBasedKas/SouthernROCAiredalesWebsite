@@ -108,3 +108,29 @@
     height: 30px;
     border-radius: 5px;
 }
+
+
+.formSubmit {
+    /* display: block; */
+    /* margin-bottom: 2%; */
+    /* width: 25%; */
+    height: 25px;
+    border-radius: 5px;
+    margin-left: 2%;
+}
+
+.formContainerItem {
+    margin-left: 2%;
+}
+
+.formContainer {
+    padding: 1%;
+}
+
+.formDesc {
+    display: block;
+    /* margin-left: 2%; */
+    width: 75%;
+    height: 100px;
+    resize: none;
+}

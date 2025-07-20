@@ -8,9 +8,6 @@ import numpy as np
 import math as mt
 import secrets
 from datetime import date
-# import dbController
-
-# db = dbController.dbController()
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB = None

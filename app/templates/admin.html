@@ -3,7 +3,7 @@
 <head>
 
     {% include 'headValues.html' %}
-
+    <link rel="stylesheet" href="/static/form.css">
 </head>
 
 <body class="bodycolor">
@@ -21,40 +21,40 @@
             <!-- Enter a new dog -->
             <div class="inputForm">
                 <h1 class="subtitle">Enter a new dog</h1>
-                <form action="/admin/newDog" method="post" enctype="multipart/form-data">
+                <form action="/admin/newDog" method="post" enctype="multipart/form-data" class="formContainer">
                     <div class="innerForm">
-                        <h3>Name</h3>
+                        <h2>Name</h2>
                         <input type="text" placeholder="Name" name="Name" required><br>
                         <!-- Gender -->
-                        <h3>Gender</h3>
+                        <h2>Gender</h2>
                         <input type="radio" name="gender" value="Female" id="Female" required> <label
                             for="Female">Female</label><br>
                         <input type="radio" name="gender" value="Male" id="Male" required> <label
                             for="Male">Male</label><br>
 
                         <!-- Available -->
-                        <h3>Are they available</h3>
+                        <h2>Are they available</h2>
                         <input type="radio" id="avail" name="avail" value="true"> <label for="true">Yes</label><br>
                         <input type="radio" id="avail" name="avail" value="false"> <label for="false">No</label><br>
 
                         <!-- Reg -->
-                        <h3>Organization of registration</h3>
+                        <h2>Organization of registration</h2>
                         <input type="radio" name="reg" value="AKC" id="AKC" required> <label for="AKC">AKC</label><br>
                         <input type="radio" name="reg" value="AATR" id="AATR" required> <label
                             for="AATR">AATR</label><br>
                         <input type="radio" name="reg" value="None" id="None" required> <label
                             for="None">None</label><br>
 
-                        <h3>Date of Birth</h3>
+                        <h2>Date of Birth</h2>
                         <input type="date" name="dob" required><br>
 
-                        <h3>Upload photos of dog</h3>
-                        <input type="file" name="files[]" required multiple>
+                        <h2>Upload photos of dog</h2>
+                        <input type="file" name="files[]" required multiple class="formItem">
 
-                        <h3>Descripton of dog</h3>
-                        <textarea name="desc" id="desc" required></textarea><br>
+                        <h2>Descripton of dog</h2>
+                        <textarea name="desc" id="desc" required class="formDesc"></textarea><br>
 
-                        <input type="submit" value="submit">
+                        <input type="submit" value="Submit" class="searchSubmit">
                     </div>
                 </form>
             </div>
