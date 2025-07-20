@@ -62,9 +62,6 @@ class User(db.Model):
     
 
 
-
-@app.route('/home')
-@app.route('/index')
 @app.route('/')
 def Welcome():
     global counter
