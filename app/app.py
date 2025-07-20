@@ -507,8 +507,6 @@ def updateDog(id, name, desc, dob, gender, avail, reg):
     dogDB.loc[dogDB["id"] == id, "available"] = avail
     dogDB.loc[dogDB["id"] == id, "registration"] = reg
 
-saveUpdates()
-
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

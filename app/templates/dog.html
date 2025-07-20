@@ -34,7 +34,9 @@
                 <h2 class="subtitle">Gallery</h2>
                 <div class="gallery">
                     {% for photo in photos %}
-                    <img src="/static/dogPhotos/{{photo[0]}}" loading="lazy" class="galleryPhoto">
+                    <div class="galleryItem">
+                        <img src="/static/dogPhotos/{{photo[0]}}" loading="lazy" class="galleryPhoto">
+                    </div>
                     {% endfor %}
 
                 </div>
