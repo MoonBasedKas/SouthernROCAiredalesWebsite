@@ -33,8 +33,7 @@ except:
 # App Config    
 app = Flask(__name__)
 
-app.secret_key = "dog"
-# app.secret_key = secrets.token_hex(32)
+app.secret_key = secrets.token_hex(32)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 autoKeyReset = False
