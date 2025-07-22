@@ -165,7 +165,7 @@ def newDog():
         photoID = photoDB['id'].max()
         sent = request.files.getlist('files[]')
         for file in sent:
-            fname = secure_filename(file.filename)
+            fname = secure_filename(str(photoID) + file.filename)
             # TODO: Check file types
             file.save(UPLOAD_FOLDER + fname)
             photoID += 1
@@ -266,7 +266,8 @@ def updateDog(id):
         check = True
         size = photoDB[photoDB["dogID"] == dogID].size
         for file in sent:
-            fname = secure_filename(file.filename)
+            fname = secure_filename(str(photoID) + file.filename)
+            
             if fname == "":
                 break
             print(sent)
@@ -490,6 +491,11 @@ threads - the current disbatched threads. Waits until all threads are done befor
 def saveUpdates():
     dogDB.to_csv("Dogs.tsv", sep="\t", index=False)
     photoDB.to_csv("Photos.tsv", sep="\t", index=False)
+    return
+
+
+def savePhotos():
+
     return
 
 """

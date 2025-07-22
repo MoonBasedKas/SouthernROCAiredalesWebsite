@@ -10,3 +10,5 @@ app/newPhotos.csv
 *.tsv
 app/Photos.tsv
 app/Photos.tsv
+app/Dogs.tsv
+app/Photos.tsv
