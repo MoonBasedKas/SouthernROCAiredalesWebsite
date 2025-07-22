@@ -165,12 +165,15 @@ def newDog():
         photoID = photoDB['id'].max()
         sent = request.files.getlist('files[]')
         for file in sent:
-            fname = secure_filename(str(photoID) + file.filename)
-            # TODO: Check file types
-            file.save(UPLOAD_FOLDER + fname)
-            photoID += 1
-            # This could honestly slow everything down a lot.
-            addPhoto(photoID, dogID, fname)
+            try:
+                fname = secure_filename(str(photoID) + file.filename)
+                # TODO: Check file types
+                file.save(UPLOAD_FOLDER + fname)
+                photoID += 1
+                # This could honestly slow everything down a lot.
+                addPhoto(photoID, dogID, fname)
+            except:
+                pass
 
 
     if fname == "":
@@ -266,21 +269,24 @@ def updateDog(id):
         check = True
         size = photoDB[photoDB["dogID"] == dogID].size
         for file in sent:
-            fname = secure_filename(str(photoID) + file.filename)
-            
-            if fname == "":
-                break
-            print(sent)
-            # TODO: Check file types
-            file.save(UPLOAD_FOLDER + fname)
-            photoID += 1
-            # Avoid checking the count each time after its been set
-            print(photoDB[photoDB["dogID"] == dogID].size)
-            if size == 0:
-                dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
-                size += 1
+            try:
+                fname = secure_filename(str(photoID) + file.filename)
+                
+                if fname == "":
+                    break
+                print(sent)
+                # TODO: Check file types
+                file.save(UPLOAD_FOLDER + fname)
+                photoID += 1
+                # Avoid checking the count each time after its been set
+                print(photoDB[photoDB["dogID"] == dogID].size)
+                if size == 0:
+                    dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
+                    size += 1
 
-            addPhoto(photoID, dogID, fname)
+                addPhoto(photoID, dogID, fname)
+            except:
+                pass
 
         
 
