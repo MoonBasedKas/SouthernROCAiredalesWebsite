@@ -8,3 +8,5 @@ app/instance/users.db
 app/newDogs.csv
 app/newPhotos.csv
 *.tsv
+app/Photos.tsv
+app/Photos.tsv
