@@ -1,7 +1,7 @@
 /* Basic page set up */
 :root {
     --bg: black;
-    --foreground: rgb(240 240 235);
+    --foreground: rgb(237, 237, 237);
     --item: white;
 }
 

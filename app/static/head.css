@@ -1,7 +1,7 @@
 /* Manages the style for the header bar at the top. */
 :root {
     --bg: black;
-    --foreground: rgb(240 240 235);
+    --foreground: rgb(237, 237, 237);
     --item: white;
 }
 
