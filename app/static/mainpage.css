@@ -1,11 +1,17 @@
 /* Basic page set up */
+:root {
+    --bg: black;
+    --foreground: rgb(240 240 235);
+    --item: white;
+}
+
 
 .bodycolor {
-    background-color: black;
+    background-color: var(--bg);
 }
 
 .content {
-    background-color: black;
+    background-color: var(--bg);
 
 }
 
@@ -14,7 +20,7 @@
 }
 
 .info {
-    background-color: rgb(240 240 235);
+    background-color: var(--foreground);
     margin: 5vw;
     margin-bottom: 0vw;
     margin-top: 0vw;
@@ -89,10 +95,10 @@
 }
 
 .dogItem {
-    background-color: rgb(255, 255, 255);
+    background-color: var(--item);
     /* border-style: solid; */
     border-radius: 10px;
-    border-color: black;
+    border-color: var(--bg);
     /* height: 25%; */
     /* width: 25%; */
     margin: 10px;
@@ -128,7 +134,7 @@
 /* Input form */
 .inputForm {
     margin: 2%;
-    background-color: white;
+    background-color: var(--item);
     border-radius: 10px;
 }
 

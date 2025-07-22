@@ -1,7 +1,12 @@
 /* Manages the style for the header bar at the top. */
+:root {
+    --bg: black;
+    --foreground: rgb(240 240 235);
+    --item: white;
+}
 
 .bar {
-    background-color: rgb(240 240 235);
+    background-color: var(--foreground);
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -18,7 +23,7 @@
 
 /* For a single item within the menu bar */
 .item {
-    color: black;
+    color: var(--bg);
     flex-grow: 1;
     flex-shrink: 1;
     text-align: center;
@@ -34,8 +39,8 @@
 }
 
 .item:hover {
-    background-color: rgb(255, 255, 255);
-    color: black;
+    background-color: var(--item);
+    color: var(--bg);
 }
 
 .headerLink:visited {
@@ -50,6 +55,6 @@
     flex-shrink: 1;
     /* width: 25%; */
     /* height: 25%; */
-    color: black;
+    color: var(--bg);
     /* margin: 10px; */
 }

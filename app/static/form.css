@@ -1,11 +1,16 @@
+:root {
+    --bg: black;
+    --foreground: rgb(240 240 235);
+    --item: white;
+}
+
+
 .loginContainer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     flex-direction: column;
 }
-
-
 
 
 .loginItem {
@@ -82,7 +87,7 @@
 
 .galleryItem {
     width: 30%;
-    background-color: white;
+    background-color: var(--item);
     border-radius: 5px;
     margin-top: 2%;
 
