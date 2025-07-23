@@ -17,10 +17,9 @@ UPLOAD_FOLDER="./static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
     dogDB = pandas.read_csv("dogs.tsv",  sep='\t')
-
 except:
     print("failed read")
-    dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "desc"])
+    dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "mainPhoto", "desc"])
 
 
 try:
