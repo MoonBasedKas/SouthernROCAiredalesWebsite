@@ -1,7 +1,8 @@
 /* Basic page set up */
 :root {
-    --bg: black;
-    --foreground: rgb(237, 237, 237);
+    --bg: rgb(18, 18, 18);
+    --foreground: rgb(232, 228, 225);
+    --altforeground: rgb(245, 241, 237);
     --item: white;
 }
 
@@ -13,6 +14,26 @@
 .content {
     background-color: var(--bg);
 
+}
+
+.altbg {
+    background-color: var(--altforeground);
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.bg {
+    background-color: var(--foreground);
+}
+
+.introCard {
+    padding-top: 10px;
+}
+
+.companyTitle {
+    font-size: 48pt;
+    text-align: center;
+    /*text-decoration: underline;*/
 }
 
 .subtitle {
@@ -29,7 +50,7 @@
     border-width: 0px;
     border-color: rgb(193, 193, 193);
     border-radius: 5px;
-    padding-bottom: 1cm;
+    /*padding-bottom: 1cm;*/
 
 
 }
