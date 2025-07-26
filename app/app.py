@@ -110,8 +110,8 @@ def dog(id):
     try:
         org = bool(org)
     except:
-        org = False
-        
+        org = True
+
     dob = query[5]
     mainPhoto= query[6]
     desc = query[7]
