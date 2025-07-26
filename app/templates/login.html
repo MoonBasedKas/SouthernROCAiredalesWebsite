@@ -18,12 +18,14 @@
         {% include 'header.html' %}
 
         <div class="info">
-            <h1 class="title">Plese enter your login information</h1>
+            <h1 class="title">Please enter your login information</h1>
             <form id="auth-form" action="{{url_for('login')}}" method="post" class="loginContainer">
                 <input type="text" name="username" placeholder="Username" class="loginItem"><br>
                 <input type="password" name="password" placeholder="Password" class="loginItem"><br>
                 <input type="submit" value="Login" class="loginSubmit">
             </form>
+            <br>
+            <br>
         </div>
     </div>
 

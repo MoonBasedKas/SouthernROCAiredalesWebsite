@@ -9,27 +9,32 @@ import math as mt
 import secrets
 from datetime import date
 
+import os
+
+print(os.listdir())
+
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB = None
 photoDB = None
 counter = 0
-UPLOAD_FOLDER="./static/dogPhotos/"
+UPLOAD_FOLDER="/home/KassidyMaberry/mysite/static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
-    dogDB = pandas.read_csv("dogs.tsv",  sep='\t')
+    dogDB = pandas.read_csv("/home/KassidyMaberry/mysite/Dogs.tsv",  sep='\t')
+
 except:
     print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "mainPhoto", "desc"])
 
 
 try:
-    photoDB = pandas.read_csv("photos.tsv", sep="\t")
+    photoDB = pandas.read_csv("/home/KassidyMaberry/mysite/Photos.tsv", sep="\t")
 
 except:
     photoDB=pandas.DataFrame(columns=["id", "dogID", "photoName"])
 
-    
-# App Config    
+
+# App Config
 app = Flask(__name__)
 
 app.secret_key = secrets.token_hex(32)
@@ -50,20 +55,20 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
-    
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
 
 
 @app.route('/')
 def Welcome():
     global counter
-        
+
     available = dogDB[dogDB["available"] == True]
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
@@ -97,7 +102,7 @@ def dog(id):
         return render_template('noDog.html')
     photos = photoDB[photoDB["dogID"] == id]
     photos = photos[["photoName"]].values.tolist()
-    
+
     query = query[0]
     name = query[1]
     gender = query[2]
@@ -130,14 +135,21 @@ Does the request for when an admin sends a new dog to add.
 """
 @app.route("/admin/newDog", methods=["POST"])
 def newDog():
+    dogID = 1
+    photoID = 0
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    
+
     fname = ""
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    
-    dogID = dogDB["id"].max() + 1
+
+    if dogDB.size != 0:
+        dogID = dogDB["id"].max() + 1
+
+    print(dogID)
+    if dogID == np.nan:
+        dogID = 1
     name = request.form['Name']
 
     gender = request.form['gender']
@@ -156,31 +168,34 @@ def newDog():
     dob = request.form['dob']
     desc = request.form['desc']
     desc = desc.replace("\t", "&emsp;")
-    
+
 
     if 'files[]' not in request.files:
         print("no photo sent")
     else:
-        photoID = photoDB['id'].max()
+        if 0 != photoDB.size:
+            photoID = photoDB['id'].max()
+
         sent = request.files.getlist('files[]')
         for file in sent:
-            try:
+            # try:
                 fname = secure_filename(str(photoID) + file.filename)
                 # TODO: Check file types
                 file.save(UPLOAD_FOLDER + fname)
                 photoID += 1
                 # This could honestly slow everything down a lot.
                 addPhoto(photoID, dogID, fname)
-            except:
-                pass
+            # except:
+            #     print
+            #     pass
 
 
     if fname == "":
         fname = "placeholder.jpg"
 
     addDog(dogID, name, gender, avail, reg, dob, fname, desc)
-    
-    
+
+
     threading.Thread(target=saveUpdates, args=([])).start()
 
 
@@ -210,7 +225,7 @@ def dogQuery():
     if query != "":
         result = result[result["name"].str.contains(query, case=False)]
 
-    
+
     pageMax = result.shape[0]
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
@@ -231,13 +246,13 @@ def updateDog(id):
     if "username" not in session:
         return redirect(url_for("Welcome"))
 
-    
+
     fname = ""
     if "username" not in session:
         return redirect(url_for("Welcome"))
     print(request.form.keys())
     dogID = int(request.form['dogID'])
-    
+
     name = request.form['Name']
     print(dogID)
 
@@ -258,7 +273,7 @@ def updateDog(id):
     desc = request.form['desc']
     desc = desc.replace("\t", "&emsp;")
 
-    
+
 
     if 'files[]' not in request.files:
         print("Warning | No photo sent.")
@@ -268,26 +283,25 @@ def updateDog(id):
         check = True
         size = photoDB[photoDB["dogID"] == dogID].size
         for file in sent:
-            try:
-                fname = secure_filename(str(photoID) + file.filename)
-                
-                if fname == "":
-                    break
-                print(sent)
-                # TODO: Check file types
-                file.save(UPLOAD_FOLDER + fname)
-                photoID += 1
-                # Avoid checking the count each time after its been set
-                print(photoDB[photoDB["dogID"] == dogID].size)
-                if size == 0:
-                    dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
-                    size += 1
+            if file.filename != "":
+                try:
+                    fname = secure_filename(str(photoID) + file.filename)
 
-                addPhoto(photoID, dogID, fname)
-            except:
-                pass
+                    print(sent)
+                    # TODO: Check file types
+                    file.save(UPLOAD_FOLDER + fname)
+                    photoID += 1
+                    # Avoid checking the count each time after its been set
+                    print(photoDB[photoDB["dogID"] == dogID].size)
+                    if size == 0:
+                        dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
+                        size += 1
 
-        
+                    addPhoto(photoID, dogID, fname)
+                except:
+                    pass
+
+
 
 
 
@@ -335,12 +349,12 @@ def dogDetails(id):
     pics = pics.values.tolist()
 
     return render_template('details.html', id=id, pics=pics, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
-    
+
 @app.route("/admin/deletePhoto", methods=["POST"])
 def deletePhoto():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    
+
     photoID = request.form["photoID"]
     photoID = int(photoID)
     dogID = int(request.form["dogID"])
@@ -355,7 +369,7 @@ def deletePhoto():
             canidates = photoDB[photoDB["dogID"] == dogID][["photoName"]]
             if canidates == []:
                 raise ValueError
-            
+
             dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] =  canidates[0][0]
         except:
             dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
@@ -401,15 +415,15 @@ Resets the logged in users password.
 def passwordReset():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    
+
     password = request.form['password']
     second = request.form['second']
 
     if second != password:
         return redirect(url_for('settings'))
-    
+
     user = User.query.filter_by(username=session["username"]).first()
-    
+
     user.set_password(password)
     db.session.commit()
 
@@ -426,13 +440,13 @@ def login():
         return render_template('login.html')
     username = request.form['username']
     password = request.form['password']
-    
+
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         session['username'] = username
         return redirect(url_for('admin'))
     else:
-        
+
         return redirect(url_for('login'))
 
 
@@ -453,7 +467,7 @@ def register():
     if user:
         print("ERROR")
         return render_template("index.html", error="Username already exists")
-    
+
     new_user = User(username=username)
     new_user.set_password(password)
     db.session.add(new_user)
@@ -494,8 +508,8 @@ Saves updates to a database
 threads - the current disbatched threads. Waits until all threads are done before writing.
 """
 def saveUpdates():
-    dogDB.to_csv("Dogs.tsv", sep="\t", index=False)
-    photoDB.to_csv("Photos.tsv", sep="\t", index=False)
+    dogDB.to_csv("/home/KassidyMaberry/mysite/Dogs.tsv", sep="\t", index=False)
+    photoDB.to_csv("/home/KassidyMaberry/mysite/Photos.tsv", sep="\t", index=False)
     return
 
 
