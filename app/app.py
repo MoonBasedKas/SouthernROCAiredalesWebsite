@@ -17,10 +17,10 @@ print(os.listdir())
 dogDB = None
 photoDB = None
 counter = 0
-UPLOAD_FOLDER="/home/KassidyMaberry/mysite/static/dogPhotos/"
+UPLOAD_FOLDER="static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 try:
-    dogDB = pandas.read_csv("/home/KassidyMaberry/mysite/Dogs.tsv",  sep='\t')
+    dogDB = pandas.read_csv("Dogs.tsv",  sep='\t')
 
 except:
     print("failed read")
@@ -28,7 +28,7 @@ except:
 
 
 try:
-    photoDB = pandas.read_csv("/home/KassidyMaberry/mysite/Photos.tsv", sep="\t")
+    photoDB = pandas.read_csv("Photos.tsv", sep="\t")
 
 except:
     photoDB=pandas.DataFrame(columns=["id", "dogID", "photoName"])
@@ -508,8 +508,8 @@ Saves updates to a database
 threads - the current disbatched threads. Waits until all threads are done before writing.
 """
 def saveUpdates():
-    dogDB.to_csv("/home/KassidyMaberry/mysite/Dogs.tsv", sep="\t", index=False)
-    photoDB.to_csv("/home/KassidyMaberry/mysite/Photos.tsv", sep="\t", index=False)
+    dogDB.to_csv("Dogs.tsv", sep="\t", index=False)
+    photoDB.to_csv("Photos.tsv", sep="\t", index=False)
     return
 
 
