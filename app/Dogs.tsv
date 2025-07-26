@@ -1,17 +1,15 @@
 id	name	gender	available	registration	dob	mainPhoto	desc
-1	Gloria	False	True	AKC	1970-01-01	placeholder.jpg	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-2	Iris	False	True	AKC	1970-01-01	placeholder.jpg	
-3	Joanne	False	True	AKC	1970-01-01	placeholder.jpg	
-4	Black Babbee	False	True	AATR	1970-01-01	placeholder.jpg	
-5	Cemone	False	True	AATR	1970-01-01	placeholder.jpg	
-6	Onyx	False	True	AATR	1970-01-01	placeholder.jpg	
-7	Alyce	False	True	AKC	1970-01-01	placeholder.jpg	
-8	Connie	False	True	AKC	1970-01-01	placeholder.jpg	
-9	Virginia	False	True	AKC	1970-01-01	placeholder.jpg	
-10	"Gringo Miguel ""White Boy Mike"""	True	True	AATR	1970-01-01	placeholder.jpg	
-11	Renegade	True	True	AKC	1970-01-01	placeholder.jpg	
-12	Apache Jr. [JR]	True	True	AKC	1970-01-01	placeholder.jpg	
-13	Hank	True	False	AKC	1970-01-01	placeholder.jpg	
-14	Monty	True	True	AKC	1970-01-01	placeholder.jpg	
-15	Dog	False	True	AKC	2025-07-03	12get_out_blue_one.png	This is a dog
-16	DogDogDog	True	True	AKC	2025-07-01	placeholder.jpg	Bark Bork
+1	Gloria	False	True	True	1970-01-01	placeholder.jpg	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+2	Iris	False	True	True	1970-01-01	placeholder.jpg	
+3	Joanne	False	True	True	1970-01-01	placeholder.jpg	
+4	Black Babbee	False	True	False	1970-01-01	placeholder.jpg	
+5	Cemone	False	True	False	1970-01-01	placeholder.jpg	
+6	Onyx	False	True	False	1970-01-01	placeholder.jpg	
+7	Alyce	False	True	True	1970-01-01	placeholder.jpg	
+8	Connie	False	True	True	1970-01-01	placeholder.jpg	
+9	Virginia	False	True	True	1970-01-01	placeholder.jpg	
+10	"Gringo Miguel ""White Boy Mike"""	True	True	False	1970-01-01	placeholder.jpg	
+11	Renegade	True	True	True	1970-01-01	placeholder.jpg	
+12	Apache Jr. [JR]	True	True	True	1970-01-01	placeholder.jpg	
+13	Hank	True	False	True	1970-01-01	placeholder.jpg	
+14	Monty	True	True	True	1970-01-01	placeholder.jpg
