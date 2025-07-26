@@ -107,6 +107,11 @@ def dog(id):
     name = query[1]
     gender = query[2]
     org = query[4]
+    try:
+        org = bool(org)
+    except:
+        org = False
+        
     dob = query[5]
     mainPhoto= query[6]
     desc = query[7]
