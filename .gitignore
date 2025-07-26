@@ -7,8 +7,3 @@ app/instance/users.db
 app/instance/users.db
 app/newDogs.csv
 app/newPhotos.csv
-*.tsv
-app/Photos.tsv
-app/Photos.tsv
-app/Dogs.tsv
-app/Photos.tsv
