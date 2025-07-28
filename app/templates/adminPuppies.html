@@ -30,11 +30,11 @@
                 <h3> Showing Results for {{Query}}.</h3>
 
                 {% endif %}
-                <div class="puppyGallery">
+                <div class="galleryContainer">
                     {% for dog in results %}
-                    <div class="puppyGalleryItemAlt">
+                    <div class="galleryItem">
                         {% if dog[4] %}
-                        <img src="/static/puppies/{{dog[1]}}" class="puppyGalleryPhoto" loading="lazy"><br>
+                        <img src="/static/puppies/{{dog[1]}}" class="galleryPhoto" loading="lazy"><br>
                         {% else %}
                         <video class="puppyGalleryPhoto" controls muted>
                             <source src="/static/puppies/{{dog[1]}}" type="video/mp4">
@@ -42,11 +42,11 @@
                         {% endif %}
                         <form action="/admin/updateVisible/{{dog[0]}}" method="POST" class="formContainer">
                             <h1>Visible</h1>
-                            <input type="radio" name="visible" id="visible" value="True"> <label
+                            <input type="radio" name="visible" id="visible" value="True" {% if dog[3] %} checked {% endif %}> <label
                                 for="True">Yes</label><br>
-                            <input type="radio" name="visible" id="visible" value="False"> <label
+                            <input type="radio" name="visible" id="visible" value="False" {% if not dog[3] %} checked {% endif %}> <label
                                 for="False">No</label><br>
-                            <input type="submit" value="Update">
+                            <input type="submit" value="Update" class="galleryButton">
                         </form>
                     </div>
                     {% endfor %}

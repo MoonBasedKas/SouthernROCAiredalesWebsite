@@ -27,7 +27,7 @@ except:
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "mainPhoto", "desc"])
 
 try:
-    puppiesDB = pandas.read_csv("puppies.tsv", sep='\t')
+    puppiesDB = pandas.read_csv("Puppies.tsv", sep='\t')
 except:
     puppiesDB = pandas.DataFrame(columns=["id", "photoName", "photo", "date", "visible", "photo"])
 
@@ -73,14 +73,20 @@ class User(db.Model):
 @app.route('/')
 def Welcome():
     global counter
-
+    
     available = dogDB[dogDB["available"] == True]
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
+    print(puppiesDB)
     puppies = puppiesDB[puppiesDB["visible"] == True]
     puppies = puppiesDB[puppiesDB["photo"] == True]
+    
     puppies = puppies.sort_values(by='id', ascending=False)
+
+    
+
     puppies = puppies[:12]
+    
     # Set Cookies
     visit = request.cookies.get("visited")
     if visit != "true":
@@ -89,7 +95,7 @@ def Welcome():
         resp = make_response(render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter))
         resp.set_cookie(key="visited", value="true", max_age=90*60*60*24)
         return resp
-
+    print("hi")
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
 
 """
@@ -99,7 +105,7 @@ Shows all of the dogs for what to modify
 def puppies():
     querySize = 30
 
-    result = puppiesDB
+    result = puppiesDB[puppiesDB["visible"] == True]
     result = result.sort_values(by='id', ascending=False)
     
     pageNo = request.args.get('page', default=0, type=int)
@@ -332,6 +338,28 @@ def viewPuppies():
     return render_template('adminPuppies.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
 
 
+"""
+Updates if a photo should be visible to users or not.
+"""
+@app.route("/admin/updateVisible/<int:id>", methods=["POST"])
+def updateVisible(id):
+    if "username" not in session:
+        return redirect(url_for('Welcome'))
+    
+    print(id)
+    print("BANG\n\n")
+    newValue = request.form["visible"]
+
+    if newValue == "True":
+        newValue = True
+    else:
+        newValue = False
+    
+    puppiesDB.loc[puppiesDB["id"] == id, "visible"] = newValue
+    threading.Thread(target=savePuppies, args=[]).start()
+    
+    # TODO make this keep track of the users page number
+    return redirect(url_for('viewPuppies'))
 
 """
 Shows all of the dogs for what to modify
@@ -382,7 +410,7 @@ def updateDog(id):
     fname = ""
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    print(request.form.keys())
+
     dogID = int(request.form['dogID'])
 
     name = request.form['Name']
