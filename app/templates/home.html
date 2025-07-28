@@ -127,6 +127,7 @@
                                 Gender: Female<br>
                                 Date of Birth {{dog[5]}}<br>
                                 Registration: AATR {% if dog[4] %} and AKC {% endif %}<br>
+                                {% if dog[8] %} Available for Purchase!{%endif%}<br>
                             </p>
                         </div>
                     </a>
@@ -144,6 +145,7 @@
                                 Gender: Male<br>
                                 Date of Birth {{dog[5]}}<br>
                                 Registration: {{dog[4]}}<br>
+                                {% if dog[8] %} Available for Purchase!{%endif%}<br>
                             </p>
                         </div>
                     </a>

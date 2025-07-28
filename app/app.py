@@ -8,8 +8,6 @@ import numpy as np
 import math as mt
 import secrets
 from datetime import date # I'm not sure why this says its not used.
-import re
-
 
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
@@ -24,7 +22,7 @@ try:
 
 except:
     print("failed read")
-    dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "mainPhoto", "desc"])
+    dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "mainPhoto", "desc", "purchase"])
 
 try:
     puppiesDB = pandas.read_csv("Puppies.tsv", sep='\t')
@@ -194,6 +192,7 @@ Does the request for when an admin sends a new dog to add.
 def newDog():
     dogID = 1
     photoID = 0
+    purchase = False
     if "username" not in session:
         return redirect(url_for("Welcome"))
 
@@ -248,7 +247,7 @@ def newDog():
     if fname == "":
         fname = "placeholder.jpg"
 
-    addDog(dogID, name, gender, avail, reg, dob, fname, desc)
+    addDog(dogID, name, gender, avail, reg, dob, fname, desc, purchase)
 
 
     threading.Thread(target=saveUpdates, args=([])).start()
@@ -403,6 +402,7 @@ Shows all of the dogs for what to modify
 """
 @app.route("/admin/update/<int:id>", methods=["POST"])
 def updateDog(id):
+    purchase = False
     if "username" not in session:
         return redirect(url_for("Welcome"))
 
@@ -468,7 +468,7 @@ def updateDog(id):
     if fname == "":
         fname = "placeholder.jpg"
 
-    updateDog(dogID, name, desc, dob, gender, avail, reg)
+    updateDog(dogID, name, desc, dob, gender, avail, reg, purchase)
     # saveUpdates()
     threading.Thread(target=saveUpdates, args=()).start()
     return redirect(f"/admin/details/{dogID}")
@@ -657,8 +657,8 @@ def addPhoto(id, dogID, photo):
 """
 Adds a new dog to the database
 """
-def addDog(id, name, gender, available, registration, dob, mainPhoto, desc):
-    new = {"id":id, "name":name, "gender":gender, "available":available, "registration":registration, "dob":dob, "mainPhoto":mainPhoto, "desc":desc}
+def addDog(id, name, gender, available, registration, dob, mainPhoto, desc, purchase):
+    new = {"id":id, "name":name, "gender":gender, "available":available, "registration":registration, "dob":dob, "mainPhoto":mainPhoto, "desc":desc, "purchase": purchase}
     dogDB.loc[len(dogDB)] = new
     return
 
@@ -684,13 +684,14 @@ def savePuppies():
 """
 Updates every parameter of a dog except for the mainPhoto
 """
-def updateDog(id, name, desc, dob, gender, avail, reg):
+def updateDog(id, name, desc, dob, gender, avail, reg, purchase):
     dogDB.loc[dogDB["id"] == id, "name"] = name
     dogDB.loc[dogDB["id"] == id, "desc"] = desc
     dogDB.loc[dogDB["id"] == id, "dob"] = dob
     dogDB.loc[dogDB["id"] == id, "gender"] = gender
     dogDB.loc[dogDB["id"] == id, "available"] = avail
     dogDB.loc[dogDB["id"] == id, "registration"] = reg
+    dogDB.loc[dogDB["id"] == id, "purchase"] = purchase
 
 if __name__ == '__main__':
     with app.app_context():
