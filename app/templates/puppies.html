@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<head>
+
+    {% include 'headValues.html' %}
+    <link rel="stylesheet" href="/static/form.css">
+    <script src="/static/pageWindow.js"></script>
+
+
+    <title>View Dogs</title>
+</head>
+
+<body class="bodycolor">
+    <!-- Top of page -->
+
+    <!-- End Top of page -->
+    <div class="content">
+        <!-- I'm thinking we put the main picture here. -->
+        {% include 'header.html' %}
+        <br>
+        <!-- Content -->
+        <div id="home" class="info">
+
+
+
+            <h1 class="title">Puppies</h1>
+
+            <div>
+                {% if Query == "" %}
+                <h3> Showing Results for {{Query}}.</h3>
+
+                {% endif %}
+                <div class="puppyGallery">
+                    {% for dog in results %}
+                    <div class="puppyGalleryItem">
+
+                        <img src="/static/puppies/{{dog[1]}}" class="puppyGalleryPhoto" loading="lazy"><br>
+
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+
+
+
+                <form action="{{url_for('puppies')}}" method="GET" id="windowControl" class="searchContainer">
+
+                    <input type="hidden" id="window" name="window">
+                    <input type="hidden" id="search" name="search" value="{{query}}">
+                    <input type="hidden" id="page" name="page" value="{{pageNo}}">
+                    Page {{pageNo + 1}}/{{pageMax}}<br>
+                    {% if pageNo == 0 %}
+
+                    {{pageNo + 1}} <input type="button" value="Next Page" onclick="setLoginForm('inc')"
+                        class="searchWindowSubmit">
+
+                    {% elif pageNo == (pageMax - 1) %}
+                    <input type="button" onclick="setLoginForm('dec')" value="Last Page" class="searchWindowSubmit">
+                    {{pageNo
+                    + 1}}
+
+                    {% else %}
+                    <input type="button" onclick="setLoginForm('dec')" value="Last Page" class="searchWindowSubmit">
+                    {{pageNo
+                    + 1}} <input type="button" value="Next Page" onclick="setLoginForm('inc')"
+                        class="searchWindowSubmit">
+
+                    {% endif %}
+
+                </form>
+
+
+
+
+            </div>
+            <!-- End Content -->
+        </div>
+
+
+</body>

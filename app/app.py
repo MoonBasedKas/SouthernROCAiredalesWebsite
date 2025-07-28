@@ -91,10 +91,42 @@ def Welcome():
 
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
 
-@app.route('/puppies')
+"""
+Shows all of the dogs for what to modify
+"""
+@app.route("/puppies", methods=["GET"])
 def puppies():
+    querySize = 30
 
-    return render_template('home.html')
+    result = puppiesDB
+    result = result.sort_values(by='id', ascending=False)
+    
+    pageNo = request.args.get('page', default=0, type=int)
+    query = request.args.get('search', default="", type=str)
+    window = request.args.get('window', default="none", type=str)
+
+    if window == 'inc':
+        pageNo += 1
+    elif window == 'dec':
+        pageNo -= 1
+        if pageNo < 0:
+            pageNo = 0
+
+    # if query != "":
+    #     result = result[result["name"].str.contains(query, case=False)]
+
+    
+    pageMax = result.shape[0]
+    pageMax = pageMax / querySize
+    pageMax = mt.ceil(pageMax)
+
+    if pageMax == pageNo:
+        pageNo = pageMax - 1
+    page = pageNo * querySize
+    # Adjusts indeces
+    result = result[page:page + querySize - 1]
+    print(result)
+    return render_template('puppies.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
 
 
 """

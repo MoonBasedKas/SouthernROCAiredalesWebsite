@@ -8,7 +8,7 @@ id	name	gender	available	registration	dob	mainPhoto	desc
 7	Alice	False	True	True	2024-10-22	placeholder.jpg	
 8	Connie	False	True	True	2024-02-29	placeholder.jpg	
 9	Virginia	False	True	True	2020-08-20	placeholder.jpg	
-10	"Gringo Miguel ""White Boy Mike"""	True	True	False	2020-01-20	placeholder.jpg	
+10	"Gringo Miguel ""White Boy Mike"""	True	True	True	2020-01-20	placeholder.jpg	
 11	Renegade	True	True	True	2024-02-29	placeholder.jpg	
 12	Apache Jr. [JR]	True	True	True	2025-01-08	placeholder.jpg	
 13	Hank	True	False	True	2013-09-16	placeholder.jpg	
