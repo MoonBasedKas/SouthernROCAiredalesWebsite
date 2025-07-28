@@ -29,7 +29,7 @@ except:
 try:
     puppiesDB = pandas.read_csv("puppies.tsv", sep='\t')
 except:
-    puppiesDB = pandas.DataFrame(columns=["id", "photoName", "photo", "date", "visible"])
+    puppiesDB = pandas.DataFrame(columns=["id", "photoName", "photo", "date", "visible", "photo"])
 
 
 try:
@@ -78,6 +78,7 @@ def Welcome():
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
     puppies = puppiesDB[puppiesDB["visible"] == True]
+    puppies = puppiesDB[puppiesDB["photo"] == True]
     puppies = puppies.sort_values(by='id', ascending=False)
     puppies = puppies[:12]
     # Set Cookies

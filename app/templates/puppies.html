@@ -33,9 +33,13 @@
                 <div class="puppyGallery">
                     {% for dog in results %}
                     <div class="puppyGalleryItem">
-
+                        {% if dog[4] %}
                         <img src="/static/puppies/{{dog[1]}}" class="puppyGalleryPhoto" loading="lazy"><br>
-
+                        {% else %}
+                        <video class="puppyGalleryPhoto" controls muted>
+                            <source src="/static/puppies/{{dog[1]}}" type="video/mp4">
+                        </video>
+                        {% endif %}
                     </div>
                     {% endfor %}
 

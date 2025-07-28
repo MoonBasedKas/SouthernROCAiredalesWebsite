@@ -1,13 +1,16 @@
-id	photoName	date	visible
-1	Puppy1.jpeg	2025-7-27	True
-2	Puppy2.jpeg	2025-7-27	True
-3	Puppy3.jpeg	2025-7-27	True
-4	Puppy4.jpeg	2025-7-27	True
-5	Puppy5.jpeg	2025-7-27	True
-6	Puppy6.jpeg	2025-7-27	True
-7	Puppy7.jpeg	2025-7-27	True
-8	Puppy8.jpeg	2025-7-27	True
-9	Puppy9.jpeg	2025-7-27	True
-10	Puppy10.jpeg	2025-7-27	True
-11	Puppy11.jpeg	2025-7-27	True
-12	Puppy12.jpeg	2025-7-27	True
+id	photoName	date	visible	photo
+1	Puppy1.jpeg	2025-7-27	True	True
+2	Puppy2.jpeg	2025-7-27	True	True
+3	Puppy3.jpeg	2025-7-27	True	True
+4	Puppy4.jpeg	2025-7-27	True	True
+5	Puppy5.jpeg	2025-7-27	True	True
+6	Puppy6.jpeg	2025-7-27	True	True
+7	Puppy7.jpeg	2025-7-27	True	True
+8	Puppy8.jpeg	2025-7-27	True	True
+9	Puppy9.jpeg	2025-7-27	True	True
+10	Puppy10.jpeg	2025-7-27	True	True
+11	Puppy11.jpeg	2025-7-27	True	True
+12	Puppy12.jpeg	2025-7-27	True	True
+13	Puppy13.mp4	2025-7-27	True	False
+14	Puppy14.mp4	2025-7-27	True	False
+15	Puppy15.mp4	2025-7-27	True	False
