@@ -32,7 +32,7 @@
                 {% endif %}
                 <div class="puppyGallery">
                     {% for dog in results %}
-                    <div class="puppyGalleryItem">
+                    <div class="puppyGalleryItemAlt">
                         {% if dog[4] %}
                         <img src="/static/puppies/{{dog[1]}}" class="puppyGalleryPhoto" loading="lazy"><br>
                         {% else %}
@@ -40,6 +40,14 @@
                             <source src="/static/puppies/{{dog[1]}}" type="video/mp4">
                         </video>
                         {% endif %}
+                        <form action="/admin/updateVisible/{{dog[0]}}" method="POST" class="formContainer">
+                            <h1>Visible</h1>
+                            <input type="radio" name="visible" id="visible" value="True"> <label
+                                for="True">Yes</label><br>
+                            <input type="radio" name="visible" id="visible" value="False"> <label
+                                for="False">No</label><br>
+                            <input type="submit" value="Update">
+                        </form>
                     </div>
                     {% endfor %}
 

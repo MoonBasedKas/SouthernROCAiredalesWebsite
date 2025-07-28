@@ -297,6 +297,42 @@ def newPuppy():
 
     return redirect(url_for('admin'))
 
+
+@app.route("/admin/puppyPhotos")
+def viewPuppies():
+    if "username" not in session:
+        return redirect(url_for('Welcome'))
+    querySize = 30
+
+    result = puppiesDB
+    result = result.sort_values(by='id', ascending=False)
+    
+    pageNo = request.args.get('page', default=0, type=int)
+    query = request.args.get('search', default="", type=str)
+    window = request.args.get('window', default="none", type=str)
+
+    if window == 'inc':
+        pageNo += 1
+    elif window == 'dec':
+        pageNo -= 1
+        if pageNo < 0:
+            pageNo = 0
+
+    
+    pageMax = result.shape[0]
+    pageMax = pageMax / querySize
+    pageMax = mt.ceil(pageMax)
+
+    if pageMax == pageNo:
+        pageNo = pageMax - 1
+    page = pageNo * querySize
+    # Adjusts indeces
+    result = result[page:page + querySize - 1]
+    print(result)
+    return render_template('adminPuppies.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
+
+
+
 """
 Shows all of the dogs for what to modify
 """
