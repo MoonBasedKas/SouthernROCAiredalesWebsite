@@ -78,6 +78,8 @@ def Welcome():
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
     puppies = puppiesDB[puppiesDB["visible"] == True]
+    puppies = puppies.sort_values(by='id', ascending=False)
+    puppies = puppies[:12]
     # Set Cookies
     visit = request.cookies.get("visited")
     if visit != "true":
@@ -88,6 +90,11 @@ def Welcome():
         return resp
 
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
+
+@app.route('/puppies')
+def puppies():
+
+    return render_template('home.html')
 
 
 """
