@@ -90,34 +90,31 @@
             <div>
                 <h1 class="subtitle" id="dogs">Our Dogs</h1>
 
-                <p class="paragraph">
+                <!-- <p class="paragraph">
                     Below you can see our available dogs, each dog comes with a health garuantee and health chart.
-                </p>
-            </div>
-
-            <div class="altbg">
-                <h1>Our puppies</h1>
-                <!-- Show 6 random photos of puppies -->
+                </p> -->
             </div>
 
             <div>
-                <h1>Meet the Crew</h1>
+                <h1 class="subtitle">Our puppies</h1>
+                <div class="puppyGallery">
                     {% for dog in puppies %}
-                    <a class="dogAnchor">
-                        <div class="dogItem">
+                    <div class="puppyGalleryItem">
 
-                            <img src="/static/puppyPhotos/{{dog[0]}}" class="dogImage" loading="lazy"><br>
+                        <img src="/static/puppies/{{dog[1]}}" class="puppyGalleryPhoto" loading="lazy"><br>
 
-                        </div>
-                    </a>
+                    </div>
                     {% endfor %}
 
+
+                </div>
                 <a href="/puppies" class="puppiesLink">View more Puppies</a>
+                <br>
             </div>
 
             <div class="altbg">
                 <!-- Dogs -->
-
+                <h1 class="subtitle">Meet our dogs</h1>
                 <h1 class="subtitle">Our Females</h1>
                 <!-- Females -->
                 <div class="dogContainer">
@@ -160,11 +157,11 @@
             <div>
                 <h1 id="health_gaurantee" class="subtitle">Health Gaurantee</h1>
                 <p class="paragraph">
-                    For all dogs you purchase from us we provide the following garuantees.
+                    For all dogs you purchase from us we provide the following garuantees:
                 </p>
                 <ul class="itemList">
                     <li>
-                        Heart, Liver, Lung, Kidney, and Bowl for life against any birth defect.
+                        Heart, Liver, Lung, Kidney, and Bowel for life against any birth defect.
                     </li>
                     <li>
                         Hips-Full 2 year garuantee against dysplasia.
