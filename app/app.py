@@ -192,8 +192,6 @@ def newDog():
         return redirect(url_for("Welcome"))
 
     fname = ""
-    if "username" not in session:
-        return redirect(url_for("Welcome"))
 
     if dogDB.size != 0:
         dogID = dogDB["id"].max() + 1
@@ -258,12 +256,12 @@ Does the request for when an admin sends a new dog to add.
 """
 @app.route("/admin/newPuppy", methods=["POST"])
 def newPuppy():
-    
+    if username not in session:
+        return redirect(url_for('Welcome'))
 
     photoID = 0
     photo = True
-    if "username" not in session:
-        return redirect(url_for("Welcome"))
+
 
 
     if puppiesDB.size != 0:
