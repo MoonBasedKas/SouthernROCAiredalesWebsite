@@ -26,6 +26,11 @@ except:
     print("failed read")
     dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "mainPhoto", "desc"])
 
+try:
+    puppiesDB = pandas.read_csv("puppies.tsv", sep='\t')
+except:
+    puppiesDB = pandas.DataFrame(columns=["id", "photoName", "photo", "date", "visible"])
+
 
 try:
     photoDB = pandas.read_csv("Photos.tsv", sep="\t")
@@ -72,6 +77,7 @@ def Welcome():
     available = dogDB[dogDB["available"] == True]
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
+    puppies = puppiesDB[puppies["visible"] == True]
     # Set Cookies
     visit = request.cookies.get("visited")
     if visit != "true":
@@ -81,7 +87,7 @@ def Welcome():
         resp.set_cookie(key="visited", value="true", max_age=90*60*60*24)
         return resp
 
-    return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter)
+    return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.tolist(), count=counter)
 
 
 """

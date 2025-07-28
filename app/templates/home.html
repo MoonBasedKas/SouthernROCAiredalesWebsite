@@ -94,6 +94,27 @@
                     Below you can see our available dogs, each dog comes with a health garuantee and health chart.
                 </p>
             </div>
+
+            <div class="altbg">
+                <h1>Our puppies</h1>
+                <!-- Show 6 random photos of puppies -->
+            </div>
+
+            <div>
+                <h1>Meet the Crew</h1>
+                    {% for dog in puppies %}
+                    <a class="dogAnchor">
+                        <div class="dogItem">
+
+                            <img src="/static/puppyPhotos/{{dog[0]}}" class="dogImage" loading="lazy"><br>
+
+                        </div>
+                    </a>
+                    {% endfor %}
+
+                <a href="/puppies" class="puppiesLink">View more Puppies</a>
+            </div>
+
             <div class="altbg">
                 <!-- Dogs -->
 
