@@ -7,11 +7,10 @@ import pandas
 import numpy as np
 import math as mt
 import secrets
-from datetime import date
+from datetime import date # I'm not sure why this says its not used.
+import re
 
-import os
 
-print(os.listdir())
 
 #Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
 dogDB = None
@@ -19,6 +18,7 @@ photoDB = None
 counter = 0
 UPLOAD_FOLDER="static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
+PUPPY_FOLDER="static/puppies/"
 try:
     dogDB = pandas.read_csv("Dogs.tsv",  sep='\t')
 
@@ -248,6 +248,53 @@ def newDog():
 
 
     threading.Thread(target=saveUpdates, args=([])).start()
+
+
+    return redirect(url_for('admin'))
+
+
+"""
+Does the request for when an admin sends a new dog to add.
+"""
+@app.route("/admin/newPuppy", methods=["POST"])
+def newPuppy():
+    
+
+    photoID = 0
+    photo = True
+    if "username" not in session:
+        return redirect(url_for("Welcome"))
+
+
+    if puppiesDB.size != 0:
+        photoID = puppiesDB["id"].max() + 1
+
+
+    if 'files[]' not in request.files:
+        print("no photo sent")
+    else:
+        day = date.today()
+        sent = request.files.getlist('files[]')
+        for file in sent:
+            # try:
+                fname = secure_filename(str(photoID) + file.filename)
+
+                if fname[-1:-4].lower == ".mp4":
+                    photo = True
+                else:
+                    photo = False
+
+
+
+                file.save(PUPPY_FOLDER + fname)
+                
+                addPuppy(photoID, fname, day, True, photo)
+                photoID += 1
+
+
+
+
+    threading.Thread(target=savePuppies, args=([])).start()
 
 
     return redirect(url_for('admin'))
@@ -555,8 +602,6 @@ def addDog(id, name, gender, available, registration, dob, mainPhoto, desc):
 
 """
 Saves updates to a database
-
-threads - the current disbatched threads. Waits until all threads are done before writing.
 """
 def saveUpdates():
     dogDB.to_csv("Dogs.tsv", sep="\t", index=False)
@@ -564,8 +609,14 @@ def saveUpdates():
     return
 
 
-def savePhotos():
 
+def addPuppy(id, photoName, date, visible, photo):
+    new = {"id":id,"photoName":photoName,"date":date, "visible":visible, "photo":photo}
+    puppiesDB.loc[len(puppiesDB)] = new
+    return
+
+def savePuppies():
+    puppiesDB.to_csv("Puppies.tsv", sep="\t", index=False)
     return
 
 """

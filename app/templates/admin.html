@@ -40,8 +40,9 @@
 
                         <!-- Reg -->
                         <h2>Are they registered with AKC</h2>
-                        <input type="radio" name="reg" value="True" id="AKC" required > <label for="AKC">Yes</label><br>
-                        <input type="radio" name="reg" value="False" id="AATR" required> <label for="AATR">No</label><br>
+                        <input type="radio" name="reg" value="True" id="AKC" required> <label for="AKC">Yes</label><br>
+                        <input type="radio" name="reg" value="False" id="AATR" required> <label
+                            for="AATR">No</label><br>
 
                         <h2>Date of Birth</h2>
                         <input type="date" name="dob" required><br>
@@ -55,6 +56,17 @@
                         <input type="submit" value="Submit" class="searchSubmit">
                     </div>
                 </form>
+            </div>
+
+            <div class="inputForm">
+                <form action="/admin/newPuppy" method="post" enctype="multipart/form-data" class="formContainer">
+                    <div class="innerForm">
+                        <h1>Submit Puppy Pictures or Videos</h1>
+                        <input type="file" name="files[]" required multiple class="formItem">
+                        <input type="submit" value="Submit" class="searchSubmit">
+                    </div>
+                </form>
+
             </div>
 
             <!-- Modify a current dog -->
