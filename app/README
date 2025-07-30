@@ -34,7 +34,8 @@ each individual dog.
 
 Puppies.tsv holds the photo information for the puppy section.
 
-Blacks.tsv holds the photo information for the blacks section.
+Blacks.tsv holds the photo information for the blacks section. This one must be manually modified because I figured this one would be 
+widely static.
 
 This project uses flask which has been previously mentioned. I picked flask as I've had a lot of expierence with python, its an 
 easy language, I didn't have to learn a new framework, and its not Apache Tomcat.

@@ -50,7 +50,7 @@
                 </p>
             </div> -->
 
-            <div id="dogs">
+            <div id="dogs" class="altbg">
                 <h1 class="subtitle">Our puppies</h1>
                 <div class="puppyGallery">
                     {% for dog in puppies %}
@@ -72,7 +72,7 @@
                 <br>
             </div>
 
-            <div class="altbg">
+            <div>
                 <!-- Dogs -->
                 <h1 class="subtitle">Meet Our Dogs</h1>
                 <h1 class="subtitle">Our Females</h1>
@@ -116,7 +116,7 @@
 
 
             <!-- Health Gaurantee -->
-            <div>
+            <div class="altbg">
                 <h1 id="health_gaurantee" class="subtitle">Health Gaurantee</h1>
                 <p class="paragraph">
                     For all dogs you purchase from us we provide the following garuantees:
@@ -133,25 +133,32 @@
                         older.
                     </li>
                 </ul>
+                <p class="paragraph">
+                    All puppies are born at our home kennel, loving raised and very people/kid friendly. If one of the
+                    above birth defects
+                    should arise with your puppy, we kindly ask that you send us your vet records/diagnosis & we will
+                    give you another puppy.
+                    There will be NO refunds. We understand it is impossible to replace the puppy you loved. Our purpose
+                    is to provide great loving
+                    people with quality, kind Airedale pets. This agreement is only valid with the original owner/buyer
+                    however, this agreement is
+                    void if the owner/buyer sign or give over ownership of the dog. We will not pay any puppy/dog or
+                    veterinarian
+                    expenses incurred. For all dogs at our kennel we provide the utmost care and ensure that they are
+                    all
+                    taken care of.
+                </p><br>
+
+                <div class="puppyGallery">
+                    <img src="/static/shed1.jpg" loading="lazy" class="shedPhoto">
+                    <img src="/static/shed2.jpg" loading="lazy" class="shedPhoto">
+                </div>
             </div>
 
-            <div class="altbg">
+            <div>
                 <h1 class="subtitle">The Story of the Blacks</h1>
-                <!-- <p class="paragraph">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                aliquip
-                ex
-                ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                eu
-                fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit
-                anim id est laborum.
-            </p>
 
-            <h2 class="subtitle">Our Book</h2> -->
+
                 <img src="static/dogfightcover.jpg" class="bookPhoto">
                 <p class="paragraphUnderPhoto">
                     Southern realizes when she is a little girl that she will dedicate her life to breeding dogs. After
@@ -177,17 +184,49 @@
                     <a
                         href="https://www.amazon.com/DOG-FIGHT-STORY-BLACK-AIREDALE-ebook/dp/B06W2FWLZG#:~:text=Book%20overview&text=The%20growing%20acclaim%20of%20their,and%20large%20socio%2Deducational%20clubs.">
                         Available for Purchase on Amazon.
-                    </a>
+                    </a><br>
                 </p>
+                <p class="paragraph">
+                    A unique breed of Airedale which we have devoted kennel towards. They have been coined the nickname
+                    "the Blacks" below you can see images of our iconic Black Airedales.
+                </p>
+
+
+                <div class="puppyGallery">
+                    {% for dog in airedales %}
+                    <div class="puppyGalleryItem">
+
+                        <img src="/static/blacks/{{dog[1]}}" class="puppyGalleryPhoto" loading="lazy"><br>
+
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+
             </div>
 
             <div>
-                <h2 class="subtitle">DNA Test Report</h2>
+                <h2 class="subtitle">Black Airedale DNA Test Report</h2>
                 <iframe src="./static/blackjustice.pdf" width="100%" height="200%" title="Black Justice DNA report"
                     class="pdfHolder" loading="lazy"></iframe>
             </div>
 
-            <div id="contact" class="altbg">
+
+            <div class="altbg">
+                <h1 class="subtitle">My Partner: Jaun Carlos Loberia</h1>
+                <div class="puppyGallery">
+                    <img src="/static/jauncarlos2.jpg" loading="lazy" class="jaunCarlosPhoto">
+                    <img src="/static/jauncarlos1.jpg" loading="lazy" class="jaunCarlosPhoto">
+                </div>
+
+                <p class="paragraph">
+
+                </p>
+            </div>
+
+
+            <div id="contact" class="bottombg">
                 <h1 class="subtitle">Contact Us</h1>
 
                 <p class="paragraph">
@@ -207,10 +246,10 @@
 
 
                 <br>
-                <div class="puppyGallery">
+                <!-- <div class="puppyGallery">
                     <img src="/static/shed1.jpg" loading="lazy" class="puppyGalleryPhoto">
                     <img src="/static/shed2.jpg" loading="lazy" class="puppyGalleryPhoto">
-                </div>
+                </div> -->
                 <br>
                 <p class="paragraph">
                     It's been a pleasure and I hope that you enjoyed everything you saw here! We worked very hard to

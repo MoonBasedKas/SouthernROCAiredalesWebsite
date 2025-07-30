@@ -22,6 +22,11 @@
     padding-bottom: 2%;
 }
 
+.bottombg {
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
 .bg {
     background-color: var(--foreground);
 }
@@ -259,6 +264,38 @@
 .puppyGalleryPhoto {
     /* width: 30%; */
     height: 24vh;
+    background-color: var(--item);
+    border-radius: 5px;
+    /* margin: 2%; */
+    /* margin-bottom: 2%; */
+
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+.jaunCarlosPhoto {
+    /* width: 30%; */
+    max-width: 45%;
+    max-height: 80vh;
+    background-color: var(--item);
+    border-radius: 5px;
+    /* margin: 2%; */
+    /* margin-bottom: 2%; */
+
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shedPhoto {
+    /* width: 30%; */
+    max-width: 45%;
+    max-height: 50vh;
     background-color: var(--item);
     border-radius: 5px;
     /* margin: 2%; */

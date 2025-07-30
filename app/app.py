@@ -36,6 +36,11 @@ try:
 except:
     photoDB=pandas.DataFrame(columns=["id", "dogID", "photoName"])
 
+try:
+    airedaleDB = pandas.read_csv("Blacks.tsv", sep="\t")
+except:
+    airedaleDB = pandas.DataFrame(columns=["id", "photoName"])
+
 
 # App Config
 app = Flask(__name__)
@@ -93,7 +98,7 @@ def Welcome():
         resp = make_response(render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter))
         resp.set_cookie(key="visited", value="true", max_age=90*60*60*24)
         return resp
-    return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
+    return render_template('home.html', airedales=airedaleDB.values.tolist(), males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
 
 """
 Shows all of the dogs for what to modify
