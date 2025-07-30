@@ -259,3 +259,8 @@
     margin: auto;
     text-align: center;
 }
+
+
+.shedContainer {
+    display: flex;
+}
