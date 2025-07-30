@@ -18,13 +18,13 @@
             <!-- Dog info container -->
             <div class="dogInfoContainer">
                 <div class="dogTitle">
-                    <h1 class="dogTitleItem">{{name}} - AATR {% if org %} and AKC {% endif %}</h1>
+                    <h1 class="dogTitleText">{{name}} - AATR {% if org %} and AKC {% endif %}</h1>
 
                     <img src="/static/dogPhotos/{{mainPhoto}}" class="mainDogPhoto" loading="lazy"
                         alt="Main Photo of Dog">
-                    <h3 class="dogTitleItem">Gender: {{gender}}</h3>
+                    <h2 class="dogTitleItem">Gender: {{gender}}</h2>
 
-                    <h3 class="dogTitleItem">Birth Day: {{dob}}</h3>
+                    <h2 class="dogTitleItem">Birth Day: {{dob}}</h2>
                 </div>
                 {% if desc != "nan" %}
                 <p class="desc">
@@ -32,11 +32,11 @@
                 </p>
                 {% endif %}
                 {% if photos != [] %}
-                <h2 class="subtitle">Gallery</h2>
-                <div class="gallery">
+                <h1 class="subtitle">Gallery</h1>
+                <div class="puppyGallery">
                     {% for photo in photos %}
-                    <div class="galleryItem">
-                        <img src="/static/dogPhotos/{{photo[0]}}" loading="lazy" class="galleryPhoto">
+                    <div class="puppyGalleryItem">
+                        <img src="/static/dogPhotos/{{photo[0]}}" loading="lazy" class="dogGalleryPhoto">
                     </div>
                     {% endfor %}
 

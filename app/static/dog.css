@@ -31,7 +31,7 @@ body {
 
 .desc {
     margin: 2%;
-    font-size: 16pt;
+    font-size: 14pt;
 }
 
 
@@ -60,6 +60,11 @@ body {
     flex-direction: column;
     justify-content: center;
     text-align: center;
+}
+
+.dogTitleText {
+    margin: 0%;
+    font-size: 36pt;
 }
 
 .dogTitleItem {
@@ -104,4 +109,9 @@ body {
     margin-bottom: 2%;
     /* display: block; */
     /* margin: auto; */
+}
+
+
+.dogName {
+    font-size: 36pt;
 }
