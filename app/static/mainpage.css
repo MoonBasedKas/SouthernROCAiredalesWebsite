@@ -337,3 +337,7 @@
 .shedContainer {
     display: flex;
 }
+
+.creditsParagraph{
+    text-align: center;
+}
