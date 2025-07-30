@@ -1,12 +1,12 @@
 id	photoName	date	visible	photo
 0	0puppies1.jpg	2025-07-29	True	True
 1	1puppies2.jpg	2025-07-29	True	True
-2	2puppies3.jpg	2025-07-29	True	True
-3	3puppies4.jpg	2025-07-29	True	True
+2	2puppies3.jpg	2025-07-29	False	True
+3	3puppies4.jpg	2025-07-29	False	True
 4	4puppies5.jpg	2025-07-29	True	True
 5	5puppies6.jpg	2025-07-29	True	True
 6	6puppies7.jpg	2025-07-29	True	True
-7	7puppies8.jpg	2025-07-29	True	True
+7	7puppies8.jpg	2025-07-29	False	True
 8	8puppies9.jpg	2025-07-29	True	True
 9	9puppies10.jpg	2025-07-29	True	True
 10	10puppies11.jpg	2025-07-29	True	True
