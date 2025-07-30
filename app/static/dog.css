@@ -38,6 +38,11 @@ body {
     display: block;
     margin: auto;
     border-radius: 5px;
+    height: auto;
+    width: auto;
+    max-width: 90%;
+    max-height: 50vh;
+
 }
 
 .dogPhotoContainer {
