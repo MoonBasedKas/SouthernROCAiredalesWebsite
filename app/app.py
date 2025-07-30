@@ -100,6 +100,15 @@ def Welcome():
         return resp
     return render_template('home.html', airedales=airedaleDB.values.tolist(), males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
 
+@app.route("/blackAiredale")
+def blacks():
+    return render_template('blackAiredale.html', airedales=airedaleDB.values.tolist())
+
+@app.route("/myPartner")
+def myPartner():
+    return render_template('jaunCarlos.html')
+
+
 """
 Shows all of the dogs for what to modify
 """
