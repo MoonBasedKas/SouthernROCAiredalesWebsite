@@ -13,4 +13,3 @@ id	name	gender	available	registration	dob	mainPhoto	desc	purchase
 12	Apache Jr. [JR]	True	True	True	2025-01-08	39apache3.jpg	Our youngest male, he comes from another kennel.	False
 13	Hank	True	False	True	2013-09-16	42hank3.jpg	The senior of the group at 12 years old Hank is still hanging out. We no longer use Hank as a stud due to his age, but we enjoy having him around!	False
 14	Monty	True	True	True	2024-02-09	43monty1.jpg	This boy was brought in to start a new program of stud work. You'll notice he is real thick in the chest. He is just now 2 years old in the photos.	False
-15	Test	False	False	True	2025-07-08	placeholder.jpg	This is a dog for testing purposes	False
