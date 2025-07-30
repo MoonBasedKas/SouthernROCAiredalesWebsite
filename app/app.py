@@ -75,9 +75,9 @@ def Welcome():
     available = dogDB[dogDB["available"] == True]
     males = available[available["gender"] ==  True]
     females = available[available["gender"] ==  False]
-    print(puppiesDB)
+    # print(puppiesDB)
     puppies = puppiesDB[puppiesDB["visible"] == True]
-    puppies = puppiesDB[puppiesDB["photo"] == True]
+    # puppies = puppiesDB[puppiesDB["photo"] == True]
     
     puppies = puppies.sort_values(by='id', ascending=False)
 
@@ -93,7 +93,6 @@ def Welcome():
         resp = make_response(render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter))
         resp.set_cookie(key="visited", value="true", max_age=90*60*60*24)
         return resp
-    print("hi")
     return render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
 
 """
@@ -130,7 +129,6 @@ def puppies():
     page = pageNo * querySize
     # Adjusts indeces
     result = result[page:page + querySize - 1]
-    print(result)
     return render_template('puppies.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
 
 
@@ -201,7 +199,6 @@ def newDog():
     if dogDB.size != 0:
         dogID = dogDB["id"].max() + 1
 
-    print(dogID)
     if dogID == np.nan:
         dogID = 1
     name = request.form['Name']
@@ -261,7 +258,7 @@ Does the request for when an admin sends a new dog to add.
 """
 @app.route("/admin/newPuppy", methods=["POST"])
 def newPuppy():
-    if username not in session:
+    if "username" not in session:
         return redirect(url_for('Welcome'))
 
     photoID = 0
@@ -279,13 +276,11 @@ def newPuppy():
         day = date.today()
         sent = request.files.getlist('files[]')
         for file in sent:
-            # try:
                 fname = secure_filename(str(photoID) + file.filename)
-
-                if fname[-1:-4].lower == ".mp4":
-                    photo = True
-                else:
+                if ".mp4" in fname.lower():
                     photo = False
+                else:
+                    photo = True
 
 
 
@@ -302,7 +297,9 @@ def newPuppy():
 
     return redirect(url_for('admin'))
 
-
+"""
+Admin page for hiding videos.
+"""
 @app.route("/admin/puppyPhotos")
 def viewPuppies():
     if "username" not in session:
@@ -333,7 +330,6 @@ def viewPuppies():
     page = pageNo * querySize
     # Adjusts indeces
     result = result[page:page + querySize - 1]
-    print(result)
     return render_template('adminPuppies.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
 
 
@@ -345,8 +341,6 @@ def updateVisible(id):
     if "username" not in session:
         return redirect(url_for('Welcome'))
     
-    print(id)
-    print("BANG\n\n")
     newValue = request.form["visible"]
 
     if newValue == "True":
@@ -357,7 +351,6 @@ def updateVisible(id):
     puppiesDB.loc[puppiesDB["id"] == id, "visible"] = newValue
     threading.Thread(target=savePuppies, args=[]).start()
     
-    # TODO make this keep track of the users page number
     return redirect(url_for('viewPuppies'))
 
 """
@@ -414,7 +407,6 @@ def updateDog(id):
     dogID = int(request.form['dogID'])
 
     name = request.form['Name']
-    print(dogID)
 
     gender = request.form['gender']
     if gender == "Female":
@@ -693,21 +685,30 @@ def updateDog(id, name, desc, dob, gender, avail, reg, purchase):
     dogDB.loc[dogDB["id"] == id, "registration"] = reg
     dogDB.loc[dogDB["id"] == id, "purchase"] = purchase
 
-if __name__ == '__main__':
-    with app.app_context():
+
+with app.app_context():
+    try:
+        file = open(".env", "r")
+        fp = file.readlines()
         db.create_all()
-        try:
-            fp = open(".env")
-            fp = fp.readlines()
-            username = fp[0].split("=")[1].strip()
+        username = fp[0].split("=")[1].strip()
+        fresh = fp[2].split("=")[1].strip()
+        # For some reason bool converts "False" -> True
+        if fresh.lower() == "True":
             user = User.query.filter_by(username=username).first()
             if not user:
                 new_user = User(username=username)
                 new_user.set_password(fp[1].split("=")[1].strip())
                 db.session.add(new_user)
                 db.session.commit()
+            # Write that this instance has been written to.
+            file.close()
+            file = open(".env", "w")
+            file.write(f"username={username}\npassword={fp[1].split('=')[1].strip()}\nread=False")
+    except FileNotFoundError:
+        print("Warning | Login may not be possible.")
 
-        except FileNotFoundError:
-            print("Warning | Login may not be possible.")
+if __name__ == '__main__':
+
 
     app.run(debug=True)

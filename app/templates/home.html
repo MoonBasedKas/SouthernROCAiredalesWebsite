@@ -101,8 +101,13 @@
                     {% for dog in puppies %}
                     <div class="puppyGalleryItem">
 
+                        {% if dog[4] %}
                         <img src="/static/puppies/{{dog[1]}}" class="puppyGalleryPhoto" loading="lazy"><br>
-
+                        {% else %}
+                        <video class="puppyGalleryPhoto" controls muted>
+                            <source src="/static/puppies/{{dog[1]}}" type="video/mp4">
+                        </video>
+                        {% endif %}
                     </div>
                     {% endfor %}
 
@@ -195,6 +200,11 @@
 
                     PO box 189 McIntosh NM 87032 <br>
                     We are available from 9am-9pm.<br>
+                </p>
+                <br><br>
+                <p class="paragraph">
+                    It's been a pleasure and I hope that you enjoyed everything you saw here! We worked very hard to
+                    bring you the finest that can be brought.
                 </p>
             </div>
 
