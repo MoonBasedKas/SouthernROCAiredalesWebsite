@@ -6,3 +6,5 @@ Called no answer, text sent.
 
 Sent text, told to set up an account with a payment processor with Southern.
 Need to do during next meeting
+
+Need to get publishable key and the secret key.
