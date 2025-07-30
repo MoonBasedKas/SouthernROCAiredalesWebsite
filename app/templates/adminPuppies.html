@@ -36,16 +36,16 @@
                         {% if dog[4] %}
                         <img src="/static/puppies/{{dog[1]}}" class="galleryPhoto" loading="lazy"><br>
                         {% else %}
-                        <video class="puppyGalleryPhoto" controls muted>
+                        <video class="puppyGalleryVideo" controls muted>
                             <source src="/static/puppies/{{dog[1]}}" type="video/mp4">
                         </video>
                         {% endif %}
                         <form action="/admin/updateVisible/{{dog[0]}}" method="POST" class="formContainer">
                             <h1>Visible</h1>
-                            <input type="radio" name="visible" id="visible" value="True" {% if dog[3] %} checked {% endif %}> <label
-                                for="True">Yes</label><br>
-                            <input type="radio" name="visible" id="visible" value="False" {% if not dog[3] %} checked {% endif %}> <label
-                                for="False">No</label><br>
+                            <input type="radio" name="visible" id="visible" value="True" {% if dog[3] %} checked {%
+                                endif %}> <label for="True">Yes</label><br>
+                            <input type="radio" name="visible" id="visible" value="False" {% if not dog[3] %} checked {%
+                                endif %}> <label for="False">No</label><br>
                             <input type="submit" value="Update" class="galleryButton">
                         </form>
                     </div>
