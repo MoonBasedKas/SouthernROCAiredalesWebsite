@@ -74,17 +74,37 @@ class dbController:
         return fetchedData
     
     def getTotalPuppies(self):
-        query = 'select count(id) from puppies where visible = %s'
+        query = 'select count(id) from Puppies where visible = %s'
         params = (True,)
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
     
+    
+    def getTotalDogs(self):
+        query = 'select count(id) from dogs'
+        params = ()
+        self.cursor.execute(query, params)
+        return self.cursor.fetchall()
     
     """
     Fetches the images for a given dog.
     """
     def fetchImage(self, id):
         query = 'select photoName from photos where dogId = %s'
+        params = (id,)
+        self.cursor.execute(query, params)
+        
+        # Fetch the data found.
+        fetchedData = self.cursor.fetchall()
+        data = fetchedData
+        return data
+    
+    
+    """
+    Fetches the images for a given dog.
+    """
+    def fetchImageID(self, id):
+        query = 'select id, photoName from photos where dogId = %s'
         params = (id,)
         self.cursor.execute(query, params)
         
@@ -129,7 +149,8 @@ class dbController:
         query = "select * from Users where username = %s"
         params = (username, )
         self.cursor.execute(query, params)
-        if self.cursor.fetchall() != []:
+        res = self.cursor.fetchone()
+        if res != None:
             return False
         
         query = "insert into users (username, password) values (%s, %s)"
@@ -139,3 +160,94 @@ class dbController:
 
         return True
     
+
+    """
+    Checks if the correct crediental were put in for the user
+    """
+    def validateSignin(self, username, password):
+        query = "select username, password from Users where username = %s"
+        params = (username, )
+        self.cursor.execute(query, params)
+
+        data = self.cursor.fetchall()
+        if data == []:
+            return False
+        return check_password_hash(data[0][1], password)
+    
+
+    """
+    Sets a new account password.
+    """
+    def newPassword(self, username, password):
+        query = "select username, password from Users where username = %s"
+        params = (username, )
+        self.cursor.execute(query, params)
+
+        data = self.cursor.fetchone()
+        if data == None:
+            return False
+        
+        query = "update Users set password = %s where username = %s"
+        params = (generate_password_hash(password), username, )
+        self.cursor.execute(query, params)
+        self.cnx.commit()
+
+
+        return check_password_hash(data[0][1], password)
+    
+    """
+    Updates all values of the dog except for its main photo.
+    """
+    def updateDog(self, id, name, gender, available, registration, dob, dogDesc, purchase):
+        query = "update dogs set dogName=%s, gender=%s, available=%s, registration=%s, dob=%s, dogDesc=%s, purchase=%s where id = %s"
+        params = (name, gender, available, registration, dob, dogDesc, purchase, id, )
+        
+        self.cursor.execute(query, params)
+        self.cnx.commit()
+
+    """
+    Updates a main photo for a given dog.
+    """
+    def updateMainPhoto(self, id, mainphoto):
+        query = "update dogs set mainPhoto = %s where id = %s"
+        params = (mainphoto, id, )
+        self.cursor.execute(query, params)
+        self.cnx.commit()
+
+    """
+    Deletes a given photo from the database.
+    """
+    def deletePhoto(self, id):
+        query = "DELETE from photos where id = %s"
+        params = (id,)
+        self.cursor.execute(query, params)
+        self.cnx.commit()
+
+    """
+    Gets all dogs stored in the database.
+    """
+    def getDogs(self):
+        query = 'select id, dogName, gender, available, registration, dob, mainPhoto, dogDesc, purchase from dogs'
+        params = ()
+        self.cursor.execute(query, params)
+        fetchedData = self.cursor.fetchall()
+        return fetchedData
+    
+    """
+    Gets a range of dog ids.
+    """
+    def getDogsIdRange(self, low, max):
+        query = 'select id, dogName, gender, available, registration, dob, mainPhoto, dogDesc, purchase from dogs where id > %s and id < %s'
+        params = (low, max, )
+        self.cursor.execute(query, params)
+        fetchedData = self.cursor.fetchall()
+        return fetchedData
+    
+    """
+    Updates the visibility of a puppy's photo.
+    """
+    def puppiesUpdateVisisible(self, id, vis):
+        query = 'update Puppies set visible = %s where id = %s'
+        params = (vis, id, )
+        self.cursor.execute(query, params)
+        self.cnx.commit()

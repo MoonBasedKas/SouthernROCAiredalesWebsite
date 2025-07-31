@@ -102,9 +102,9 @@
                             <h4 class="subtitle">{{dog[1]}}</h4><br>
                             <img src="/static/dogPhotos/{{dog[6]}}" class="dogImage" loading="lazy"><br>
                             <p class="subtitle">
-                                Gender: Male<br>
-                                Date of Birth {{dog[5]}}<br>
-                                Registration: {{dog[4]}}<br>
+                                Gender: Female<br>
+                                Date of Birth: {{dog[5]}}<br>
+                                Registration: AATR {% if dog[4] %} and AKC {% endif %}<br>
                                 {% if dog[8] %} Available for Purchase!{%endif%}<br>
                             </p>
                         </div>
@@ -155,7 +155,7 @@
                 </div>
             </div>
 
-            
+
 
 
 
@@ -193,7 +193,8 @@
 
                 <p class="creditsParagraph">
                     This website was designed and developed by Kassidy Maberry.<br>
-                    I can be reached via email at <a href="mailto:kassidymaberry@gmail.com">kassidymaberry@gmail.com</a>.<br>
+                    I can be reached via email at <a
+                        href="mailto:kassidymaberry@gmail.com">kassidymaberry@gmail.com</a>.<br>
                     You can see some of my other projects at my <a href="https://moonbasedkas.github.io/">website</a>!
                 </p>
             </div>

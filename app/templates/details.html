@@ -66,10 +66,10 @@
 
                         <!-- Reg REQUIRED -->
                         <h1>Are they registered with AKC</h1>
-                        <input type="radio" name="reg" value="True" id="AKC" required {%if org %} checked {% endif
-                            %}> <label for="AKC">Yes</label><br>
-                        <input type="radio" name="reg" value="False" id="AATR" required {%if not org %} checked {%
-                            endif %}> <label for="AATR">No</label><br>
+                        <input type="radio" name="reg" value="True" id="AKC" required {%if org %} checked {% endif %}>
+                        <label for="AKC">Yes</label><br>
+                        <input type="radio" name="reg" value="False" id="AATR" required {%if not org %} checked {% endif
+                            %}> <label for="AATR">No</label><br>
 
                         <!-- REQUIRED -->
                         <h1>Date of Birth</h1>
@@ -94,9 +94,9 @@
             <div class="galleryContainer">
                 {% for pic in pics %}
                 <div class="galleryItem">
-                    <img src="/static/dogPhotos/{{pic[2]}}" class="galleryPhoto">
+                    <img src="/static/dogPhotos/{{pic[1]}}" class="galleryPhoto">
                     <form id="photo-form-{{pic[0]}}" action="POST">
-                        <input type="hidden" value="{{pic[2]}}" name="photoName">
+                        <input type="hidden" value="{{pic[1]}}" name="photoName">
                         <input type="hidden" value="{{pic[0]}}" name="photoID">
                         <input type="hidden" value="{{id}}" name="dogID">
                         <!-- Inputs -->

@@ -1,8 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect, session, url_for, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from flask_sqlalchemy import SQLAlchemy
-import threading
 import numpy as np
 import math as mt
 import secrets
@@ -37,9 +35,8 @@ def Welcome():
     
     males = db.getAvailMales()
     females = db.getAvailFemales()
-    # print(puppiesDB)
     puppies = db.getVisiblePuppies()
-    # puppies = puppiesDB[puppiesDB["photo"] == True]
+
     
     puppies = puppies
 
@@ -57,7 +54,7 @@ def Welcome():
     if visit != "true":
         counter += 1
     else:
-        resp = make_response(render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter))
+        resp = make_response(render_template('home.html', males=males, females=females.values, count=counter))
         resp.set_cookie(key="visited", value="true", max_age=90*60*60*24)
         return resp
     
@@ -173,8 +170,6 @@ def newDog():
 
     fname = ""
 
-    if dogDB.size != 0:
-        dogID = dogDB["id"].max() + 1
 
     if dogID == np.nan:
         dogID = 1
@@ -193,6 +188,10 @@ def newDog():
         avail = False
 
     reg = request.form['reg']
+    if reg == "True":
+        reg = True
+    else:
+        reg = False
     dob = request.form['dob']
     desc = request.form['desc']
     desc = desc.replace("\t", "&emsp;")
@@ -201,9 +200,6 @@ def newDog():
     if 'files[]' not in request.files:
         print("no photo sent")
     else:
-        if 0 != photoDB.size:
-            photoID = photoDB['id'].max()
-
         sent = request.files.getlist('files[]')
         for file in sent:
             # try:
@@ -213,6 +209,7 @@ def newDog():
                 photoID += 1
                 # This could honestly slow everything down a lot.
                 addPhoto(photoID, dogID, fname)
+            
             # except:
             #     print
             #     pass
@@ -223,8 +220,6 @@ def newDog():
 
     addDog(dogID, name, gender, avail, reg, dob, fname, desc, purchase)
 
-
-    threading.Thread(target=saveUpdates, args=([])).start()
 
 
     return redirect(url_for('admin'))
@@ -240,12 +235,6 @@ def newPuppy():
 
     photoID = 0
     photo = True
-
-
-
-    if puppiesDB.size != 0:
-        photoID = puppiesDB["id"].max() + 1
-
 
     if 'files[]' not in request.files:
         print("no photo sent")
@@ -269,7 +258,6 @@ def newPuppy():
 
 
 
-    threading.Thread(target=savePuppies, args=([])).start()
 
 
     return redirect(url_for('admin'))
@@ -283,8 +271,6 @@ def viewPuppies():
         return redirect(url_for('Welcome'))
     querySize = 30
 
-    result = puppiesDB
-    result = result.sort_values(by='id', ascending=False)
     
     pageNo = request.args.get('page', default=0, type=int)
     query = request.args.get('search', default="", type=str)
@@ -297,8 +283,13 @@ def viewPuppies():
         if pageNo < 0:
             pageNo = 0
 
+    # if query != "":
+    #     result = result[result["name"].str.contains(query, case=False)]
+
     
-    pageMax = result.shape[0]
+    pageMax = db.getTotalPuppies()[0]
+    pageMax = pageMax[0]
+    print(pageMax)
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
@@ -306,8 +297,10 @@ def viewPuppies():
         pageNo = pageMax - 1
     page = pageNo * querySize
     # Adjusts indeces
-    result = result[page:page + querySize - 1]
-    return render_template('adminPuppies.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
+    result = db.getVisiblePuppiesIdRange(page, page + querySize)
+    print(result)
+
+    return render_template('adminPuppies.html', results=result, query=query, pageNo=pageNo, pageMax=pageMax)
 
 
 """
@@ -325,8 +318,7 @@ def updateVisible(id):
     else:
         newValue = False
     
-    puppiesDB.loc[puppiesDB["id"] == id, "visible"] = newValue
-    threading.Thread(target=savePuppies, args=[]).start()
+    db.puppiesUpdateVisisible(id, newValue)
     
     return redirect(url_for('viewPuppies'))
 
@@ -339,7 +331,7 @@ def dogQuery():
         return redirect(url_for("Welcome"))
     querySize = 18
 
-    result = dogDB
+
     pageNo = request.args.get('page', default=0, type=int)
     query = request.args.get('search', default="", type=str)
     window = request.args.get('window', default="none", type=str)
@@ -354,8 +346,9 @@ def dogQuery():
     if query != "":
         result = result[result["name"].str.contains(query, case=False)]
 
-
-    pageMax = result.shape[0]
+    pageMax = db.getTotalDogs()[0]
+    pageMax = pageMax[0]
+    print(pageMax)
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
@@ -363,8 +356,8 @@ def dogQuery():
         pageNo = pageMax - 1
     page = pageNo * querySize
     # Adjusts indeces
-    result = result.loc[page:page + querySize - 1]
-    return render_template('adminDogs.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
+    result = db.getDogsIdRange(page, page + querySize)
+    return render_template('adminDogs.html', results=result, query=query, pageNo=pageNo, pageMax=pageMax)
 
 
 """
@@ -378,13 +371,8 @@ def updateDog(id):
 
 
     fname = ""
-    if "username" not in session:
-        return redirect(url_for("Welcome"))
-
     dogID = int(request.form['dogID'])
-
     name = request.form['Name']
-
     gender = request.form['gender']
     if gender == "Female":
         gender = False
@@ -398,6 +386,10 @@ def updateDog(id):
         avail = False
 
     reg = request.form['reg']
+    if reg == "True":
+        reg = True
+    else:
+        reg = False
     dob = request.form['dob']
     desc = request.form['desc']
     desc = desc.replace("\t", "&emsp;")
@@ -407,10 +399,8 @@ def updateDog(id):
     if 'files[]' not in request.files:
         print("Warning | No photo sent.")
     else:
-        photoID = photoDB['id'].max()
         sent = request.files.getlist('files[]')
         check = True
-        size = photoDB[photoDB["dogID"] == dogID].size
         for file in sent:
             if file.filename != "":
                 try:
@@ -421,10 +411,6 @@ def updateDog(id):
                     file.save(UPLOAD_FOLDER + fname)
                     photoID += 1
                     # Avoid checking the count each time after its been set
-                    print(photoDB[photoDB["dogID"] == dogID].size)
-                    if size == 0:
-                        dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = fname
-                        size += 1
 
                     addPhoto(photoID, dogID, fname)
                 except:
@@ -438,8 +424,6 @@ def updateDog(id):
         fname = "placeholder.jpg"
 
     updateDog(dogID, name, desc, dob, gender, avail, reg, purchase)
-    # saveUpdates()
-    threading.Thread(target=saveUpdates, args=()).start()
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -450,7 +434,7 @@ Shows us the details of the dogs, let's us see each dog so we can modify it.
 def dogDetails(id):
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    dog = dogDB[dogDB["id"] == id]
+    dog = db.fetchDog(id)
     pics = ["PlaceHolder.png"]
     name = "null"
     desc = "null"
@@ -459,11 +443,11 @@ def dogDetails(id):
     mainPhoto=""
     org=""
     pics=[]
-    query = dog.values.tolist()
-    if query == []:
+
+    if dog == []:
         # TODO upodate to no dog found.
         return render_template('noDog.html')
-    query = query[0] # Set to first value because it'll return [[]] if it exists.
+    query = dog[0]
     name = query[1]
     gender = query[2]
     avail = query[3]
@@ -474,8 +458,8 @@ def dogDetails(id):
     if type(desc) == float:
         desc = ""
 
-    pics = photoDB[photoDB["dogID"] == id]
-    pics = pics.values.tolist()
+    pics = db.fetchImageID(id)
+    print(pics)
 
     return render_template('details.html', id=id, pics=pics, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
 
@@ -487,23 +471,8 @@ def deletePhoto():
     photoID = request.form["photoID"]
     photoID = int(photoID)
     dogID = int(request.form["dogID"])
-    photoName = photoDB.loc[photoDB["id"] == photoID, "photoName"].item()
+    db.deletePhoto(photoID)
 
-    photoDB.loc[photoDB["id"] == photoID, "dogID"] = -1 # invalidate photo
-    value = dogDB.loc[dogDB["id"] == dogID, "mainPhoto"].item()
-
-    # Attempt to find a replacement
-    if photoName == value:
-        try:
-            canidates = photoDB[photoDB["dogID"] == dogID][["photoName"]]
-            if canidates == []:
-                raise ValueError
-
-            dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] =  canidates[0][0]
-        except:
-            dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = "placeholder.jpg"
-
-    threading.Thread(target=saveUpdates).start()
     return redirect(f"/admin/details/{dogID}")
 
 @app.route("/admin/setMainPhoto", methods=["POST"])
@@ -514,8 +483,7 @@ def setMainPhoto():
     dogID = request.form["dogID"]
     dogID = int(dogID)
     # Query to update the dogs primary photo
-    dogDB.loc[dogDB["id"] == dogID, "mainPhoto"] = photoName
-    threading.Thread(target=saveUpdates).start()
+    db.updateMainPhoto(id, photoName)
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -551,10 +519,7 @@ def passwordReset():
     if second != password:
         return redirect(url_for('settings'))
 
-    user = User.query.filter_by(username=session["username"]).first()
-
-    user.set_password(password)
-    db.session.commit()
+    db.newPassword(session["username"], password)
 
     return redirect(url_for('settings'))
 
@@ -570,8 +535,7 @@ def login():
     username = request.form['username']
     password = request.form['password']
 
-    user = User.query.filter_by(username=username).first()
-    if user and user.check_password(password):
+    if db.validateSignin(username, password):
         session['username'] = username
         return redirect(url_for('admin'))
     else:
@@ -588,19 +552,10 @@ def register():
     username = request.form['username']
     password = request.form['password']
     second = request.form['second']
-
     if second != password:
         return redirect(url_for('settings'))
-
-    user = User.query.filter_by(username=username).first()
-    if user:
-        print("ERROR")
-        return render_template("index.html", error="Username already exists")
-
-    new_user = User(username=username)
-    new_user.set_password(password)
-    db.session.add(new_user)
-    db.session.commit()
+    
+    db.insertUser(username, password)
 
     return redirect(url_for('admin'))
 
@@ -619,66 +574,33 @@ def logout():
 Adds a photo to the database
 """
 def addPhoto(id, dogID, photo):
-    new = {"id":id,"dogID":dogID,"photoName":photo}
-    photoDB.loc[len(photoDB)] = new
+    db.insertPhoto(dogID, photo)
     return
 
 """
 Adds a new dog to the database
 """
 def addDog(id, name, gender, available, registration, dob, mainPhoto, desc, purchase):
-    new = {"id":id, "name":name, "gender":gender, "available":available, "registration":registration, "dob":dob, "mainPhoto":mainPhoto, "desc":desc, "purchase": purchase}
-    dogDB.loc[len(dogDB)] = new
+    db.insertDog(name, gender, available, registration, dob, mainPhoto, desc, purchase)
     return
 
-"""
-Saves updates to a database
-"""
-def saveUpdates():
-    dogDB.to_csv("Dogs.tsv", sep="\t", index=False)
-    photoDB.to_csv("Photos.tsv", sep="\t", index=False)
-    return
 
 
 
 def addPuppy(id, photoName, date, visible, photo):
-    new = {"id":id,"photoName":photoName,"date":date, "visible":visible, "photo":photo}
-    puppiesDB.loc[len(puppiesDB)] = new
-    return
-
-def savePuppies():
-    puppiesDB.to_csv("Puppies.tsv", sep="\t", index=False)
+    db.insertPuppy(photoName, date, visible, photo)
     return
 
 """
 Updates every parameter of a dog except for the mainPhoto
 """
 def updateDog(id, name, desc, dob, gender, avail, reg, purchase):
-    dogDB.loc[dogDB["id"] == id, "name"] = name
-    dogDB.loc[dogDB["id"] == id, "desc"] = desc
-    dogDB.loc[dogDB["id"] == id, "dob"] = dob
-    dogDB.loc[dogDB["id"] == id, "gender"] = gender
-    dogDB.loc[dogDB["id"] == id, "available"] = avail
-    dogDB.loc[dogDB["id"] == id, "registration"] = reg
-    dogDB.loc[dogDB["id"] == id, "purchase"] = purchase
+    db.updateDog(id, name, gender, avail, reg, dob, desc, purchase)
 
 
 with app.app_context():
-    try:
-        file = open(".env", "r")
-        fp = file.readlines()
-        username = fp[0].split("=")[1].strip()
-        fresh = fp[2].split("=")[1].strip()
-        # For some reason bool converts "False" -> True
-        if fresh.lower() == "True":
-            db.insertUser(username, fp[1].split("=")[1].strip())
-            
-            # Write that this instance has been written to.
-            file.close()
-            file = open(".env", "w")
-            file.write(f"username={username}\npassword={fp[1].split('=')[1].strip()}\nread=False")
-    except FileNotFoundError:
-        print("Warning | Login may not be possible.")
+        db.insertUser("ROCAdmin", "test1234")
+
 
 if __name__ == '__main__':
 
