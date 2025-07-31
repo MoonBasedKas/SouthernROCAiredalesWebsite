@@ -1,5 +1,7 @@
-import mysql.connector
+# print(__version__)
 
+import mysql.connector
+# import mariadb
 
 class dbController:
     def __init__(self):
@@ -9,6 +11,7 @@ class dbController:
         password = lines[1].split("=")[1].strip()
         self.cnx = mysql.connector.connect(user=user, password=password,
                                 host='127.0.0.1',
+                                port=3307,
                                 database='dogs')
         self.cursor = self.cnx.cursor()
 
@@ -26,8 +29,8 @@ class dbController:
             return {}
         
         print(fetchedData)
-        data = {"dogName":fetchedData[0][0], "gender":fetchedData[0][1], "available":fetchedData[0][2], "dogDesc":fetchedData[0][3]}
-        return data
+        # data = {"dogName":fetchedData[0][0], "gender":fetchedData[0][1], "available":fetchedData[0][2], "dogDesc":fetchedData[0][3]}
+        # return data
     
     """
     Fetches the images for a given dog.
