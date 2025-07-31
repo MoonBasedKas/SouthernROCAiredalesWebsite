@@ -3,46 +3,23 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 import threading
-import pandas
 import numpy as np
 import math as mt
 import secrets
 from datetime import date # I'm not sure why this says its not used.
 import dbController 
 
-db = dbController.dbController()
-
-
-#Create the pandas database. Slower than sql but I don't think this database will ever get so large it won't matter.
-dogDB = None
-photoDB = None
 counter = 0
 UPLOAD_FOLDER="static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 PUPPY_FOLDER="static/puppies/"
-try:
-    dogDB = pandas.read_csv("Dogs.tsv",  sep='\t')
-
-except:
-    print("failed read")
-    dogDB=pandas.DataFrame(columns=["id", "name", "gender", "available", "registration", "dob", "mainPhoto", "desc", "purchase"])
-
-try:
-    puppiesDB = pandas.read_csv("Puppies.tsv", sep='\t')
-except:
-    puppiesDB = pandas.DataFrame(columns=["id", "photoName", "photo", "date", "visible", "photo"])
 
 
-try:
-    photoDB = pandas.read_csv("Photos.tsv", sep="\t")
 
-except:
-    photoDB=pandas.DataFrame(columns=["id", "dogID", "photoName"])
 
-try:
-    airedaleDB = pandas.read_csv("Blacks.tsv", sep="\t")
-except:
-    airedaleDB = pandas.DataFrame(columns=["id", "photoName"])
+db = dbController.dbController()
+print(db.fetchDog(1))
+
 
 
 # App Config
@@ -51,28 +28,6 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-autoKeyReset = False
-lastReset = date.today()
-
-
-
-# Config of SQL alchemy
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(32), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
-
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
 
 
 
@@ -80,18 +35,22 @@ class User(db.Model):
 def Welcome():
     global counter
     
-    available = dogDB[dogDB["available"] == True]
-    males = available[available["gender"] ==  True]
-    females = available[available["gender"] ==  False]
+    males = db.getAvailMales()
+    females = db.getAvailFemales()
     # print(puppiesDB)
-    puppies = puppiesDB[puppiesDB["visible"] == True]
+    puppies = db.getVisiblePuppies()
     # puppies = puppiesDB[puppiesDB["photo"] == True]
     
-    puppies = puppies.sort_values(by='id', ascending=False)
+    puppies = puppies
 
-    
-
-    puppies = puppies[:12]
+    print(puppies.reverse())
+    shown = []
+    hits = 0
+    for i in puppies:
+        shown.append(i)
+        if hits == 12:
+            break
+        hits += 1
     
     # Set Cookies
     visit = request.cookies.get("visited")
@@ -101,11 +60,12 @@ def Welcome():
         resp = make_response(render_template('home.html', males=males.values.tolist(), females=females.values.tolist(), count=counter))
         resp.set_cookie(key="visited", value="true", max_age=90*60*60*24)
         return resp
-    return render_template('home.html', airedales=airedaleDB.values.tolist(), males=males.values.tolist(), females=females.values.tolist(), puppies=puppies.values.tolist(), count=counter)
+    
+    return render_template('home.html', males=males, females=females, puppies=shown, count=counter)
 
 @app.route("/blackAiredale")
 def blacks():
-    return render_template('blackAiredale.html', airedales=airedaleDB.values.tolist())
+    return render_template('blackAiredale.html')
 
 @app.route("/myPartner")
 def myPartner():
@@ -119,8 +79,6 @@ Shows all of the dogs for what to modify
 def puppies():
     querySize = 30
 
-    result = puppiesDB[puppiesDB["visible"] == True]
-    result = result.sort_values(by='id', ascending=False)
     
     pageNo = request.args.get('page', default=0, type=int)
     query = request.args.get('search', default="", type=str)
@@ -137,7 +95,9 @@ def puppies():
     #     result = result[result["name"].str.contains(query, case=False)]
 
     
-    pageMax = result.shape[0]
+    pageMax = db.getTotalPuppies()[0]
+    pageMax = pageMax[0]
+    print(pageMax)
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
@@ -145,8 +105,10 @@ def puppies():
         pageNo = pageMax - 1
     page = pageNo * querySize
     # Adjusts indeces
-    result = result[page:page + querySize - 1]
-    return render_template('puppies.html', results=result.values.tolist(), query=query, pageNo=pageNo, pageMax=pageMax)
+    result = db.getVisiblePuppiesIdRange(page, page + querySize)
+    print(result)
+    
+    return render_template('puppies.html', results=result, query=query, pageNo=pageNo, pageMax=pageMax)
 
 
 """
@@ -154,7 +116,6 @@ For viewing a singular dog
 """
 @app.route('/dogs/dog/<int:id>')
 def dog(id):
-    dog = dogDB[dogDB["id"] == id]
     photos = ["PlaceHolder.png"]
     name = "null"
     desc = "null"
@@ -162,13 +123,12 @@ def dog(id):
     gender = "Female"
     mainPhoto=""
     org=""
-    query = dog.values.tolist()
+    query = db.fetchDog(id)
     if query == []:
         return render_template('noDog.html')
-    photos = photoDB[photoDB["dogID"] == id]
-    photos = photos[["photoName"]].values.tolist()
-
+    photos = db.fetchImage(id)
     query = query[0]
+    print(photos)
     name = query[1]
     gender = query[2]
     org = query[4]
@@ -707,17 +667,12 @@ with app.app_context():
     try:
         file = open(".env", "r")
         fp = file.readlines()
-        db.create_all()
         username = fp[0].split("=")[1].strip()
         fresh = fp[2].split("=")[1].strip()
         # For some reason bool converts "False" -> True
         if fresh.lower() == "True":
-            user = User.query.filter_by(username=username).first()
-            if not user:
-                new_user = User(username=username)
-                new_user.set_password(fp[1].split("=")[1].strip())
-                db.session.add(new_user)
-                db.session.commit()
+            db.insertUser(username, fp[1].split("=")[1].strip())
+            
             # Write that this instance has been written to.
             file.close()
             file = open(".env", "w")
