@@ -1,41 +1,14 @@
-FORCE THIS WEBSITE TO BE A HTTPS CONNECTION IF YOU ARE GOING TO BE LOGGING IN.
+FORCE THIS WEBSITE TO BE A HTTPS CONNECTION IF POSSIBLE. IF YOU ARE NOT ON A HTTPS CONNECTION DO NOT LOG IN.
 
-Hello, if you're reading this you probably are wondering why this is not using a sql database. It's a simple answer really,
-I built this not knowing if I would be able to use sql and by the time I figured I would be able to I was already mostly 
-done with the basic feature set. A lot of the website is very drag and drop to update it if you are going to be making launching this 
-you'll need to create a .env file with a username and password for the initial user. Without that you can't make any changes or all changes you'll 
-want to make will either have to be programmed into the web page or you'll have to manually modify the .tsv files. The .env file will need a read 
-section which is set to True on the first time. This will create the user table in sql alchemy. I didn't use that as from my reasearch
-pandas would had been faster.
+Okay most of this website is easy to get set up and running you will need to modify the .env file to be the following.
+user=
+password=
+host=127.0.0.1
+port=3306
+database=SouthernROC
+You'll need to fill in the uesr and password section for the database connection. I'm not sure where the .env will be opened that seems to kind of 
+varry. But the .env should be in whatever directory you are executing from.
 
-The .env will look something like this, you are free to change the values of the initial username and password. read must be set to True
-at first however.
-username=Admin
-password=1
-read=True
-
-app.py is fairly long, honestly the main reason is just to easily access global variables. Yes, this was a bad programming practice. You 
-are free to correct this as you wish. 
-if "username" not in session:
-    return redirect(url_for('Welcome'))
-
-This should be one of the first few things the function does.
-
-There are 4 important tsv files:
-    - Dogs.tsv
-    - Puppies.tsv
-    - Photos.tsv
-    - Blacks.tsv
-
-Dogs.tsv holds information for all the dogs on the page while all the others contain photo information fro different parts of the 
-website. Photos.tsv will need to track if something is a video or photo so keep that in mind when using it otherwise blacks.tsv 
-is very similar. Finally photos.tsv has a foriegn key in it to connect it to Dogs.tsv. This is used for generating the pages of 
-each individual dog.
-
-Puppies.tsv holds the photo information for the puppy section.
-
-Blacks.tsv holds the photo information for the blacks section. This one must be manually modified because I figured this one would be 
-widely static.
-
-This project uses flask which has been previously mentioned. I picked flask as I've had a lot of expierence with python, its an 
-easy language, I didn't have to learn a new framework, and its not Apache Tomcat.
+If you have to modify the .env's file location you may have to modify line 10 from app.py
+folderpath = ""
+Put the new path to the apps directory from where you are running there.

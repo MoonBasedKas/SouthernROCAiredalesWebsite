@@ -3,14 +3,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class dbController:
     def __init__(self):
-        env = open("DB_CONFIG", "r")
+        env = open(".env", "r")
         lines = env.readlines()
         user = lines[0].split("=")[1].strip()
         password = lines[1].split("=")[1].strip()
+        host = lines[2].split("=")[1].strip()
+        port = lines[3].split("=")[1].strip()
+        database = lines[4].split("=")[1].strip()
         self.cnx = mysql.connector.connect(user=user, password=password,
-                                host='127.0.0.1',
-                                port=3307, # Change this as need be
-                                database='SouthernROC')
+                                host=host,
+                                port=port, # Change this as need be
+                                database=database)
         self.cursor = self.cnx.cursor()
 
     """
@@ -24,6 +27,8 @@ class dbController:
         # Fetch the data found.
         fetchedData = self.cursor.fetchall()
         return fetchedData
+    
+
 
 
     """
@@ -79,9 +84,21 @@ class dbController:
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
     
+    def getTotalPhotos(self):
+        query = 'select count(id) from photos'
+        params = ()
+        self.cursor.execute(query, params)
+        return self.cursor.fetchone()
+    
     
     def getTotalDogs(self):
         query = 'select count(id) from dogs'
+        params = ()
+        self.cursor.execute(query, params)
+        return self.cursor.fetchall()
+    
+    def getMaxID(self):
+        query = 'select max(id) from dogs'
         params = ()
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
@@ -123,6 +140,14 @@ class dbController:
         
         self.cursor.execute(query, params)
         self.cnx.commit()
+
+    def getDogID(self, name, gender, available, registration, dob, mainPhoto, dogDesc, purchase):
+        query = "select id from dogs where dogName = %s and gender = %s and available = %s and registration = %s and dob = %s and mainPhoto = %s and dogDesc = %s and purchase = %s"
+        params = (name, gender, available, registration, dob, mainPhoto, dogDesc, purchase, )
+        
+        self.cursor.execute(query, params)
+        fetchedData = self.cursor.fetchone()
+        return fetchedData[0]
 
     """
     Inserts a photo
@@ -208,9 +233,10 @@ class dbController:
     """
     Updates a main photo for a given dog.
     """
-    def updateMainPhoto(self, id, mainphoto):
+    def updateMainPhoto(self, dogID, mainphoto):
         query = "update dogs set mainPhoto = %s where id = %s"
-        params = (mainphoto, id, )
+        params = (mainphoto, dogID, )
+        print(params)
         self.cursor.execute(query, params)
         self.cnx.commit()
 

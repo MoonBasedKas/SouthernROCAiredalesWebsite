@@ -1,22 +1,21 @@
 from flask import Flask, render_template, jsonify, request, redirect, session, url_for, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-import numpy as np
 import math as mt
 import secrets
 from datetime import date # I'm not sure why this says its not used.
 import dbController 
 
 counter = 0
-UPLOAD_FOLDER="static/dogPhotos/"
+folderpath = ""
+UPLOAD_FOLDER= folderpath + "static/dogPhotos/"
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
-PUPPY_FOLDER="static/puppies/"
+PUPPY_FOLDER=folderpath + "static/puppies/"
 
 
 
 
 db = dbController.dbController()
-print(db.fetchDog(1))
 
 
 
@@ -40,7 +39,7 @@ def Welcome():
     
     puppies = puppies
 
-    print(puppies.reverse())
+    puppies.reverse()
     shown = []
     hits = 0
     for i in puppies:
@@ -94,7 +93,6 @@ def puppies():
     
     pageMax = db.getTotalPuppies()[0]
     pageMax = pageMax[0]
-    print(pageMax)
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
@@ -103,7 +101,6 @@ def puppies():
     page = pageNo * querySize
     # Adjusts indeces
     result = db.getVisiblePuppiesIdRange(page, page + querySize)
-    print(result)
     
     return render_template('puppies.html', results=result, query=query, pageNo=pageNo, pageMax=pageMax)
 
@@ -125,7 +122,6 @@ def dog(id):
         return render_template('noDog.html')
     photos = db.fetchImage(id)
     query = query[0]
-    print(photos)
     name = query[1]
     gender = query[2]
     org = query[4]
@@ -163,16 +159,13 @@ Does the request for when an admin sends a new dog to add.
 @app.route("/admin/newDog", methods=["POST"])
 def newDog():
     dogID = 1
-    photoID = 0
+    photoID = db.getTotalPhotos()[0]
     purchase = False
     if "username" not in session:
         return redirect(url_for("Welcome"))
 
-    fname = ""
+    fname = "placeholder.jpg"
 
-
-    if dogID == np.nan:
-        dogID = 1
     name = request.form['Name']
 
     gender = request.form['gender']
@@ -196,29 +189,25 @@ def newDog():
     desc = request.form['desc']
     desc = desc.replace("\t", "&emsp;")
 
+    addDog(dogID, name, gender, avail, reg, dob, fname, desc, purchase)
+    dogID = db.getDogID(name, gender, avail, reg, dob, fname, desc, purchase)
 
     if 'files[]' not in request.files:
         print("no photo sent")
     else:
         sent = request.files.getlist('files[]')
         for file in sent:
-            # try:
                 fname = secure_filename(str(photoID) + file.filename)
-                # TODO: Check file types
                 file.save(UPLOAD_FOLDER + fname)
                 photoID += 1
-                # This could honestly slow everything down a lot.
                 addPhoto(photoID, dogID, fname)
-            
-            # except:
-            #     print
-            #     pass
 
 
-    if fname == "":
-        fname = "placeholder.jpg"
 
-    addDog(dogID, name, gender, avail, reg, dob, fname, desc, purchase)
+    if fname != "placeholder.jpg":
+        db.updateMainPhoto(dogID, fname)
+
+    
 
 
 
@@ -289,7 +278,6 @@ def viewPuppies():
     
     pageMax = db.getTotalPuppies()[0]
     pageMax = pageMax[0]
-    print(pageMax)
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
@@ -298,7 +286,6 @@ def viewPuppies():
     page = pageNo * querySize
     # Adjusts indeces
     result = db.getVisiblePuppiesIdRange(page, page + querySize)
-    print(result)
 
     return render_template('adminPuppies.html', results=result, query=query, pageNo=pageNo, pageMax=pageMax)
 
@@ -346,9 +333,9 @@ def dogQuery():
     if query != "":
         result = result[result["name"].str.contains(query, case=False)]
 
-    pageMax = db.getTotalDogs()[0]
+    pageMax = db.getMaxID()[0]
     pageMax = pageMax[0]
-    print(pageMax)
+
     pageMax = pageMax / querySize
     pageMax = mt.ceil(pageMax)
 
@@ -400,21 +387,15 @@ def updateDog(id):
         print("Warning | No photo sent.")
     else:
         sent = request.files.getlist('files[]')
-        check = True
+        photoID = db.getTotalPhotos()[0]
+        print(photoID)
         for file in sent:
             if file.filename != "":
-                try:
-                    fname = secure_filename(str(photoID) + file.filename)
+                fname = secure_filename(str(photoID) + file.filename)
+                file.save(UPLOAD_FOLDER + fname)
+                photoID += 1
+                addPhoto(photoID, dogID, fname)
 
-                    print(sent)
-                    # TODO: Check file types
-                    file.save(UPLOAD_FOLDER + fname)
-                    photoID += 1
-                    # Avoid checking the count each time after its been set
-
-                    addPhoto(photoID, dogID, fname)
-                except:
-                    pass
 
 
 
@@ -459,7 +440,6 @@ def dogDetails(id):
         desc = ""
 
     pics = db.fetchImageID(id)
-    print(pics)
 
     return render_template('details.html', id=id, pics=pics, name=name, gender=gender, dob=dob, desc=desc, mainPhoto=mainPhoto, org=org, avail=avail)
 
@@ -479,11 +459,12 @@ def deletePhoto():
 def setMainPhoto():
     if "username" not in session:
         return redirect(url_for("Welcome"))
-    photoName = request.form["photoName"]
+    newPhotoName = str(request.form["photoName"])
     dogID = request.form["dogID"]
     dogID = int(dogID)
+    print(dogID, 1)
     # Query to update the dogs primary photo
-    db.updateMainPhoto(id, photoName)
+    db.updateMainPhoto(dogID, newPhotoName)
     return redirect(f"/admin/details/{dogID}")
 
 
@@ -605,4 +586,4 @@ with app.app_context():
 if __name__ == '__main__':
 
 
-    app.run(debug=True)
+    app.run()

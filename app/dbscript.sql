@@ -1,3 +1,6 @@
+-- Database initalization.
+CREATE DATABASE SouthernROC;
+USE SouthernROC;
 -- Table creation
 CREATE TABLE dogs (
     id int not null auto_increment,
