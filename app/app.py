@@ -285,7 +285,7 @@ def viewPuppies():
         pageNo = pageMax - 1
     page = pageNo * querySize
     # Adjusts indeces
-    result = db.getVisiblePuppiesIdRange(page, page + querySize)
+    result = db.getPuppiesIdRange(page, page + querySize)
 
     return render_template('adminPuppies.html', results=result, query=query, pageNo=pageNo, pageMax=pageMax)
 

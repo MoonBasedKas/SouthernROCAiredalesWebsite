@@ -7,8 +7,15 @@ host=127.0.0.1
 port=3306
 database=SouthernROC
 You'll need to fill in the uesr and password section for the database connection. I'm not sure where the .env will be opened that seems to kind of 
-varry. But the .env should be in whatever directory you are executing from.
+varry on my system its the same directory I ran app.py, but from a test deployment it was from the root directory. But the .env should be in whatever directory you are executing from. You will want to change the host, password, and user. If the database
+changes you'll want to change it as well.
 
 If you have to modify the .env's file location you may have to modify line 10 from app.py
 folderpath = ""
-Put the new path to the apps directory from where you are running there.
+Put the new path to where app.py is located from where the .env folder was.
+
+You will need the following libraries:
+- Flask
+- mysql-connector-python
+
+Every other library used comes with flask or is party of the python standard library.

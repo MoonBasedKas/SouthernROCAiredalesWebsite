@@ -78,6 +78,13 @@ class dbController:
         fetchedData = self.cursor.fetchall()
         return fetchedData
     
+    def getPuppiesIdRange(self, low, max):
+        query = 'select id, photoName, dateTaken, visible, photo from Puppies where id > %s and id < %s'
+        params = (low, max, )
+        self.cursor.execute(query, params)
+        fetchedData = self.cursor.fetchall()
+        return fetchedData
+
     def getTotalPuppies(self):
         query = 'select count(id) from Puppies where visible = %s'
         params = (True,)
